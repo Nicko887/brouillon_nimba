@@ -1,0 +1,524 @@
+/* === RESET CSS MODERNE === */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* === HTML ET BODY === */
+html {
+  line-height: 1.15;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  color: var(--text-primary);
+  font-size: 16px;
+  line-height: 1.6;
+  font-weight: 400;
+  overflow-x: hidden;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* === ÉLÉMENTS DE BLOC === */
+main,
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+nav,
+section {
+  display: block;
+}
+
+/* === TITRES === */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: 1.2;
+  margin: 0;
+}
+
+/* === PARAGRAPHES === */
+p {
+  margin: 0;
+}
+
+/* === LISTES === */
+ol,
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* === LIENS === */
+a {
+  background-color: transparent;
+  color: inherit;
+  text-decoration: inherit;
+  cursor: pointer;
+}
+
+a:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* === EMPHASES === */
+b,
+strong {
+  font-weight: bolder;
+}
+
+small {
+  font-size: 80%;
+}
+
+/* === INDICES ET EXPOSANTS === */
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+sub {
+  bottom: -0.25em;
+}
+
+sup {
+  top: -0.5em;
+}
+
+/* === IMAGES === */
+img {
+  border-style: none;
+  max-width: 100%;
+  height: auto;
+  vertical-align: middle;
+}
+
+svg {
+  fill: currentColor;
+  vertical-align: middle;
+}
+
+/* === FORMULAIRES === */
+button,
+input,
+optgroup,
+select,
+textarea {
+  font-family: inherit;
+  font-size: 100%;
+  line-height: 1.15;
+  margin: 0;
+  padding: 0;
+  color: inherit;
+}
+
+button,
+input {
+  overflow: visible;
+}
+
+button,
+select {
+  text-transform: none;
+}
+
+button,
+[type="button"],
+[type="reset"],
+[type="submit"] {
+  -webkit-appearance: button;
+  cursor: pointer;
+}
+
+button::-moz-focus-inner,
+[type="button"]::-moz-focus-inner,
+[type="reset"]::-moz-focus-inner,
+[type="submit"]::-moz-focus-inner {
+  border-style: none;
+  padding: 0;
+}
+
+button:-moz-focusring,
+[type="button"]:-moz-focusring,
+[type="reset"]:-moz-focusring,
+[type="submit"]:-moz-focusring {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+fieldset {
+  padding: 0.35em 0.75em 0.625em;
+  border: 1px solid #c0c0c0;
+  margin: 0 2px;
+}
+
+legend {
+  box-sizing: border-box;
+  color: inherit;
+  display: table;
+  max-width: 100%;
+  padding: 0;
+  white-space: normal;
+}
+
+progress {
+  vertical-align: baseline;
+}
+
+textarea {
+  overflow: auto;
+  resize: vertical;
+}
+
+[type="checkbox"],
+[type="radio"] {
+  box-sizing: border-box;
+  padding: 0;
+}
+
+[type="number"]::-webkit-inner-spin-button,
+[type="number"]::-webkit-outer-spin-button {
+  height: auto;
+}
+
+[type="search"] {
+  -webkit-appearance: textfield;
+  outline-offset: -2px;
+}
+
+[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+
+::-webkit-file-upload-button {
+  -webkit-appearance: button;
+  font: inherit;
+}
+
+/* === TABLEAUX === */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+}
+
+td,
+th {
+  padding: 0;
+  text-align: left;
+}
+
+/* === ÉLÉMENTS INTERACTIFS === */
+details {
+  display: block;
+}
+
+summary {
+  display: list-item;
+  cursor: pointer;
+}
+
+/* === ÉLÉMENTS CACHÉS === */
+[hidden],
+template {
+  display: none;
+}
+
+/* === ACCESSIBILITÉ === */
+[aria-busy="true"] {
+  cursor: progress;
+}
+
+[aria-controls] {
+  cursor: pointer;
+}
+
+[aria-disabled="true"],
+[disabled] {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+[aria-hidden="false"][hidden] {
+  display: initial;
+}
+
+[aria-hidden="false"][hidden]:not(:focus) {
+  clip: rect(0, 0, 0, 0);
+  position: absolute;
+}
+
+/* === FOCUS VISIBLE === */
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* === SÉLECTION === */
+::selection {
+  background-color: var(--primary);
+  color: white;
+}
+
+::-moz-selection {
+  background-color: var(--primary);
+  color: white;
+}
+
+/* === SCROLLBARS === */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  transition: background var(--timing-normal) var(--ease-in-out);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* === PLACEHOLDERS === */
+::placeholder {
+  color: var(--text-secondary);
+  opacity: 1;
+}
+
+::-moz-placeholder {
+  color: var(--text-secondary);
+  opacity: 1;
+}
+
+::-webkit-input-placeholder {
+  color: var(--text-secondary);
+  opacity: 1;
+}
+
+/* === OPTIMISATIONS PERFORMANCES === */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* === SUPPORT MOBILE === */
+@media (max-width: 767px) {
+  body {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  
+  /* Éviter le zoom sur les inputs iOS */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="search"],
+  input[type="tel"],
+  input[type="url"],
+  textarea,
+  select {
+    font-size: 16px;
+  }
+}
+
+/* === OPTIMISATIONS TOUCH === */
+@media (hover: none) and (pointer: coarse) {
+  /* Interfaces tactiles */
+  button,
+  [role="button"],
+  input[type="button"],
+  input[type="submit"],
+  input[type="reset"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  a {
+    min-height: 44px;
+    display: inline-block;
+  }
+}
+
+/* === PRINT STYLES === */
+@media print {
+  *,
+  *::before,
+  *::after {
+    background: transparent !important;
+    color: black !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+  
+  a,
+  a:visited {
+    text-decoration: underline;
+  }
+  
+  a[href]::after {
+    content: " (" attr(href) ")";
+  }
+  
+  abbr[title]::after {
+    content: " (" attr(title) ")";
+  }
+  
+  img {
+    page-break-inside: avoid;
+  }
+  
+  p,
+  h2,
+  h3 {
+    orphans: 3;
+    widows: 3;
+  }
+  
+  h2,
+  h3 {
+    page-break-after: avoid;
+  }
+  
+  body {
+    background: white;
+    color: black;
+  }
+}
+
+/* === CONTRASTE ÉLEVÉ === */
+@media (prefers-contrast: high) {
+  :focus-visible {
+    outline: 3px solid;
+    outline-offset: 2px;
+  }
+}
+
+/* === MODE SOMBRE === */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #1a1a1a;
+    --text-primary: #ffffff;
+    --text-secondary: #a0a0a0;
+    --border: #333333;
+  }
+  
+  body {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d3748 100%);
+    color: var(--text-primary);
+  }
+}
+
+/* === VARIABLES DYNAMIQUES === */
+:root {
+  /* Système de couleurs adaptatif */
+  color-scheme: light dark;
+  
+  /* Support variables CSS natives */
+  --font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+  --font-mono: 'SF Mono', Consolas, 'Liberation Mono', monospace;
+  
+  /* Tailles de police fluides */
+  --font-size-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+  --font-size-sm: clamp(0.875rem, 0.8rem + 0.375vw, 1rem);
+  --font-size-base: clamp(1rem, 0.9rem + 0.5vw, 1.125rem);
+  --font-size-lg: clamp(1.125rem, 1rem + 0.625vw, 1.25rem);
+  --font-size-xl: clamp(1.25rem, 1.1rem + 0.75vw, 1.5rem);
+}
+
+/* === RESET AVANCÉ === */
+*, *::before, *::after {
+  /* Variables CSS héritées */
+  --tw-border-spacing-x: 0;
+  --tw-border-spacing-y: 0;
+  --tw-translate-x: 0;
+  --tw-translate-y: 0;
+  --tw-rotate: 0;
+  --tw-skew-x: 0;
+  --tw-skew-y: 0;
+  --tw-scale-x: 1;
+  --tw-scale-y: 1;
+}
+
+/* === NORMALISATION FINALE === */
+html {
+  tab-size: 4;
+  -webkit-text-size-adjust: 100%;
+  font-feature-settings: normal;
+  font-variation-settings: normal;
+}
+
+body {
+  margin: 0;
+  line-height: inherit;
+}
+
+hr {
+  height: 0;
+  color: inherit;
+  border-top-width: 1px;
+}
+
+abbr:where([title]) {
+  text-decoration: underline dotted;
+}
+
+code,
+kbd,
+samp,
+pre {
+  font-family: var(--font-mono);
+  font-size: 1em;
+}
+
+/* === OPTIMISATIONS FINALES === */
+img, svg, video, canvas, audio, iframe, embed, object {
+  display: block;
+  vertical-align: middle;
+}
+
+img, video {
+  max-width: 100%;
+  height: auto;
+}

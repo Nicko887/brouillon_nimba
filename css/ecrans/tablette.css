@@ -1,0 +1,54 @@
+/* === RESPONSIVE TRÈS PETIT ÉCRANS === */
+@media (max-width: 480px) {
+  .top-links {
+    display: none;
+  }
+
+  .auth-buttons {
+    gap: 8px;
+  }
+
+  .inscription,
+  .login-button {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+
+  .header-top {
+    padding: 10px 15px;
+    padding-right: 70px;
+  }
+
+  .header-search-mobile {
+    padding: 8px 15px;
+    padding-right: 70px;
+  }
+
+  .main-content {
+    margin-top: 160px;
+    padding: 15px;
+  }
+
+  .burger-menu {
+    right: 15px;
+    width: 40px;
+    height: 40px;
+  }
+
+  .mega-menu {
+    right: 15px;
+    width: calc(100vw - 30px);
+  }
+}
+
+/* === AMÉLIORATION DE LA LISIBILITÉ === */
+@media (max-width: 360px) {
+  .main-nav ul {
+    gap: 8px;
+  }
+  
+  .main-nav li a {
+    font-size: 11px;
+    padding: 6px 12px;
+  }
+}

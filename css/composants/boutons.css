@@ -1,0 +1,328 @@
+/* === CONTENEUR BOUTONS AUTH === */
+.auth-buttons {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+/* === BOUTON INSCRIPTION === */
+.inscription {
+  padding: 8px 16px;
+  background: rgba(0, 122, 255, 0.1);
+  color: var(--primary);
+  text-decoration: none;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all var(--timing-normal) var(--ease-in-out);
+  white-space: nowrap;
+  border: 1px solid rgba(0, 122, 255, 0.15);
+  display: inline-block;
+}
+
+.inscription:hover,
+.inscription:focus {
+  background: rgba(0, 122, 255, 0.15);
+  transform: translateY(-1px);
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  box-shadow: 0 2px 8px rgba(0, 122, 255, 0.2);
+}
+
+.inscription:active {
+  transform: translateY(0);
+  transition-duration: var(--timing-fast);
+}
+
+/* === BOUTON LOGIN === */
+.login-button {
+  background: linear-gradient(135deg, var(--secondary) 0%, #e55a0f 100%);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all var(--timing-medium) var(--ease-in-out);
+  box-shadow: 0 2px 8px rgba(255, 110, 20, 0.3);
+  white-space: nowrap;
+  display: inline-block;
+}
+
+.login-button:hover,
+.login-button:focus {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 110, 20, 0.4);
+  outline: 2px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 2px;
+}
+
+.login-button:active {
+  transform: translateY(-1px);
+  transition-duration: var(--timing-fast);
+}
+
+/* === BOUTONS GÉNÉRIQUES === */
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--timing-normal) var(--ease-in-out);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* === VARIANTES BOUTONS === */
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+  color: white;
+  box-shadow: 0 2px 8px rgba(0, 122, 255, 0.3);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 122, 255, 0.4);
+  outline: 2px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 2px;
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--primary);
+  border: 1px solid var(--primary);
+}
+
+.btn-secondary:hover,
+.btn-secondary:focus {
+  background: var(--primary);
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
+}
+
+.btn-success {
+  background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+  color: white;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+}
+
+.btn-success:hover,
+.btn-success:focus {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+}
+
+.btn-warning {
+  background: linear-gradient(135deg, var(--warning) 0%, #d97706 100%);
+  color: white;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+}
+
+.btn-warning:hover,
+.btn-warning:focus {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+}
+
+.btn-error {
+  background: linear-gradient(135deg, var(--error) 0%, #dc2626 100%);
+  color: white;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+}
+
+.btn-error:hover,
+.btn-error:focus {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+}
+
+/* === TAILLES BOUTONS === */
+.btn-sm {
+  padding: 6px 12px;
+  font-size: 12px;
+  border-radius: var(--radius-sm);
+}
+
+.btn-lg {
+  padding: 14px 28px;
+  font-size: 16px;
+  border-radius: var(--radius-lg);
+}
+
+.btn-xl {
+  padding: 18px 36px;
+  font-size: 18px;
+  font-weight: 600;
+  border-radius: var(--radius-xl);
+}
+
+/* === BOUTONS AVEC ICÔNES === */
+.btn i {
+  font-size: 0.9em;
+}
+
+.btn-icon-only {
+  padding: 10px;
+  border-radius: var(--radius-full);
+  aspect-ratio: 1;
+}
+
+/* === RESPONSIVE DESKTOP === */
+@media (min-width: 768px) {
+  /* === AUTH BUTTONS DESKTOP === */
+  .auth-buttons {
+    gap: 30px;
+    flex-shrink: 0;
+  }
+
+  .inscription {
+    padding: 0;
+    background: none;
+    color: var(--primary);
+    border-radius: 0;
+    font-size: 14px;
+    font-weight: 600;
+    border: none;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .inscription:hover,
+  .inscription:focus {
+    color: var(--primary-hover);
+    background: none;
+    transform: none;
+    outline: none;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    box-shadow: none;
+  }
+
+  .login-button {
+    background: none;
+    color: var(--text-primary);
+    padding: 0;
+    border-radius: 0;
+    font-weight: 500;
+    font-size: 14px;
+    box-shadow: none;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .login-button:hover,
+  .login-button:focus {
+    color: var(--primary);
+    transform: none;
+    box-shadow: none;
+    background: none;
+    outline: none;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  /* === BOUTONS GÉNÉRIQUES DESKTOP === */
+  .btn:hover,
+  .btn:focus {
+    transform: translateY(-2px);
+  }
+
+  .btn:active {
+    transform: translateY(-1px);
+  }
+}
+
+/* === ANIMATIONS ET EFFETS === */
+@keyframes ripple {
+  to {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+.btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.3s ease, height 0.3s ease;
+}
+
+.btn:active::before {
+  width: 120%;
+  height: 120%;
+}
+
+/* === ÉTAT DE CHARGEMENT === */
+.btn-loading {
+  pointer-events: none;
+  position: relative;
+  color: transparent !important;
+}
+
+.btn-loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 16px;
+  height: 16px;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  color: inherit;
+}
+
+@keyframes spin {
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+/* === GROUPES DE BOUTONS === */
+.btn-group {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.btn-group .btn {
+  flex: 1;
+  min-width: 0;
+}
+
+.btn-group-vertical {
+  flex-direction: column;
+}
+
+.btn-group-vertical .btn {
+  width: 100%;
+}

@@ -1,0 +1,102 @@
+:root {
+  /* === COULEURS PRINCIPALES === */
+  --primary: #007AFF;
+  --primary-hover: #0056CC;
+  --secondary: #ff6e14;
+  --background: #ffffff;
+  --background-blur: rgba(255, 255, 255, 0.85);
+  --text-primary: #1d1d1f;
+  --text-secondary: #86868b;
+  --border: #d2d2d7;
+  --shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  --shadow-light: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --radius: 12px;
+  --radius-small: 8px;
+  --transition: cubic-bezier(0.28, 0, 0.63, 1);
+  --header-height-mobile: 180px;
+  --header-height-desktop: 160px;
+
+  /* === BREAKPOINTS CENTRALISÉS === */
+  --bp-mobile-max: 767;
+  --bp-tablet-min: 768;
+  --bp-desktop-min: 1024;
+  --bp-large-min: 1440;
+  
+  /* Pour utilisation en CSS */
+  --bp-mobile-max-px: 767px;
+  --bp-tablet-min-px: 768px;
+  --bp-desktop-min-px: 1024px;
+  --bp-large-min-px: 1440px;
+
+  /* === ÉCHELLE Z-INDEX CENTRALISÉE === */
+  --z-behind: -1;
+  --z-base: 0;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-header: 900;
+  --z-burger: 901;
+  --z-menu-closed: -1;
+  --z-menu-open: 1000;
+  --z-modal: 1100;
+  --z-toast: 1200;
+
+  /* === TIMINGS OPTIMISÉS === */
+  --timing-instant: 0.05s;
+  --timing-fast: 0.1s;
+  --timing-normal: 0.15s;
+  --timing-medium: 0.3s;
+  --timing-slow: 0.5s;
+
+  /* === EASINGS SPÉCIFIQUES === */
+  --ease-linear: linear;
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --ease-out-fast: cubic-bezier(0.4, 0, 1, 1);
+  --ease-in-out-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* === COULEURS ÉTENDUES === */
+  --success: #10b981;
+  --warning: #f59e0b;
+  --error: #ef4444;
+  --info: #3b82f6;
+
+  /* === ESPACEMENTS === */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+
+  /* === LAYOUT === */
+  --container-xs: 20rem;
+  --container-sm: 24rem;
+  --container-md: 28rem;
+  --container-lg: 32rem;
+  --container-xl: 36rem;
+  --container-2xl: 42rem;
+  --container-3xl: 48rem;
+  --container-full: 100%;
+
+  /* === BORDURES === */
+  --radius-none: 0;
+  --radius-xs: 0.125rem;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+  --radius-2xl: 1rem;
+  --radius-full: 9999px;
+
+  /* === OMBRES ÉTENDUES === */
+  --shadow-none: none;
+  --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+}
