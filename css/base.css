@@ -6,24 +6,113 @@ Variables globales, reset CSS, typographie de base
 Impact : GLOBAL - Tester sur tout le site après modification
 */
 
+
+
+
+
+
+
+
 /* === VARIABLES CSS ORIGINALES === */
 :root {
-  --primary: #007AFF;
-  --primary-hover: #0056CC;
-  --secondary: #ff6e14;
+  /* ==========================================
+     🎯 PALETTE NIMBA OPTIMISÉE
+     Basée sur le logo + couleurs existantes
+     ========================================== */
+  
+  /* === COULEURS PRINCIPALES (Logo) === */
+  --primary: #2563eb;              /* Bleu principal du logo */
+  --primary-hover: #1d4ed8;        /* Bleu foncé montagne */
+  --primary-light: #60a5fa;        /* Bleu clair accent */
+  
+  --secondary: #ff6e14;            /* Orange conservé (fonctionne bien) */
+  --secondary-hover: #e55a0f;
+  
+  /* === NEUTRES (Logo + Lisibilité) === */
+  --gray-dark: #374151;            /* Gris foncé du logo (textes) */
+  --gray: #6b7280;                 /* Gris moyen (textes secondaires) */
+  --gray-light: #d1d5db;           /* Gris clair (bordures) */
+  --gray-pale: #f9fafb;            /* Gris très clair (backgrounds) */
+  
+  /* === APPLICATIONS DIRECTES === */
+  --text-primary: var(--gray-dark);
+  --text-secondary: var(--gray);
+  --text-muted: #9ca3af;
+  
   --background: #ffffff;
+  --background-secondary: var(--gray-pale);
   --background-blur: rgba(255, 255, 255, 0.85);
-  --text-primary: #1d1d1f;
-  --text-secondary: #86868b;
-  --border: #d2d2d7;
+  
+  --border: var(--gray-light);
+  --border-light: #f3f4f6;
+  
+  /* === ÉTATS (Seulement l'essentiel) === */
+  --success: #10b981;
+  --error: #ef4444;
+  --warning: #f59e0b;
+  
+  /* ==========================================
+     ✨ EFFETS ET DIMENSIONS
+     ========================================== */
+  
   --shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
   --shadow-light: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --shadow-primary: 0 4px 16px rgba(37, 99, 235, 0.2);
+  
   --radius: 12px;
   --radius-small: 8px;
+  --radius-large: 16px;
+  
   --transition: cubic-bezier(0.28, 0, 0.63, 1);
+  --transition-fast: 0.2s ease;
+  --transition-medium: 0.3s var(--transition);
+  
   --header-height-mobile: 180px;
   --header-height-desktop: 160px;
 }
+
+/* ==========================================
+   🎨 DÉGRADÉS SIGNATURE NIMBA
+   ========================================== */
+
+:root {
+  /* Dégradé principal inspiré des montagnes du logo */
+  --gradient-nimba: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+  
+  /* Dégradé subtil pour backgrounds */
+  --gradient-subtle: linear-gradient(135deg, #f8fafc 0%, var(--gray-pale) 100%);
+}
+
+/* ==========================================
+   🚀 CLASSES UTILITAIRES ESSENTIELLES
+   ========================================== */
+
+/* Textes */
+.text-primary { color: var(--text-primary); }
+.text-secondary { color: var(--text-secondary); }
+.text-muted { color: var(--text-muted); }
+.text-white { color: white; }
+
+/* Backgrounds */
+.bg-primary { background-color: var(--primary); }
+.bg-secondary { background-color: var(--secondary); }
+.bg-gray-light { background-color: var(--gray-pale); }
+.bg-white { background-color: var(--background); }
+
+/* États */
+.text-success { color: var(--success); }
+.text-error { color: var(--error); }
+.text-warning { color: var(--warning); }
+
+.bg-success { background-color: var(--success); }
+.bg-error { background-color: var(--error); }
+.bg-warning { background-color: var(--warning); }
+
+
+
+
+
+
 
 /* === RESET CSS === */
 * { 

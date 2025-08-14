@@ -144,20 +144,20 @@ Impact : MOYEN À ÉLEVÉ selon l'usage
   width: 100%;
   height: 44px;
   padding: 0 50px 0 16px;
-  border: 1px solid #d1d5db;
-  border-radius: 10px; /* Plus arrondi */
-  background: #f8fafc;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-small);
+  background: var(--background-secondary);
   font-size: 15px;
-  color: #374151;
+  color: var(--text-primary);
   outline: none;
-  transition: all 0.2s ease;
+  transition: var(--transition-fast);
   box-shadow: none;
 }
 
 .search-form input:focus {
   border-color: var(--primary);
-  background: #ffffff;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  background: var(--background);
+  box-shadow: var(--shadow-primary);
   transform: none;
 }
 
@@ -311,7 +311,7 @@ Impact : MOYEN À ÉLEVÉ selon l'usage
 }
 
 /* === MEGA MENU DESKTOP === */
-@media (min-width: 768px) {
+/* @media (min-width: 768px) {
   .mega-menu {
     display: block;
     position: static;
@@ -322,7 +322,7 @@ Impact : MOYEN À ÉLEVÉ selon l'usage
     z-index: inherit;
     pointer-events: inherit;
   }
-}
+} */
 
 .mega-menu ul {
   list-style: none;

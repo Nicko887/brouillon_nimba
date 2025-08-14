@@ -1,10 +1,6 @@
 📋 GUIDE GIT SIMPLE
 ===================
 
-📋 ÉTAPE 1 : OUVRIR VS CODE
-----------------------------
-1. Ouvrir VS Code
-2. Ouvrir un terminal : Terminal → New Terminal (ou Ctrl+ù)
 
 📋 ÉTAPE 2 : NAVIGUER VERS LE DOSSIER PROJET
 --------------------------------------------
@@ -19,6 +15,7 @@ Tapez ces commandes une par une :
     git config user.name "Votre Nom"
     git config user.email "votre.email@example.com"
     git remote add origin https://Nicko887:VOTRE_TOKEN@github.com/Nicko887/brouillon_nimba.git
+    
     git add .
     git commit -m "Premier commit - ajout des fichiers initiaux"
     git branch -M main
