@@ -152,6 +152,31 @@ Version finale propre avec révélation inscription desktop
   }
 }
 
+
+
+
+
+/* Juste ça dans responsive.css */
+@media (max-width: 767px) {
+  .mega-menu-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    opacity: 0; visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 1001; pointer-events: none;
+  }
+  .mega-menu-overlay.show {
+    opacity: 1; visibility: visible; pointer-events: auto;
+  }
+}
+
+
+
+
+
+
 /* ========================================================================== */
 /* === TABLET & DESKTOP (min-width: 768px) === */
 /* ========================================================================== */
