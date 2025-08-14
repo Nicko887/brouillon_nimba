@@ -150,6 +150,30 @@ Version finale propre avec révélation inscription desktop
     z-index: 1002;
     pointer-events: auto;
   }
+
+
+
+
+
+    /* === FIX 1 : Rectangle de focus plus discret === */
+  .mega-menu > ul > li > button:focus,
+  .mega-menu > ul > li > a:focus {
+    outline: 1px solid var(--primary) !important;
+    outline-offset: 1px !important;
+    box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.3) !important;
+  }
+  
+  /* === FIX 2 : Menu plus grand pour sous-menus === */
+  .mega-menu.show {
+    max-height: 85vh !important; /* Plus d'espace */
+    height: auto !important;
+    overflow-y: auto !important;
+  }
+  
+  /* Sous-menus avec plus d'espace */
+  .submenu.show {
+    max-height: 400px !important;
+  }
 }
 
 
@@ -583,6 +607,49 @@ Version finale propre avec révélation inscription desktop
     margin-top: 20px;
     padding-top: 20px;
   }
+
+
+
+
+
+    .footer {
+    padding: 80px 0 0;
+  }
+
+  .footer-container {
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 60px;
+    align-items: flex-start;
+  }
+
+  .footer-section {
+    text-align: left;
+  }
+
+  .footer-section:first-child {
+    text-align: left;
+  }
+
+  .footer-section h3::after {
+    left: 0;
+    transform: none;
+  }
+
+  .social-links {
+    justify-content: flex-start;
+  }
+
+  .footer-links {
+    text-align: left;
+  }
+
+  .payment-methods {
+    justify-content: flex-start;
+  }
+
+  .footer-bottom {
+    padding: 50px 40px 40px;
+  }
 }
 
 /* ========================================================================== */
@@ -593,5 +660,13 @@ Version finale propre avec révélation inscription desktop
   /* === RÉVÉLATION INSCRIPTION SUR GRAND DESKTOP === */
   .inscription {
     display: inline-flex; /* Révélé sur desktop */
+  }
+
+
+
+
+    .footer-container {
+    grid-template-columns: 3fr 2fr 2fr;
+    gap: 80px;
   }
 }
