@@ -1,14 +1,170 @@
 ﻿/*
 ================================================================================
-RESPONSIVE - responsive.css
+RESPONSIVE - responsive.css (Mobile First - Code original réorganisé)
 ================================================================================
 Breakpoints et adaptations mobile-first
 Impact : TRÈS ÉLEVÉ pour l'expérience mobile
 Version finale propre avec révélation inscription desktop
 */
 
-/* === RESPONSIVE DESKTOP === */
+/* ========================================================================== */
+/* === STYLES MOBILE DE BASE (par défaut) === */
+/* ========================================================================== */
+
+
+/* Masquer SEULEMENT le lien email sur mobile */
+.top-links__social[href^="mailto:"] {
+  display: none;
+}
+
+
+
+/* Styles mobile par défaut ici si nécessaire */
+.main-content {
+  margin-top: 160px;
+  padding: 15px;
+}
+
+/* ========================================================================== */
+/* === TRÈS PETITS ÉCRANS (max-width: 360px) === */
+/* ========================================================================== */
+
+@media (max-width: 360px) {
+  .top-links__social {
+    width: 30px !important;
+    height: 30px !important;
+    padding: 6px !important;
+  }
+  
+  .top-links__social svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .main-nav ul {
+    gap: 8px;
+  }
+  
+  .main-nav li a {
+    font-size: 11px;
+    padding: 6px 12px;
+  }
+}
+
+/* ========================================================================== */
+/* === PETITS ÉCRANS (max-width: 480px) === */
+/* ========================================================================== */
+
+@media (max-width: 480px) {
+  /* === HEADER MOBILE OPTIMISÉ === */
+  .auth-buttons {
+    gap: 8px;
+  }
+
+  .inscription,
+  .login-button {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+
+  .header-top {
+    padding: 10px 15px;
+    padding-right: 70px;
+  }
+
+  .header-search-mobile {
+    padding: 8px 15px;
+    padding-right: 70px;
+  }
+
+  /* === CONTENU MOBILE === */
+  .main-content {
+    margin-top: 160px;
+    padding: 15px;
+  }
+
+  /* === POSITIONNEMENT BURGER ET MEGA MENU === */
+  .burger-menu {
+    right: 15px; /* Seulement le positionnement */
+  }
+
+  .mega-menu {
+    right: 15px;
+    width: calc(100vw - 30px);
+  }
+}
+
+/* ========================================================================== */
+/* === MOBILE (max-width: 767px) === */
+/* ========================================================================== */
+
+@media (max-width: 767px) {
+  .header.scrolled .search-form {
+    max-width: none;
+    margin: 0;
+  }
+
+  .header.scrolled .header-disappearing {
+    max-height: 0;
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+  }
+
+  .header.scrolled .main-nav {
+    max-height: 0;
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  /* === MEGA MENU DROPDOWN (MOBILE) - FIX FLASH === */
+  .mega-menu {
+    position: fixed;
+    top: 60px;
+    right: 20px;
+    width: min(320px, calc(100vw - 40px));
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    transition: all 0.3s var(--transition);
+    will-change: transform, opacity;
+    
+    /* 🔥 FIX FLASH: Complètement masqué par défaut */
+    display: none;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  .mega-menu.show {
+    display: block;
+    max-height: min(80vh, 600px);
+    opacity: 1;
+    padding: 20px;
+    transform: translateY(0) scale(1);
+    overflow-y: auto;
+    z-index: 1002;
+    pointer-events: auto;
+  }
+}
+
+/* ========================================================================== */
+/* === TABLET & DESKTOP (min-width: 768px) === */
+/* ========================================================================== */
+
 @media (min-width: 768px) {
+
+    /* === RÉVÉLATION LIEN EMAIL DESKTOP === */
+  .top-links__social[href^="mailto:"] {
+    display: flex; /* Réafficher l'email sur desktop */
+  }
+
+
+  
   /* === HEADER DESKTOP === */
   .header {
     position: fixed;
@@ -27,9 +183,6 @@ Version finale propre avec révélation inscription desktop
     pointer-events: auto;
     overflow: visible;
   }
-
-
-  
 
   /* === MEGA MENU DISPARAIT AU SCROLL (sans !important) === */
   .header.scrolled .mega-menu {
@@ -242,12 +395,7 @@ Version finale propre avec révélation inscription desktop
     text-underline-offset: 4px;
   }
 
-
-
-
   /* === MEGA MENU DESKTOP === */
-  
-/* === MEGA MENU DESKTOP === */
   .mega-menu {
     display: block;
     position: static;
@@ -400,86 +548,25 @@ Version finale propre avec révélation inscription desktop
     outline: none;
   }
 
-
-
-
-
-
-
-
-
   /* === MASQUER BURGER SUR DESKTOP === */
   .burger-menu {
     display: none;
   }
+
+  /* === CONTENU PRINCIPAL DESKTOP === */
+  .main-content {
+    margin-top: 20px;
+    padding-top: 20px;
+  }
 }
 
-/* === RÉVÉLATION INSCRIPTION SUR GRAND DESKTOP === */
+/* ========================================================================== */
+/* === LARGE DESKTOP (min-width: 1024px) === */
+/* ========================================================================== */
+
 @media (min-width: 1024px) {
+  /* === RÉVÉLATION INSCRIPTION SUR GRAND DESKTOP === */
   .inscription {
     display: inline-flex; /* Révélé sur desktop */
-  }
-}
-
-/* === RESPONSIVE TRÈS PETITS ÉCRANS === */
-@media (max-width: 480px) {
-  /* === HEADER MOBILE OPTIMISÉ === */
-  .auth-buttons {
-    gap: 8px;
-  }
-
-  .inscription,
-  .login-button {
-    font-size: 12px;
-    padding: 6px 12px;
-  }
-
-  .header-top {
-    padding: 10px 15px;
-    padding-right: 70px;
-  }
-
-  .header-search-mobile {
-    padding: 8px 15px;
-    padding-right: 70px;
-  }
-
-  /* === CONTENU MOBILE === */
-  .main-content {
-    margin-top: 160px;
-    padding: 15px;
-  }
-
-  /* === POSITIONNEMENT BURGER ET MEGA MENU === */
-  .burger-menu {
-    right: 15px; /* Seulement le positionnement */
-  }
-
-  .mega-menu {
-    right: 15px;
-    width: calc(100vw - 30px);
-  }
-}
-
-/* === AMÉLIORATION LISIBILITÉ ÉCRANS ULTRA-PETITS === */
-@media (max-width: 360px) {
-  .top-links__social {
-    width: 30px !important;
-    height: 30px !important;
-    padding: 6px !important;
-  }
-  
-  .top-links__social svg {
-    width: 16px;
-    height: 16px;
-  }
-
-  .main-nav ul {
-    gap: 8px;
-  }
-  
-  .main-nav li a {
-    font-size: 11px;
-    padding: 6px 12px;
   }
 }

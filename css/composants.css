@@ -37,7 +37,7 @@ Impact : MOYEN À ÉLEVÉ selon l'usage
 
 /* === ICÔNES SOCIALES === */
 .top-links__social {
-  display: flex !important;
+  display: flex;
   align-items: center;
   justify-content: center;
   width: 36px;
@@ -131,13 +131,6 @@ Impact : MOYEN À ÉLEVÉ selon l'usage
   width: 100%;
   max-width: 500px;
   margin: 0 auto;
-}
-
-@media (max-width: 767px) {
-  .header.scrolled .search-form {
-    max-width: none;
-    margin: 0;
-  }
 }
 
 .search-form input {
@@ -276,39 +269,6 @@ Impact : MOYEN À ÉLEVÉ selon l'usage
   transform: translateY(1px);
 }
 
-/* === MEGA MENU DROPDOWN (MOBILE) - FIX FLASH === */
-@media (max-width: 767px) {
-  .mega-menu {
-    position: fixed;
-    top: 60px;
-    right: 20px;
-    width: min(320px, calc(100vw - 40px));
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    transition: all 0.3s var(--transition);
-    will-change: transform, opacity;
-    
-    /* 🔥 FIX FLASH: Complètement masqué par défaut */
-    display: none;
-    z-index: -1;
-    pointer-events: none;
-  }
-
-  .mega-menu.show {
-    display: block;
-    max-height: min(80vh, 600px);
-    opacity: 1;
-    padding: 20px;
-    transform: translateY(0) scale(1);
-    overflow-y: auto;
-    z-index: 1002;
-    pointer-events: auto;
-  }
-}
 
 /* === MEGA MENU DESKTOP === */
 /* @media (min-width: 768px) {

@@ -35,14 +35,7 @@ Impact : ÉLEVÉ - Affecte la disposition générale
   will-change: transform, opacity;
 }
 
-@media (max-width: 767px) {
-  .header.scrolled .header-disappearing {
-    max-height: 0;
-    opacity: 0;
-    transform: translateY(-10px);
-    pointer-events: none;
-  }
-}
+
 
 /* === LIGNE 1 : Logo + Contact/Réseaux + Auth === */
 .header-top {
@@ -111,15 +104,6 @@ Impact : ÉLEVÉ - Affecte la disposition générale
   position: relative;
 }
 
-@media (max-width: 767px) {
-  .header.scrolled .main-nav {
-    max-height: 0;
-    opacity: 0;
-    transform: translateY(-10px);
-    pointer-events: none;
-    overflow: hidden;
-  }
-}
 
 .main-nav ul {
   display: flex;
@@ -165,12 +149,7 @@ Impact : ÉLEVÉ - Affecte la disposition générale
   min-height: 100vh;
 }
 
-@media (min-width: 768px) {
-  .main-content {
-    margin-top: 20px;
-    padding-top: 20px;
-  }
-}
+
 
 /* === FOOTER === */
 .footer {
