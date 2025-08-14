@@ -100,6 +100,9 @@
       min-width: 0; /* Permet la compression */
     }
 
+
+/* animation cercle logo */
+
     .header__logo {
       flex-shrink: 0;
     }
@@ -116,6 +119,16 @@
       transform: translateY(-2px);
       box-shadow: 0 6px 20px rgba(0, 122, 255, 0.3);
     }
+
+
+/* fin animation cercle logo */
+    
+
+
+
+
+
+
 
     .top-links {
       display: flex;
@@ -342,7 +355,9 @@
       outline-offset: 2px;
     }
 
-    /* === BURGER MENU FIXE === */
+    
+
+    /* === BURGER MENU FIXE AVEC ANIMATION === */
     .burger-menu {
       position: fixed;
       top: 8px;
@@ -356,14 +371,14 @@
       border-radius: var(--radius-small);
       cursor: pointer;
       padding: 0;
-      transition: all 0.2s var(--transition);
+      transition: all 0.3s var(--transition);
       z-index: 1001;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-      font-size: 18px;
-      color: var(--text-primary);
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
+      gap: 4px;
     }
 
     .burger-menu:hover,
@@ -375,10 +390,69 @@
       outline-offset: 2px;
     }
 
+    /* === BARRES DU BURGER === */
+    .burger-bar {
+      width: 20px;
+      height: 2px;
+      background: var(--text-primary);
+      border-radius: 1px;
+      transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      transform-origin: center;
+      will-change: transform, opacity;
+    }
+
+    /* === ANIMATION BURGER → CROIX === */
     .burger-menu.active {
-      transform: rotate(90deg);
       background: var(--primary);
-      color: white;
+      transform: translateY(-1px);
+    }
+
+    .burger-menu.active .burger-bar {
+      background: white;
+    }
+
+    .burger-menu.active .burger-bar:nth-child(1) {
+      transform: translateY(6px) rotate(45deg);
+    }
+
+    .burger-menu.active .burger-bar:nth-child(2) {
+      opacity: 0;
+      transform: scale(0);
+    }
+
+    .burger-menu.active .burger-bar:nth-child(3) {
+      transform: translateY(-6px) rotate(-45deg);
+    }
+
+    /* === ANIMATION HOVER AVANCÉE === */
+    .burger-menu:not(.active):hover .burger-bar:nth-child(1) {
+      transform: translateY(-1px);
+    }
+
+    .burger-menu:not(.active):hover .burger-bar:nth-child(3) {
+      transform: translateY(1px);
+    }
+
+    /* === RESPONSIVE TRÈS PETITS ÉCRANS === */
+    @media (max-width: 480px) {
+      .burger-menu {
+        right: 15px;
+        width: 40px;
+        height: 40px;
+        gap: 3px;
+      }
+      
+      .burger-bar {
+        width: 18px;
+      }
+      
+      .burger-menu.active .burger-bar:nth-child(1) {
+        transform: translateY(5px) rotate(45deg);
+      }
+      
+      .burger-menu.active .burger-bar:nth-child(3) {
+        transform: translateY(-5px) rotate(-45deg);
+      }
     }
 
     /* === MEGA MENU DROPDOWN (MOBILE) === */

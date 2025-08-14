@@ -1,75 +1,15 @@
-﻿/* ============================================
-   STRUCTURE CSS - SITE PETITES ANNONCES
-   Noms en français pour maintenance simplifiée
-   ============================================ */
+﻿/*
+================================================================================
+POINT D'ENTRÉE UNIQUE - main.css
+================================================================================
+Architecture CSS simplifiée pour site d'annonces
+Ordre d'importation critique - NE PAS MODIFIER
+*/
 
-/* 1. FONDATIONS (ordre critique) */
-@import url('./fondations/variables.css');
-@import url('./fondations/reinitialisation.css');
-@import url('./fondations/typographie.css');
-@import url('./fondations/animations.css');
-
-/* 2. STRUCTURE (layout général) */
-@import url('./structure/conteneurs.css');
-@import url('./structure/grille.css');
-@import url('./structure/en-tete.css');
-@import url('./structure/pied-de-page.css');
-
-/* 3. COMPOSANTS (éléments réutilisables) */
-@import url('./composants/boutons.css');
-@import url('./composants/cartes.css');
-@import url('./composants/formulaires.css');
-@import url('./composants/navigation.css');
-@import url('./composants/modales.css');
-@import url('./composants/chargement.css');
-
-/* 4. ANNONCES (cœur métier) */
-@import url('./annonces/carte-annonce.css');
-@import url('./annonces/galerie-photos.css');
-@import url('./annonces/filtres.css');
-@import url('./annonces/barre-recherche.css');
-@import url('./annonces/fil-ariane.css');
-@import url('./annonces/pagination.css');
-@import url('./annonces/badges-etats.css');
-@import url('./annonces/favoris.css');
-@import url('./annonces/carte-geographique.css');
-
-/* 5. PAGES SPÉCIFIQUES */
-@import url('./pages/accueil.css');
-@import url('./pages/liste-annonces.css');
-@import url('./pages/detail-annonce.css');
-@import url('./pages/deposer-annonce.css');
-@import url('./pages/resultats-recherche.css');
-@import url('./pages/profil-utilisateur.css');
-@import url('./pages/tableau-bord.css');
-@import url('./pages/messagerie.css');
-@import url('./pages/categories.css');
-
-/* 6. FONCTIONNALITÉS AVANCÉES */
-@import url('./fonctionnalites/geolocalisation.css');
-@import url('./fonctionnalites/fourchette-prix.css');
-@import url('./fonctionnalites/selecteur-categories.css');
-@import url('./fonctionnalites/upload-photos.css');
-@import url('./fonctionnalites/contact-vendeur.css');
-@import url('./fonctionnalites/signalement.css');
-
-/* 7. DJANGO FRAMEWORK */
-@import url('./django/formulaires-django.css');
-@import url('./django/admin-django.css');
-@import url('./django/messages-django.css');
-@import url('./django/crispy-forms.css');
-
-/* 8. UTILITAIRES (priorité élevée) */
-@import url('./utilitaires/espacements.css');
-@import url('./utilitaires/couleurs.css');
-@import url('./utilitaires/texte.css');
-@import url('./utilitaires/affichage.css');
-
-/* 9. THÈMES (conditionnel) */
-@import url('./themes/theme-clair.css') (prefers-color-scheme: light);
-@import url('./themes/theme-sombre.css') (prefers-color-scheme: dark);
-
-/* 10. RESPONSIVE (derniers pour override) */
-@import url('./ecrans/tablette.css') screen and (min-width: 768px);
-@import url('./ecrans/ordinateur.css') screen and (min-width: 1024px);
-@import url('./ecrans/grand-ecran.css') screen and (min-width: 1440px);
+@import url('./base.css');
+@import url('./layout.css');
+@import url('./composants.css');
+@import url('./annonces.css');
+@import url('./pages.css');
+@import url('./utilitaires.css');
+@import url('./responsive.css');

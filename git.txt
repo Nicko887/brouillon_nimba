@@ -1,0 +1,43 @@
+📋 GUIDE GIT SIMPLE
+===================
+
+📋 ÉTAPE 1 : OUVRIR VS CODE
+----------------------------
+1. Ouvrir VS Code
+2. Ouvrir un terminal : Terminal → New Terminal (ou Ctrl+ù)
+
+📋 ÉTAPE 2 : NAVIGUER VERS LE DOSSIER PROJET
+--------------------------------------------
+Tapez dans le terminal :
+    cd C:\Users\eunic\OneDrive\Documents\NICODEME\NimbaPro
+
+📋 ÉTAPE 3 : PREMIER DÉPÔT (une seule fois)
+-------------------------------------------
+Tapez ces commandes une par une :
+
+    git init
+    git config user.name "Votre Nom"
+    git config user.email "votre.email@example.com"
+    git remote add origin https://Nicko887:VOTRE_TOKEN@github.com/Nicko887/brouillon_nimba.git
+    git add .
+    git commit -m "Premier commit - ajout des fichiers initiaux"
+    git branch -M main
+    git push -u origin main
+
+✅ Résultat attendu : Vos fichiers apparaissent sur GitHub
+
+📋 ÉTAPE 4 : POUR CHAQUE MODIFICATION (usage régulier)
+------------------------------------------------------
+Après avoir modifié vos fichiers, tapez :
+
+    git add .
+    git commit -m "Description de vos modifications"
+    git push https://Nicko887:VOTRE_TOKEN@github.com/Nicko887/brouillon_nimba.git main
+
+✅ Résultat attendu : Vos modifications apparaissent sur GitHub
+
+📋 NOTES IMPORTANTES
+--------------------
+- Remplacer VOTRE_TOKEN par votre vrai token GitHub
+- Changer le nom et email dans git config
+- Repository : https://github.com/Nicko887/brouillon_nimba.git

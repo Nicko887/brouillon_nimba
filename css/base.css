@@ -1,0 +1,64 @@
+﻿/*
+================================================================================
+FONDATIONS - base.css
+================================================================================
+Variables globales, reset CSS, typographie de base
+Impact : GLOBAL - Tester sur tout le site après modification
+*/
+
+/* === VARIABLES CSS ORIGINALES === */
+:root {
+  --primary: #007AFF;
+  --primary-hover: #0056CC;
+  --secondary: #ff6e14;
+  --background: #ffffff;
+  --background-blur: rgba(255, 255, 255, 0.85);
+  --text-primary: #1d1d1f;
+  --text-secondary: #86868b;
+  --border: #d2d2d7;
+  --shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  --shadow-light: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --radius: 12px;
+  --radius-small: 8px;
+  --transition: cubic-bezier(0.28, 0, 0.63, 1);
+  --header-height-mobile: 180px;
+  --header-height-desktop: 160px;
+}
+
+/* === RESET CSS === */
+* { 
+  box-sizing: border-box; 
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  color: var(--text-primary);
+  /* Prévention du scroll horizontal */
+  overflow-x: hidden;
+}
+
+/* === ACCESSIBILITÉ === */
+/* Cache visually-hidden */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* === OPTIMISATIONS PERFORMANCE === */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

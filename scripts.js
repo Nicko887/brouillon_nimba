@@ -1,4 +1,4 @@
-    /**
+/**
      * 🎯 NIMBA HEADER - OPTIMISÉ POUR LA PERFORMANCE ET L'ACCESSIBILITÉ
      * 🔥 CORRECTION DU BUG: Mega-menu qui bloque les clics après fermeture
      */
@@ -105,7 +105,7 @@
         
         // 🔥 FIX: S'assurer que le mega-menu reçoit les événements quand ouvert
         this.megaMenu.style.pointerEvents = 'auto';
-        this.megaMenu.style.zIndex = '1000';
+        this.megaMenu.style.zIndex = '1002';
         
         // Prévention du scroll du body
         document.body.style.overflow = 'hidden';
@@ -199,7 +199,7 @@
       }
 
       /**
-       * 📐 GESTION DU RESIZE
+       * 🔍 GESTION DU RESIZE
        */
       handleResize() {
         const isMobile = window.innerWidth < 768;
@@ -221,8 +221,8 @@
           }
         } else {
           // Mode desktop: comportement normal
-          this.megaMenu.style.pointerEvents = 'auto';
-          this.megaMenu.style.zIndex = 'auto';
+          this.megaMenu.style.pointerEvents = '';
+          this.megaMenu.style.zIndex = '';
         }
         
         // Réinitialisation des styles en cas de changement de breakpoint
@@ -390,13 +390,13 @@
           this.megaMenu.style.pointerEvents = 'none';
           this.megaMenu.style.zIndex = '-1';
         } else {
-          this.megaMenu.style.pointerEvents = 'auto';
-          this.megaMenu.style.zIndex = 'auto';
+          this.megaMenu.style.pointerEvents = '';
+          this.megaMenu.style.zIndex = '';
         }
       }
 
       /**
-       * 📐 RÉINITIALISATION DES STYLES RESPONSIVES
+       * 🔍 RÉINITIALISATION DES STYLES RESPONSIVES
        */
       resetResponsiveStyles() {
         if (window.innerWidth >= 768) {
@@ -405,8 +405,8 @@
           this.closeAllSubMenus();
           
           // 🔥 FIX: Réactivation du mega-menu sur desktop
-          this.megaMenu.style.pointerEvents = 'auto';
-          this.megaMenu.style.zIndex = 'auto';
+          this.megaMenu.style.pointerEvents = '';
+          this.megaMenu.style.zIndex = '';
         } else {
           // Mobile: s'assurer que le mega-menu est désactivé si fermé
           if (!this.isMenuOpen) {

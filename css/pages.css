@@ -1,0 +1,17 @@
+﻿/*
+================================================================================
+PAGES - pages.css
+================================================================================
+Styles spécifiques par page uniquement
+Impact : VARIABLE selon la page
+*/
+
+/* === STYLES DU CONTENU === */
+.recherche-section, .scrolling-text-container, .central, .medium-section,
+.left-column, .right-column {
+  margin-bottom: 20px;
+  padding: 20px;
+  background: white;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-light);
+}

@@ -1,0 +1,445 @@
+﻿/*
+================================================================================
+RESPONSIVE - responsive.css
+================================================================================
+Breakpoints et adaptations mobile-first
+Impact : TRÈS ÉLEVÉ pour l'expérience mobile
+Version finale propre avec révélation inscription desktop
+*/
+
+/* === RESPONSIVE DESKTOP === */
+@media (min-width: 768px) {
+  /* === HEADER DESKTOP === */
+  .header {
+    position: fixed;
+    top: 0;
+    background-color: rgba(255, 255, 255, 0.98);
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  }
+
+  /* === RÉVÉLATION SECTIONS DESKTOP (sans !important) === */
+  .header .header-disappearing,
+  .header .main-nav {
+    max-height: none;
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+    overflow: visible;
+  }
+
+  /* === MEGA MENU DISPARAIT AU SCROLL (sans !important) === */
+  .header.scrolled .mega-menu {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    pointer-events: none;
+    transform: translateY(-100%);
+    transition: all 0.3s var(--transition);
+  }
+
+  /* === HEADER TOP DESKTOP === */
+  .header-top {
+    padding: 16px 40px;
+    min-height: 70px;
+    padding-right: 40px;
+    gap: 40px;
+  }
+
+  .header-left {
+    gap: 40px;
+  }
+
+  .header__logo img {
+    height: 45px;
+  }
+
+  /* === LIENS TOP DESKTOP === */
+  .top-links {
+    gap: 30px;
+  }
+
+  .top-links a {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--text-secondary);
+    padding: 0;
+    background: none;
+    border-radius: 0;
+    letter-spacing: 0.3px;
+    transition: color var(--transition);
+  }
+
+  .top-links a:hover,
+  .top-links a:focus {
+    background: none;
+    color: var(--primary);
+    transform: none;
+    outline: none;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  /* === RECHERCHE DESKTOP === */
+  .search-desktop {
+    display: block;
+    flex: 1;
+    max-width: 600px;
+    margin: 0 40px;
+  }
+
+  /* === STYLES RECHERCHE DESKTOP === */
+  .search-container {
+    position: relative;
+    width: 100%;
+  }
+
+  .search-container input {
+    width: 100%;
+    height: 44px;
+    padding: 0 50px 0 16px;
+    border: 1px solid #d1d5db;
+    border-radius: 10px; /* Plus arrondi */
+    background: #f8fafc;
+    font-size: 15px;
+    color: #374151;
+    outline: none;
+    transition: all 0.2s ease;
+    box-shadow: none;
+  }
+
+  .search-container input:focus {
+    border-color: var(--primary);
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  }
+
+  .search-container input::placeholder {
+    color: #9ca3af;
+    font-weight: 400;
+    opacity: 1;
+  }
+
+  .search-container button {
+    position: absolute;
+    right: 4px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--primary);
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px; /* Plus arrondi */
+    cursor: pointer;
+    color: white;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .search-container button:hover,
+  .search-container button:focus {
+    background: var(--primary-hover);
+    transform: translateY(-50%) scale(1.02);
+  }
+
+  /* === ICÔNE SVG DESKTOP === */
+  .search-container button svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* === MASQUER RECHERCHE MOBILE === */
+  .header-search-mobile {
+    display: none;
+  }
+
+  /* === AUTH BUTTONS DESKTOP === */
+  .auth-buttons {
+    gap: 30px;
+    flex-shrink: 0;
+  }
+
+  .inscription {
+    padding: 0;
+    background: none;
+    color: var(--primary);
+    border-radius: 0;
+    font-size: 14px;
+    font-weight: 600;
+    border: none;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: color var(--transition);
+  }
+
+  .inscription:hover,
+  .inscription:focus {
+    color: var(--primary-hover);
+    background: none;
+    transform: none;
+    outline: none;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  .login-button {
+    background: none;
+    color: var(--text-primary);
+    padding: 0;
+    border-radius: 0;
+    font-weight: 500;
+    font-size: 14px;
+    box-shadow: none;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: color var(--transition);
+  }
+
+  .login-button:hover,
+  .login-button:focus {
+    color: var(--primary);
+    transform: none;
+    box-shadow: none;
+    background: none;
+    outline: none;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  /* === NAVIGATION PRINCIPALE DESKTOP === */
+  .main-nav ul {
+    justify-content: center;
+    gap: 50px;
+    padding: 18px 40px;
+    flex-wrap: nowrap;
+  }
+
+  .main-nav li a {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+    padding: 0;
+    background: none;
+    border: none;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: color var(--transition);
+  }
+
+  .main-nav li a:hover,
+  .main-nav li a:focus {
+    color: var(--primary);
+    transform: none;
+    background: none;
+    box-shadow: none;
+    outline: none;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  /* === MEGA MENU DESKTOP === */
+  .mega-menu {
+    position: static;
+    width: 100%;
+    max-height: none;
+    overflow: visible;
+    background: rgba(248, 250, 252, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    opacity: 1;
+    transform: none;
+    /* 🔥 FIX: Ne pas forcer z-index, laisser le CSS mobile gérer */
+    z-index: inherit;
+    padding: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.04);
+    /* 🔥 FIX: Ne pas forcer pointer-events, laisser le JS mobile gérer */
+    pointer-events: inherit;
+  }
+
+  .mega-menu > ul {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    padding: 16px 40px;
+    list-style: none;
+    flex-wrap: wrap;
+    margin: 0;
+  }
+
+  .mega-menu > ul > li {
+    position: relative;
+    margin-bottom: 0;
+  }
+
+  .mega-menu > ul > li > button,
+  .mega-menu > ul > li > a {
+    display: block;
+    padding: 10px 20px;
+    background: none;
+    border: none;
+    text-align: center;
+    color: var(--text-primary);
+    font-weight: 500;
+    font-size: 13px;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.2s var(--transition);
+    text-decoration: none;
+    white-space: nowrap;
+    width: auto;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    font-family: inherit;
+  }
+
+  .mega-menu > ul > li > button:hover,
+  .mega-menu > ul > li > button:focus,
+  .mega-menu > ul > li > a:hover,
+  .mega-menu > ul > li > a:focus {
+    background: rgba(0, 122, 255, 0.06);
+    color: var(--primary);
+    transform: translateY(-1px);
+    outline: none;
+  }
+
+  /* === DROPDOWNS DESKTOP AU HOVER === */
+  .mega-menu .submenu {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 240px;
+    max-height: 0;
+    overflow: hidden;
+    background: white;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
+    transition: all 0.3s var(--transition);
+    margin: 0;
+    z-index: 1000;
+    opacity: 0;
+    transform: translateX(-50%) translateY(-8px);
+    will-change: transform, opacity;
+  }
+
+  .mega-menu > ul > li:hover .submenu,
+  .mega-menu > ul > li:focus-within .submenu {
+    max-height: 400px;
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+    padding: 12px 0;
+    margin-top: 8px;
+  }
+
+  .mega-menu .submenu li {
+    margin: 0;
+  }
+
+  .mega-menu .submenu li a {
+    display: block;
+    padding: 12px 24px;
+    font-size: 13px;
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: all 0.2s var(--transition);
+    width: 100%;
+    text-align: left;
+    text-transform: none;
+    font-weight: 400;
+    letter-spacing: normal;
+    border-radius: 0;
+  }
+
+  .mega-menu .submenu li a:hover,
+  .mega-menu .submenu li a:focus {
+    background: rgba(0, 122, 255, 0.06);
+    color: var(--primary);
+    transform: none;
+    padding-left: 28px;
+    outline: none;
+  }
+
+  /* === MASQUER BURGER SUR DESKTOP === */
+  .burger-menu {
+    display: none;
+  }
+}
+
+/* === RÉVÉLATION INSCRIPTION SUR GRAND DESKTOP === */
+@media (min-width: 1024px) {
+  .inscription {
+    display: inline-flex; /* Révélé sur desktop */
+  }
+}
+
+/* === RESPONSIVE TRÈS PETITS ÉCRANS === */
+@media (max-width: 480px) {
+  /* === HEADER MOBILE OPTIMISÉ === */
+  .auth-buttons {
+    gap: 8px;
+  }
+
+  .inscription,
+  .login-button {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+
+  .header-top {
+    padding: 10px 15px;
+    padding-right: 70px;
+  }
+
+  .header-search-mobile {
+    padding: 8px 15px;
+    padding-right: 70px;
+  }
+
+  /* === CONTENU MOBILE === */
+  .main-content {
+    margin-top: 160px;
+    padding: 15px;
+  }
+
+  /* === POSITIONNEMENT BURGER ET MEGA MENU === */
+  .burger-menu {
+    right: 15px; /* Seulement le positionnement */
+  }
+
+  .mega-menu {
+    right: 15px;
+    width: calc(100vw - 30px);
+  }
+}
+
+/* === AMÉLIORATION LISIBILITÉ ÉCRANS ULTRA-PETITS === */
+@media (max-width: 360px) {
+  .top-links__social {
+    width: 30px !important;
+    height: 30px !important;
+    padding: 6px !important;
+  }
+  
+  .top-links__social svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .main-nav ul {
+    gap: 8px;
+  }
+  
+  .main-nav li a {
+    font-size: 11px;
+    padding: 6px 12px;
+  }
+}

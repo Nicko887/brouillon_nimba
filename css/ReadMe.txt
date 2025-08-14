@@ -1,364 +1,431 @@
 ================================================================================
-                        README - MAINTENANCE CSS STRUCTURE FRANÇAISE
-                                Site de Petites Annonces
+GUIDE COMPLET DE MAINTENANCE CSS
 ================================================================================
-
-TABLE DES MATIÈRES
-==================
-1. Vue d'ensemble du projet
-2. Architecture CSS modulaire
-3. Guide de maintenance par dossier
-4. Conventions de nommage
-5. Ordre d'importation critique
-6. Méthodologie de modification
-7. Guide pour demandes d'optimisation IA
-8. Résolution de problèmes
-9. Bonnes pratiques
-10. Checklist de maintenance
+Architecture CSS optimisée pour site d'annonces
+Structure simplifiée et évolutive - 8 fichiers core
+Version : 2.0 | Dernière mise à jour : [À compléter]
 
 ================================================================================
-1. VUE D'ENSEMBLE DU PROJET
+1. OBJECTIF ARCHITECTURAL
 ================================================================================
 
-OBJECTIF ARCHITECTURAL
-Ce projet utilise une structure CSS modulaire en français pour faciliter 
-la maintenance et la collaboration sur un site de petites annonces développé 
-avec Django. L'architecture sépare les responsabilités et permet une évolution 
-progressive sans casser l'existant.
+Cette structure CSS réorganisée facilite grandement la maintenance et la 
+collaboration sur votre site d'annonces. L'architecture suit le principe 
+"mobile-first" et sépare les responsabilités pour une évolution progressive 
+sans casser l'existant.
 
 PRINCIPE FONDAMENTAL
 Chaque fichier CSS a une responsabilité unique et clairement définie. 
 Cette séparation permet de localiser rapidement les styles à modifier 
 et de travailler en équipe sans conflits.
 
-AVANTAGES CLÉS
-- Maintenance simplifiée grâce aux noms français évocateurs
+AVANTAGES CLÉS DE LA RÉORGANISATION
+- Maintenance simplifiée grâce à 8 fichiers organisés vs monolithe
 - Modifications isolées sans impact sur d'autres sections
-- Évolutivité facilitée pour ajout de nouvelles fonctionnalités
-- Collaboration optimisée avec responsabilités claires
-- Débogage accéléré par la localisation précise des styles
+- Mobile-first renforcé pour une meilleure performance
+- Variables CSS standardisées et extensibles
+- Conventions de nommage cohérentes (BEM français)
+- Classes utilitaires complètes pour développement rapide
+- Accessibilité et performance optimisées
 
 ================================================================================
-2. ARCHITECTURE CSS MODULAIRE
+2. ARCHITECTURE CSS RÉORGANISÉE
 ================================================================================
 
-STRUCTURE GÉNÉRALE
+STRUCTURE GÉNÉRALE (8 FICHIERS CORE)
 /css/
 ├── main.css                               (Point d'entrée UNIQUE)
-├── fondations/                            (Variables globales, reset)
-├── structure/                             (Layout principal du site)
-├── composants/                            (Éléments réutilisables)
-├── annonces/                              (Spécifique métier annonces)
-├── pages/                                 (Styles par page)
-├── fonctionnalites/                       (Features interactives)
-├── django/                                (Intégration framework)
-├── utilitaires/                           (Classes atomiques)
-├── themes/                                (Variantes visuelles)
-└── ecrans/                                (Responsive design)
+├── base.css                               (Variables, reset, typographie)
+├── layout.css                             (Header, footer, navigation, grilles)
+├── composants.css                         (Boutons, formulaires, burger, mega-menu)
+├── annonces.css                           (Métier spécifique aux annonces)
+├── pages.css                              (Styles spécifiques par page)
+├── utilitaires.css                        (Classes d'aide atomiques)
+└── responsive.css                         (Breakpoints mobile-first)
 
-HIÉRARCHIE D'IMPORTATION
+HIÉRARCHIE D'IMPORTATION CRITIQUE
 L'ordre d'importation dans main.css est critique et doit être respecté 
 pour éviter les problèmes de cascade CSS et de spécificité.
 
-LOGIQUE DE SÉPARATION
-- fondations/ : Styles qui affectent tout le site
-- structure/ : Architecture générale et layout
-- composants/ : Éléments réutilisables sur plusieurs pages
-- annonces/ : Logique métier spécifique aux petites annonces
-- pages/ : Styles spécifiques à chaque page
-- fonctionnalites/ : Features complexes et interactives
-- django/ : Intégration avec le framework Django
-- utilitaires/ : Classes d'aide et modifications rapides
-- themes/ : Variations visuelles et modes d'affichage
-- ecrans/ : Adaptations responsive pour différentes tailles
+LOGIQUE DE SÉPARATION SIMPLIFIÉE
+- base.css : Variables globales, reset CSS, typographie de base
+- layout.css : Structure générale du site (header, footer, navigation)
+- composants.css : Éléments réutilisables (boutons, formulaires, menus)
+- annonces.css : Tout le métier spécifique aux annonces
+- pages.css : Styles spécifiques par page uniquement
+- utilitaires.css : Classes d'aide pour styling rapide
+- responsive.css : Adaptations mobile, tablette, desktop
 
 ================================================================================
-3. GUIDE DE MAINTENANCE PAR DOSSIER
+3. GUIDE DE MAINTENANCE PAR FICHIER
 ================================================================================
 
-DOSSIER FONDATIONS/
-===================
-Rôle : Contient les bases du design system et les styles globaux
-Impact : Modifications affectent l'ensemble du site
-Criticité : TRÈS ÉLEVÉE - Tester sur toutes les pages après modification
+FICHIER BASE.CSS
+===============
+Rôle : Variables globales, reset CSS moderne, typographie de base
+Impact : GLOBAL - Tester sur tout le site après modification
+Criticité : TRÈS ÉLEVÉE - Affecte l'ensemble de l'application
 
-Fichiers détaillés :
-- variables.css : Variables CSS globales (couleurs, espacements, polices, 
-  breakpoints, animations). Centralise tous les tokens de design pour 
-  maintenir la cohérence visuelle.
-- reinitialisation.css : Reset CSS navigateur, box-sizing, styles body globaux.
-  Assure un rendu cohérent entre navigateurs.
-- typographie.css : Système typographique complet (titres, paragraphes, liens,
-  hiérarchie). Définit l'identité textuelle du site.
-- animations.css : Keyframes globales, transitions par défaut, gestion du 
-  prefers-reduced-motion pour l'accessibilité.
+Contenu détaillé :
+- Variables CSS globales (:root)
+  * Couleurs (primaire, secondaire, système, fond, texte, bordures)
+  * Espacements (système d'échelle xs à 3xl)
+  * Typographie (polices, tailles responsive)
+  * Breakpoints (mobile: 768px, tablette: 1024px, desktop: 1280px)
+  * Rayons de bordure (xs à 2xl)
+  * Ombres (xs à xl)
+  * Transitions optimisées (rapide, normale, lente)
+  * Dimensions header (mobile/desktop)
 
-Quand modifier fondations/ :
+- Reset CSS moderne
+  * Box-sizing border-box global
+  * Marges et paddings à zéro
+  * Optimisations de rendu (font-smoothing, text-rendering)
+  * Prévention scroll horizontal
+
+- Typographie globale
+  * Hiérarchie des titres (h1 à h6)
+  * Styles de base pour paragraphes et liens
+  * Optimisation des éléments média
+
+- Accessibilité
+  * Classe .visually-hidden
+  * Support prefers-reduced-motion
+  * Focus-visible optimisé
+  * Support backdrop-filter
+
+Quand modifier base.css :
 - Changement de charte graphique globale
 - Ajout de nouvelles couleurs dans le design system
 - Modification des espacements standards
 - Évolution de la typographie générale
-- Ajustement des animations par défaut
+- Ajout de nouvelles variables CSS
+- Optimisation des performances globales
 
-DOSSIER STRUCTURE/
+FICHIER LAYOUT.CSS
 ==================
-Rôle : Architecture générale et layout principal du site
-Impact : Modification de la structure visuelle générale
-Criticité : ÉLEVÉE - Affecte la navigation et la disposition
+Rôle : Structure générale du site, header, footer, navigation
+Impact : ÉLEVÉ - Affecte la disposition générale
+Criticité : ÉLEVÉE - Modifie l'architecture visuelle
 
-Fichiers détaillés :
-- en-tete.css : Header fixe/sticky, logo, navigation principale, zones 
-  d'authentification. Gère le comportement au scroll et les breakpoints.
-- pied-de-page.css : Footer avec liens, mentions légales, méthodes de paiement,
-  réseaux sociaux. Styles pour présentation cohérente.
-- grille.css : Système de grille CSS Grid et Flexbox, colonnes responsive,
-  gaps et alignements pour layouts complexes.
-- conteneurs.css : Wrappers principaux, max-width, centrage, marges des 
-  sections. Définit la largeur maximale du contenu.
+Contenu détaillé :
+- Conteneur principal (.main-content)
+  * Marges top responsive selon header
+  * Padding et dimensions générales
 
-Quand modifier structure/ :
+- Header global (.header)
+  * Position fixed avec backdrop-filter
+  * États scrolled avec animations
+  * Sections qui disparaissent au scroll mobile
+
+- Header top (.header-top, .header-left)
+  * Logo avec animations hover
+  * Liens top et auth buttons
+  * Disposition responsive
+
+- Navigation principale (.main-nav)
+  * Menu horizontal centré
+  * Styles des liens de navigation
+  * Animations et états hover
+
+- Footer (.footer)
+  * Méthodes de paiement
+  * Liens footer
+  * Copyright et mentions
+
+Quand modifier layout.css :
 - Changement de la navigation principale
-- Modification de la disposition générale des pages
-- Ajustement des conteneurs et largeurs maximales
-- Évolution du header ou footer
-- Refonte de l'architecture responsive
+- Modification de la disposition du header
+- Ajustement du footer
+- Évolution de la structure des pages
+- Modifications du comportement responsive global
 
-DOSSIER COMPOSANTS/
-===================
-Rôle : Éléments d'interface réutilisables sur plusieurs pages
-Impact : Modification d'éléments utilisés à plusieurs endroits
-Criticité : MOYENNE À ÉLEVÉE selon l'usage du composant
+FICHIER COMPOSANTS.CSS
+=======================
+Rôle : Éléments réutilisables (boutons, formulaires, burger, mega-menu)
+Impact : MOYEN À ÉLEVÉ selon l'usage du composant
+Criticité : MOYENNE À ÉLEVÉE selon l'ubiquité
 
-Fichiers détaillés :
-- boutons.css : Système complet de boutons (.btn, .btn-primaire, variantes),
-  états hover/focus/disabled, animations et accessibilité.
-- cartes.css : Structure de base des cartes réutilisables, padding, bordures,
-  ombres, états hover. Base pour toutes les cartes du site.
-- formulaires.css : Styles pour inputs, selects, textareas, checkboxes, 
-  radio buttons, messages d'erreur, validation visuelle.
-- navigation.css : Menus principaux, burger menu mobile, dropdowns, 
-  mega-menus, breadcrumbs, navigation secondaire.
-- modales.css : Pop-ups, overlays, lightboxes, animations d'ouverture/
-  fermeture, positionnement et z-index.
-- chargement.css : Indicateurs de chargement, spinners, skeleton loading,
-  barres de progression, états de loading.
+Contenu détaillé :
+- Système de boutons
+  * .btn classe de base
+  * .btn--primaire, .btn--secondaire variantes
+  * .btn--outline pour boutons outline
+  * États hover/focus/disabled avec animations
 
-Quand modifier composants/ :
-- Création d'un nouveau type de bouton ou variante
-- Modification du style des formulaires
-- Évolution des cartes affichées sur le site
-- Ajustement des modales et pop-ups
-- Amélioration des indicateurs de chargement
+- Formulaires et recherche
+  * .search-form pour barres de recherche
+  * Inputs avec styles focus optimisés
+  * Boutons de soumission intégrés
 
-DOSSIER ANNONCES/
-=================
-Rôle : Styles spécifiques au métier des petites annonces
-Impact : Modification de l'expérience utilisateur principale
-Criticité : TRÈS ÉLEVÉE - Cœur de l'activité du site
+- Burger menu (.burger-menu)
+  * Position fixed responsive
+  * Animation burger → croix
+  * Barres avec transforms optimisées
+  * États hover avancés
 
-Fichiers détaillés :
-- carte-annonce.css : Affichage des vignettes d'annonces (titre, prix, photo,
-  localisation, date). Gère les versions grid et liste.
-- galerie-photos.css : Carrousel d'images, zoom, thumbnails, navigation,
-  modal plein écran, responsive pour mobile et desktop.
-- filtres.css : Panel de filtres avancés (prix, catégorie, localisation,
-  date), toggles, accordéons, états actifs.
-- barre-recherche.css : Champ de recherche avec autocomplétion, suggestions,
-  historique, bouton de recherche et raccourcis clavier.
-- fil-ariane.css : Breadcrumbs de navigation (Accueil > Catégorie > Sous-cat),
-  séparateurs, liens actifs et inactifs.
-- pagination.css : Navigation entre pages (précédent/suivant, numéros),
-  états actifs, disabled, responsive mobile.
-- badges-etats.css : Labels "Nouveau", "Urgent", "Vendu", "PRO", couleurs
-  sémantiques, animations d'apparition.
-- favoris.css : Système de favoris (cœur plein/vide), listes de favoris,
-  animations de toggle, compteurs.
-- carte-geographique.css : Intégration Leaflet/Google Maps, markers 
-  personnalisés, contrôles, responsive et mobile.
+- Mega menu (.mega-menu)
+  * Version mobile (dropdown fixe)
+  * Version desktop (menu horizontal)
+  * Sous-menus avec animations
+  * Gestion z-index et pointer-events
 
-Quand modifier annonces/ :
-- Amélioration de l'affichage des annonces
-- Évolution des fonctionnalités de recherche et filtrage
+- Liens et boutons header
+  * .top-links avec styles subtils
+  * .auth-buttons (inscription, login)
+  * Navigation principale responsive
+
+Quand modifier composants.css :
+- Création de nouveaux types de boutons
+- Modification des styles de formulaires
+- Évolution du menu burger ou mega-menu
+- Ajout de nouveaux composants réutilisables
+- Amélioration des animations et interactions
+
+FICHIER ANNONCES.CSS
+====================
+Rôle : Styles spécifiques au métier des annonces
+Impact : TRÈS ÉLEVÉ - Cœur de l'activité métier
+Criticité : TRÈS ÉLEVÉE - Expérience utilisateur principale
+
+Contenu détaillé :
+- Cartes d'annonces (.annonce-carte)
+  * Structure de base avec hover effects
+  * Image, titre, prix, métadonnées
+  * Animations et états interactifs
+
+- Badges et états (.annonce-badge)
+  * .annonce-badge--nouveau (vert)
+  * .annonce-badge--urgent (orange avec pulse)
+  * .annonce-badge--vendu (gris)
+  * .annonce-badge--pro (bleu)
+
+- Filtres et recherche (.annonce-filtres)
+  * Panel de filtres avec groupes
+  * Inputs et labels stylisés
+  * États focus et interactions
+
+- Galerie photos (.annonce-galerie)
+  * Image principale responsive
+  * Thumbnails avec navigation
+  * États actifs et hover
+
+- Favoris (.annonce-favori)
+  * Bouton floating avec backdrop-filter
+  * Animation et états actif/inactif
+  * Positionnement responsive
+
+- Pagination (.annonce-pagination)
+  * Boutons de navigation
+  * États actif/disabled
+  * Centrage et espacements
+
+Quand modifier annonces.css :
+- Amélioration de l'affichage des cartes d'annonces
+- Ajout de nouveaux types de badges
+- Évolution des filtres de recherche
 - Modification de la galerie photos
-- Ajustement des états et badges
-- Optimisation de la géolocalisation
+- Optimisation de l'expérience favoris
+- Ajustement de la pagination
 
-DOSSIER PAGES/
-==============
-Rôle : Styles spécifiques à chaque page du site
-Impact : Modification d'une page particulière uniquement
-Criticité : VARIABLE selon l'importance de la page
+FICHIER PAGES.CSS
+=================
+Rôle : Styles spécifiques par page uniquement
+Impact : VARIABLE selon la page modifiée
+Criticité : MOYENNE - Limitée à une page spécifique
 
-Fichiers détaillés :
-- accueil.css : Page d'accueil avec hero section, catégories populaires,
-  annonces récentes, call-to-actions, sections marketing.
-- liste-annonces.css : Page de liste avec grille/liste d'annonces, tri,
-  filtres sidebar, pagination, modes d'affichage.
-- detail-annonce.css : Page individuelle d'annonce avec galerie, description,
-  caractéristiques, contact vendeur, annonces similaires.
-- deposer-annonce.css : Formulaire de création d'annonce multi-étapes,
-  upload photos, preview, validation, progression.
-- resultats-recherche.css : Page de résultats avec gestion du cas "0 résultat",
-  suggestions alternatives, filtres contextuels.
-- profil-utilisateur.css : Profil public avec photo, statistiques,
-  annonces de l'utilisateur, évaluations, contact.
-- tableau-bord.css : Dashboard privé utilisateur (mes annonces, favoris,
-  messages, statistiques, paramètres).
-- messagerie.css : Interface de chat (conversations, messages, statuts
-  de lecture, notifications, responsive mobile).
-- categories.css : Pages de catégories avec sous-catégories, descriptions,
-  annonces populaires, navigation dans l'arbre.
+Contenu détaillé :
+- Sections communes
+  * Classes de base pour sections (.recherche-section, .central, etc.)
+  * Styles hover et animations
+  * Padding et marges cohérents
 
-Quand modifier pages/ :
+- Page accueil (.page-accueil)
+  * Hero section avec gradient
+  * Grille de catégories responsive
+  * Cartes de catégories avec hover
+
+- Page liste annonces (.page-liste)
+  * Toolbar avec vue grille/liste
+  * Boutons de changement de vue
+  * Grilles responsive pour résultats
+
+- Page détail annonce (.page-detail)
+  * Header d'annonce (titre, prix, meta)
+  * Description stylisée
+  * Bouton de contact vendeur
+  * Sections annexes
+
+- Page profil (.page-profil)
+  * Header profil avec avatar
+  * Informations utilisateur
+  * Statistiques et métadonnées
+
+Quand modifier pages.css :
 - Création d'une nouvelle page
 - Refonte de l'interface d'une page existante
-- Ajout de nouvelles sections ou fonctionnalités
-- Optimisation de l'expérience utilisateur d'une page
-- Amélioration du responsive d'une page spécifique
+- Ajout de sections spécifiques à une page
+- Optimisation responsive d'une page particulière
+- Amélioration de l'expérience utilisateur par page
 
-DOSSIER FONCTIONNALITES/
+FICHIER UTILITAIRES.CSS
 ========================
-Rôle : Features avancées et interactives du site
-Impact : Modification de fonctionnalités complexes
-Criticité : ÉLEVÉE pour l'expérience utilisateur
+Rôle : Classes d'aide atomiques pour développement rapide
+Impact : FAIBLE - Classes d'appoint
+Criticité : FAIBLE - Modifications localisées
 
-Fichiers détaillés :
-- geolocalisation.css : Sélecteur de ville/région, autocomplétion géographique,
-  détection GPS, cartes de sélection, validation.
-- fourchette-prix.css : Range slider double (prix min/max), valeurs dynamiques,
-  optimisation tactile mobile, animations fluides.
-- selecteur-categories.css : Arbre déroulant de catégories/sous-catégories,
-  recherche dans les catégories, sélection multiple.
-- upload-photos.css : Drag & drop d'images, preview, réorganisation,
-  compression automatique, formats acceptés, erreurs.
-- contact-vendeur.css : Modal de contact vendeur, formulaire avec validation,
-  protection anti-spam, historique des messages.
-- signalement.css : Formulaire de signalement d'annonces, motifs prédéfinis,
-  validation, confirmation d'envoi.
+Contenu détaillé :
+- Espacements
+  * Marges (.u-mt-*, .u-mb-*, .u-mx-auto)
+  * Paddings (.u-p-*)
+  * Système d'échelle cohérent avec variables
 
-Quand modifier fonctionnalites/ :
-- Ajout d'une nouvelle fonctionnalité interactive
-- Amélioration de l'ergonomie des features existantes
-- Optimisation mobile des interactions
-- Intégration de nouveaux widgets ou plugins
-- Résolution de bugs sur les fonctionnalités avancées
+- Texte
+  * Alignement (.u-text-center, .u-text-left, .u-text-right)
+  * Poids (.u-text-bold, .u-text-normal)
+  * Tailles (.u-text-xs à .u-text-2xl)
+  * Transformations (.u-text-uppercase, .u-text-truncate)
 
-DOSSIER DJANGO/
-===============
-Rôle : Intégration avec le framework Django
-Impact : Modification des éléments générés par Django
-Criticité : MOYENNE - Affecte les formulaires et l'admin
+- Couleurs
+  * Texte (.u-text-primaire, .u-text-succes, etc.)
+  * Fond (.u-bg-primaire, .u-bg-transparent)
+  * Couleurs sémantiques complètes
 
-Fichiers détaillés :
-- formulaires-django.css : Styles pour Django forms (Field, Widget, ErrorList),
-  messages d'erreur, help_text, required fields.
-- admin-django.css : Personnalisation de l'interface d'administration Django,
-  couleurs, layout, responsive, navigation.
-- messages-django.css : Styles pour Django messages framework (success, error,
-  warning, info), animations, positionnement.
-- crispy-forms.css : Styles pour django-crispy-forms si utilisé, layouts
-  personnalisés, classes Bootstrap adaptées.
+- Affichage
+  * Display (.u-hidden, .u-visible, .u-flex, .u-grid)
+  * Flexbox (.u-flex-center, .u-flex-between, .u-flex-column)
+  * Propriétés flex (.u-flex-1, .u-flex-wrap)
 
-Quand modifier django/ :
-- Personnalisation des formulaires générés par Django
-- Amélioration de l'interface d'administration
-- Stylisation des messages système
-- Intégration de nouvelles extensions Django
+- Positionnement
+  * Position (.u-relative, .u-absolute, .u-fixed, .u-sticky)
+  * Coordonnées (.u-top-0, .u-right-0, etc.)
 
-DOSSIER UTILITAIRES/
-====================
-Rôle : Classes atomiques et utilitaires CSS
-Impact : Ajout de classes d'aide pour styling rapide
-Criticité : FAIBLE - Classes d'appoint
+- Dimensions
+  * Largeur (.u-w-full, .u-w-auto, .u-max-w-*)
+  * Hauteur (.u-h-full, .u-h-auto)
 
-Fichiers détaillés :
-- espacements.css : Classes d'espacement (.mt-1, .mb-2, .p-lg, .mx-auto),
-  système d'échelle cohérent avec les variables.
-- couleurs.css : Classes de couleurs (.texte-primaire, .fond-succes,
-  .bordure-erreur), variantes et nuances.
-- texte.css : Utilitaires texte (.centre, .gras, .italique, .majuscules,
-  .tronque), alignements et transformations.
-- affichage.css : Classes d'affichage (.cache, .visible, .flex, .grille,
-  .bloc), responsive utilities, sr-only.
+- Bordures et ombres
+  * Bordures (.u-border, .u-border-0, .u-rounded-*)
+  * Ombres (.u-shadow-xs à .u-shadow-xl)
 
-Quand modifier utilitaires/ :
+- Divers
+  * Opacité (.u-opacity-*)
+  * Débordement (.u-overflow-hidden, .u-overflow-auto)
+  * Z-index (.u-z-10, .u-z-50)
+  * Curseur (.u-cursor-pointer, .u-cursor-not-allowed)
+  * Interactions (.u-pointer-events-none)
+
+Quand modifier utilitaires.css :
 - Ajout de nouvelles classes d'aide
 - Extension du système d'espacement
 - Création de variantes de couleurs
 - Ajout d'utilitaires responsive
+- Besoins de développement rapide
 
-DOSSIER THEMES/
-===============
-Rôle : Variations visuelles et thèmes du site
-Impact : Changement d'apparence globale optionnel
-Criticité : FAIBLE À MOYENNE selon l'usage
+FICHIER RESPONSIVE.CSS
+======================
+Rôle : Breakpoints et adaptations mobile-first
+Impact : TRÈS ÉLEVÉ pour l'expérience mobile
+Criticité : TRÈS ÉLEVÉE - Affecte tous les appareils
 
-Fichiers détaillés :
-- theme-clair.css : Variables et overrides pour le mode jour,
-  couleurs claires, contrastes optimisés.
-- theme-sombre.css : Variables et overrides pour le mode nuit,
-  couleurs sombres, accessibilité maintenue.
+Contenu détaillé :
+- Mobile spécifique (max-width: 480px)
+  * Masquage des liens top
+  * Réduction des boutons auth
+  * Ajustement burger menu
+  * Optimisation navigation très petits écrans
 
-Quand modifier themes/ :
-- Création d'un nouveau thème visuel
-- Ajustement des modes clair/sombre
-- Amélioration de l'accessibilité des thèmes
-- Ajout de thèmes saisonniers ou événementiels
+- Mobile étendu (max-width: 767px)
+  * Animations header au scroll
+  * Masquage sections header
+  * Recherche mobile persistante
+  * Grilles single-column
+  * Utilitaires mobile (.u-hidden-mobile)
 
-DOSSIER ECRANS/
-===============
-Rôle : Adaptations responsive pour différentes tailles d'écran
-Impact : Modification de l'affichage selon les appareils
-Criticité : TRÈS ÉLEVÉE pour l'expérience mobile
+- Tablette (min-width: 768px)
+  * Header sticky
+  * Révélation des sections desktop
+  * Recherche desktop
+  * Auth buttons en mode texte
+  * Menu horizontal
+  * Mega menu desktop avec dropdowns hover
 
-Fichiers détaillés :
-- tablette.css : Styles pour écrans moyens (768px+), adaptations layout,
-  navigation horizontale, colonnes multiples.
-- ordinateur.css : Styles pour desktop (1024px+), menus complets,
-  hover effects, layouts complexes, sidebar.
-- grand-ecran.css : Styles pour grands écrans (1440px+), max-width optimisées,
-  espacements étendus, multi-colonnes.
+- Desktop large (min-width: 1024px)
+  * Espacements étendus
+  * Grilles multi-colonnes optimisées
+  * Contenus plus larges
 
-Quand modifier ecrans/ :
+- Grand écran (min-width: 1280px)
+  * Contrainte max-width 1200px
+  * Centrage du contenu
+  * Espacements maximaux
+  * Recherche étendue
+
+- Utilitaires responsive avancés
+  * Classes mobile (.u-mobile-text-center, .u-mobile-w-full)
+  * Classes desktop (.u-desktop-flex-row, .u-desktop-w-auto)
+
+Quand modifier responsive.css :
 - Ajout d'un nouveau breakpoint
 - Optimisation mobile d'une fonctionnalité
 - Amélioration de l'affichage desktop
 - Résolution de problèmes responsive
+- Ajout d'utilitaires responsive
 
 ================================================================================
 4. CONVENTIONS DE NOMMAGE
 ================================================================================
 
-MÉTHODOLOGIE BEM FRANÇAISE
-La convention BEM (Block Element Modifier) est adaptée avec des noms français
+MÉTHODOLOGIE BEM FRANÇAISE ADAPTÉE
+Cette convention suit BEM (Block Element Modifier) avec des noms français
 pour une meilleure compréhension par l'équipe.
 
 STRUCTURE BEM FRANÇAISE
-.bloc → Composant principal (ex: .carte-annonce)
-.bloc__element → Élément du composant (ex: .carte-annonce__titre)
-.bloc--modificateur → Variante du composant (ex: .carte-annonce--urgente)
-.bloc__element--modificateur → Variante d'un élément (ex: .carte-annonce__titre--grand)
+.bloc → Composant principal (ex: .annonce-carte)
+.bloc__element → Élément du composant (ex: .annonce-carte__titre)
+.bloc--modificateur → Variante du composant (ex: .annonce-carte--urgente)
+.bloc__element--modificateur → Variante d'un élément (ex: .annonce-carte__titre--grand)
 
-RÈGLES DE NOMMAGE
+RÈGLES DE NOMMAGE APPLIQUÉES
 - Utiliser des traits d'union pour séparer les mots
 - Éviter les abréviations non évidentes
 - Privilégier la clarté à la brièveté
 - Utiliser des termes métier compréhensibles
 - Maintenir la cohérence dans tout le projet
 
-PRÉFIXES SÉMANTIQUES
-.btn- → Boutons (ex: .btn-primaire, .btn-danger)
-.carte- → Cartes (ex: .carte-produit, .carte-vendeur)
-.form- → Formulaires (ex: .form-groupe, .form-erreur)
-.nav- → Navigation (ex: .nav-principale, .nav-mobile)
+PRÉFIXES SÉMANTIQUES UTILISÉS
+.btn- → Boutons (ex: .btn-primaire, .btn--secondaire)
+.annonce- → Métier annonces (ex: .annonce-carte, .annonce-badge)
 .page- → Pages spécifiques (ex: .page-accueil, .page-detail)
+.header- → Header (ex: .header-top, .header-search-mobile)
+.mega-menu → Menu (ex: .mega-menu, .submenu)
+.u- → Utilitaires (ex: .u-text-center, .u-flex)
 
-CLASSES D'ÉTAT
-.est-actif → État actif d'un élément
-.est-cache → Élément masqué
-.est-charge → État de chargement
-.est-erreur → État d'erreur
-.est-succes → État de succès
+CLASSES D'ÉTAT STANDARDISÉES
+.active → État actif d'un élément
+.show → Élément visible/ouvert
+.scrolled → État après scroll
+.disabled → État désactivé
+
+EXEMPLES CONCRETS DE NOMMAGE
+/* Composant annonce */
+.annonce-carte                    /* Bloc principal */
+.annonce-carte__image            /* Élément image */
+.annonce-carte__titre            /* Élément titre */
+.annonce-carte__prix             /* Élément prix */
+.annonce-carte--urgente          /* Variante urgente */
+
+/* Badges d'annonces */
+.annonce-badge                   /* Bloc badge */
+.annonce-badge--nouveau          /* Variante nouveau */
+.annonce-badge--urgent           /* Variante urgent */
+.annonce-badge--vendu            /* Variante vendu */
+
+/* Système de boutons */
+.btn                            /* Bloc bouton */
+.btn--primaire                  /* Variante primaire */
+.btn--secondaire                /* Variante secondaire */
+.btn--outline                   /* Variante outline */
 
 ================================================================================
 5. ORDRE D'IMPORTATION CRITIQUE
@@ -368,84 +435,40 @@ HIÉRARCHIE OBLIGATOIRE DANS MAIN.CSS
 L'ordre d'importation est critique pour éviter les problèmes de cascade CSS
 et de spécificité. Cet ordre DOIT être respecté.
 
-1. FONDATIONS (ordre critique)
-@import url('./fondations/reinitialisation.css');
-@import url('./fondations/variables.css');
-@import url('./fondations/typographie.css');
-@import url('./fondations/animations.css');
+1. FONDATIONS (variables et reset)
+@import url('./base.css');
 
 2. STRUCTURE (layout général)
-@import url('./structure/conteneurs.css');
-@import url('./structure/grille.css');
-@import url('./structure/en-tete.css');
-@import url('./structure/pied-de-page.css');
+@import url('./layout.css');
 
 3. COMPOSANTS (éléments réutilisables)
-@import url('./composants/boutons.css');
-@import url('./composants/cartes.css');
-@import url('./composants/formulaires.css');
-@import url('./composants/navigation.css');
-@import url('./composants/modales.css');
-@import url('./composants/chargement.css');
+@import url('./composants.css');
 
-4. ANNONCES (cœur métier)
-@import url('./annonces/carte-annonce.css');
-@import url('./annonces/galerie-photos.css');
-@import url('./annonces/filtres.css');
-@import url('./annonces/barre-recherche.css');
-@import url('./annonces/fil-ariane.css');
-@import url('./annonces/pagination.css');
-@import url('./annonces/badges-etats.css');
-@import url('./annonces/favoris.css');
-@import url('./annonces/carte-geographique.css');
+4. MÉTIER (spécifique annonces)
+@import url('./annonces.css');
 
-5. PAGES SPÉCIFIQUES
-@import url('./pages/accueil.css');
-@import url('./pages/liste-annonces.css');
-@import url('./pages/detail-annonce.css');
-@import url('./pages/deposer-annonce.css');
-@import url('./pages/resultats-recherche.css');
-@import url('./pages/profil-utilisateur.css');
-@import url('./pages/tableau-bord.css');
-@import url('./pages/messagerie.css');
-@import url('./pages/categories.css');
+5. PAGES (spécificités par page)
+@import url('./pages.css');
 
-6. FONCTIONNALITÉS AVANCÉES
-@import url('./fonctionnalites/geolocalisation.css');
-@import url('./fonctionnalites/fourchette-prix.css');
-@import url('./fonctionnalites/selecteur-categories.css');
-@import url('./fonctionnalites/upload-photos.css');
-@import url('./fonctionnalites/contact-vendeur.css');
-@import url('./fonctionnalites/signalement.css');
+6. UTILITAIRES (priorité élevée)
+@import url('./utilitaires.css');
 
-7. DJANGO FRAMEWORK
-@import url('./django/formulaires-django.css');
-@import url('./django/admin-django.css');
-@import url('./django/messages-django.css');
-@import url('./django/crispy-forms.css');
-
-8. UTILITAIRES (priorité élevée)
-@import url('./utilitaires/espacements.css');
-@import url('./utilitaires/couleurs.css');
-@import url('./utilitaires/texte.css');
-@import url('./utilitaires/affichage.css');
-
-9. THÈMES (conditionnel)
-@import url('./themes/theme-clair.css') (prefers-color-scheme: light);
-@import url('./themes/theme-sombre.css') (prefers-color-scheme: dark);
-
-10. RESPONSIVE (derniers pour override)
-@import url('./ecrans/tablette.css') screen and (min-width: 768px);
-@import url('./ecrans/ordinateur.css') screen and (min-width: 1024px);
-@import url('./ecrans/grand-ecran.css') screen and (min-width: 1440px);
+7. RESPONSIVE (overrides selon breakpoints)
+@import url('./responsive.css');
 
 POURQUOI CET ORDRE EST CRITIQUE
 - Les variables doivent être chargées avant toute utilisation
 - Les styles de base (reset, typographie) définissent les fondations
-- Les composants utilisent les variables et styles de base
-- Les pages peuvent override les composants si nécessaire
+- La structure (layout) utilise les variables et styles de base
+- Les composants utilisent les fondations et peuvent être overridés par pages
+- Le métier annonces peut utiliser tous les composants précédents
+- Les pages peuvent override tout ce qui précède si nécessaire
 - Les utilitaires ont une spécificité élevée pour forcer les overrides
 - Le responsive vient en dernier pour override selon les breakpoints
+
+ATTENTION AUX MODIFICATIONS
+Ne jamais changer cet ordre sans tester l'ensemble du site.
+Toute modification de l'ordre peut casser la cascade CSS.
 
 ================================================================================
 6. MÉTHODOLOGIE DE MODIFICATION
@@ -457,9 +480,19 @@ et maintenir la qualité du code.
 
 ÉTAPE 1 : ANALYSE ET PLANIFICATION
 - Identifier précisément le problème ou l'amélioration souhaitée
-- Localiser le(s) fichier(s) CSS concerné(s) selon la structure
+- Localiser le fichier CSS concerné selon la structure (voir section 3)
 - Vérifier les dépendances et les impacts potentiels
 - Planifier les tests nécessaires après modification
+
+GUIDE DE LOCALISATION RAPIDE
+Pour modifier un style, se poser ces questions :
+1. Est-ce une variable globale ? → base.css
+2. Est-ce la structure générale (header/footer) ? → layout.css
+3. Est-ce un composant réutilisable ? → composants.css
+4. Est-ce spécifique aux annonces ? → annonces.css
+5. Est-ce spécifique à une page ? → pages.css
+6. Est-ce une classe d'aide ? → utilitaires.css
+7. Est-ce du responsive ? → responsive.css
 
 ÉTAPE 2 : SAUVEGARDE ET BRANCHING
 - Créer une sauvegarde des fichiers à modifier
@@ -490,12 +523,24 @@ BONNES PRATIQUES DE MODIFICATION
 - Utiliser les variables CSS plutôt que des valeurs hardcodées
 - Maintenir la cohérence avec les conventions existantes
 - Commenter les modifications complexes
+- Respecter la méthodologie BEM française
 
-GESTION DES CONFLITS ET RÉGRESSIONS
-- En cas de régression, revenir à la version précédente immédiatement
-- Analyser la cause du conflit avant de proposer une nouvelle solution
-- Impliquer l'équipe en cas de modification structurelle importante
-- Documenter les solutions trouvées pour éviter la répétition
+EXEMPLES DE MODIFICATIONS TYPIQUES
+
+Modifier une couleur globale :
+1. Localisation → base.css (variables)
+2. Modification → :root { --couleur-primaire: #nouvelle-couleur; }
+3. Test → Vérifier sur tout le site
+
+Créer un nouveau type de bouton :
+1. Localisation → composants.css (système boutons)
+2. Ajout → .btn--nouveau { /* styles */ }
+3. Test → Vérifier réutilisabilité
+
+Ajuster une page spécifique :
+1. Localisation → pages.css ou responsive.css selon le besoin
+2. Modification → .page-nom .element { /* ajustements */ }
+3. Test → Vérifier uniquement cette page
 
 ================================================================================
 7. GUIDE POUR DEMANDES D'OPTIMISATION IA
@@ -509,15 +554,20 @@ FORMAT DE DEMANDE RECOMMANDÉ
 
 CONTEXTE DU PROJET
 Mentionner systématiquement :
-- "Ce projet utilise une structure CSS modulaire en français"
-- "Architecture pour site de petites annonces avec Django"
-- "Convention BEM française avec noms évocateurs"
+- "Ce projet utilise une architecture CSS simplifiée en 8 fichiers"
+- "Architecture mobile-first pour site d'annonces"
+- "Convention BEM française avec variables CSS standardisées"
+- "Structure : base.css → layout.css → composants.css → annonces.css → pages.css → utilitaires.css → responsive.css"
 
 LOCALISATION PRÉCISE
 Indiquer le fichier exact concerné :
-- "Dans le fichier structure/en-tete.css"
-- "Concernant annonces/carte-annonce.css"
-- "Pour optimiser composants/boutons.css"
+- "Dans le fichier base.css pour les variables globales"
+- "Concernant layout.css pour la structure header"
+- "Pour optimiser composants.css, section boutons"
+- "Dans annonces.css pour les cartes d'annonces"
+- "Modification de pages.css pour la page d'accueil"
+- "Ajout d'utilitaires dans utilitaires.css"
+- "Problème responsive dans responsive.css"
 
 DESCRIPTION DU PROBLÈME OU OBJECTIF
 Être spécifique sur :
@@ -528,124 +578,81 @@ DESCRIPTION DU PROBLÈME OU OBJECTIF
 
 INFORMATIONS CONTEXTUELLES
 Préciser si pertinent :
-- Breakpoint concerné (mobile, tablette, desktop)
+- Breakpoint concerné (mobile 768px-, tablette 768px+, desktop 1024px+)
 - Navigateur spécifique si problème de compatibilité
-- Interaction concernée (hover, focus, click)
+- Interaction concernée (hover, focus, click, scroll)
 - Performance ou accessibilité si enjeu
+- Variables CSS à utiliser ou éviter
 
 DEMANDE SPÉCIFIQUE
 Formuler clairement ce qui est attendu :
 - "Peux-tu analyser et proposer une solution pour..."
-- "Comment optimiser... en maintenant..."
-- "Quelle serait la meilleure approche pour..."
-- "Peux-tu créer un code CSS qui..."
+- "Comment optimiser... en maintenant les variables CSS existantes..."
+- "Quelle serait la meilleure approche mobile-first pour..."
+- "Peux-tu créer un composant qui respecte notre convention BEM..."
 
 CONTRAINTES ET EXIGENCES
 Mentionner les limitations :
 - Compatibilité navigateur requise
 - Performance attendue
 - Accessibilité obligatoire
-- Cohérence avec le design system existant
+- Cohérence avec les variables CSS existantes
+- Respect de la structure en 8 fichiers
 
 TYPES DE DEMANDES EFFICACES
 
-ANALYSE DE CODE EXISTANT
-"Peux-tu analyser le fichier structure/en-tete.css et identifier les points 
-d'amélioration pour la performance et la maintenabilité ? Le header a des 
-problèmes de fluidité au scroll sur mobile."
+ANALYSE DE FICHIER EXISTANT
+"Peux-tu analyser le fichier layout.css et identifier les points 
+d'amélioration pour la performance mobile ? Le header a des problèmes 
+de fluidité au scroll sur iPhone. Les variables CSS à utiliser sont 
+dans base.css."
 
 CRÉATION DE NOUVEAUX STYLES
-"Dans composants/boutons.css, je dois créer un nouveau bouton .btn-urgent 
-pour les annonces urgentes. Il doit respecter les variables existantes, 
-avoir une couleur orange vibrante et une animation de pulsation subtile."
+"Dans composants.css, je dois créer un nouveau système de cartes 
+.carte-produit qui respecte notre convention BEM française. Il doit 
+utiliser les variables existantes et être responsive selon nos 
+breakpoints (768px et 1024px)."
 
-RÉSOLUTION DE BUGS
-"Le fichier annonces/galerie-photos.css a un problème d'affichage sur iPad 
-en mode portrait. Les thumbnails se chevauchent et le zoom ne fonctionne pas. 
-Peux-tu proposer une solution responsive ?"
+RÉSOLUTION DE BUGS RESPONSIVE
+"Le fichier responsive.css a un problème d'affichage sur tablette 
+(768px-1023px). Les cartes d'annonces se chevauchent et le mega-menu 
+ne fonctionne pas. Peux-tu proposer une solution mobile-first ?"
 
 OPTIMISATION PERFORMANCE
-"Comment optimiser les animations dans fondations/animations.css pour réduire 
-les reflows et améliorer la fluidité sur appareils moins puissants tout en 
-gardant l'expérience utilisateur ?"
+"Comment optimiser les animations dans base.css et composants.css pour 
+réduire les reflows ? Il faut garder l'expérience utilisateur tout en 
+améliorant les performances sur appareils moins puissants."
 
 AMÉLIORATION ACCESSIBILITÉ
-"Dans formulaires.css, les messages d'erreur ne sont pas assez contrastés 
-et manquent d'indicateurs pour les lecteurs d'écran. Peux-tu proposer une 
-amélioration complète de l'accessibilité ?"
+"Dans composants.css, les boutons ne sont pas assez contrastés et 
+manquent d'indicateurs pour les lecteurs d'écran. Peux-tu proposer 
+une amélioration complète de l'accessibilité en utilisant nos variables ?"
 
-REFACTORING ET MODERNISATION
-"Le fichier pages/liste-annonces.css utilise encore float pour le layout. 
-Peux-tu le moderniser avec CSS Grid et Flexbox tout en maintenant 
-l'affichage identique ?"
-
-INFORMATIONS À FOURNIR SYSTÉMATIQUEMENT
-
-ÉTAT ACTUEL
-- Code CSS existant concerné
-- Comportement actuel observé
-- Problèmes ou limitations identifiés
-
-OBJECTIF CIBLE
-- Résultat souhaité précisément décrit
-- Critères de succès mesurables
-- Contraintes techniques à respecter
-
-CONTEXTE TECHNIQUE
-- Breakpoints concernés
-- Navigateurs à supporter
-- Frameworks ou librairies utilisés
-- Intégrations spécifiques (Django, JavaScript)
-
-PRIORITÉS
-- Performance vs fonctionnalité
-- Accessibilité obligatoire ou optionnelle
-- Compatibilité legacy vs modernité
-- Maintenabilité vs rapidité d'implémentation
+ÉVOLUTION ARCHITECTURE
+"Je veux ajouter un système de thèmes (clair/sombre) à notre architecture. 
+Comment l'intégrer proprement sans casser la structure existante ? 
+Faut-il créer un 9ème fichier ou utiliser les variables CSS ?"
 
 EXEMPLES DE FORMULATIONS EFFICACES
 
 FORMULATION CLAIRE ET PRÉCISE
-"Le fichier annonces/filtres.css contient le panel de filtres pour la recherche 
-d'annonces. Sur mobile, les filtres prennent trop de place verticale et 
-l'expérience utilisateur est dégradée. Je veux transformer le panel en 
-modal bottom-sheet qui s'ouvre depuis un bouton 'Filtres' fixe en bas 
-d'écran. Le modal doit être accessible, animé et permettre de voir les 
-résultats en temps réel."
+"Le fichier annonces.css contient les cartes d'annonces (.annonce-carte). 
+Sur mobile (moins de 768px), les cartes prennent trop de place verticale. 
+Je veux optimiser l'affichage en réduisant les espacements et en ajustant 
+la taille des images, tout en gardant l'accessibilité et les variables 
+CSS existantes."
 
 DEMANDE D'ANALYSE STRUCTURÉE
-"Peux-tu analyser le fichier structure/grille.css et me proposer un système 
-de grille plus moderne utilisant CSS Grid natives plutôt que Flexbox ? 
-Le système doit supporter 12 colonnes sur desktop, 6 sur tablette et 4 sur 
-mobile, avec des gaps variables selon les breakpoints définis dans 
-fondations/variables.css."
+"Peux-tu analyser le fichier responsive.css et me proposer un meilleur 
+système de breakpoints ? Notre site a des problèmes d'affichage entre 
+768px et 1024px. Il faut garder l'approche mobile-first et utiliser 
+nos variables CSS (--mobile, --tablette, --desktop)."
 
 OPTIMISATION AVEC CONTRAINTES
-"Dans composants/cartes.css, les cartes d'annonces ont des problèmes de 
-performance lors du scroll sur mobile (jank visible). Peux-tu optimiser 
-les transitions et ombres pour améliorer la fluidité tout en gardant 
-l'esthétique actuelle ? Les cartes doivent rester accessibles et maintenir 
-leur effet hover sur desktop."
-
-CONSEILS POUR MAXIMISER L'EFFICACITÉ
-
-PRÉPARATION DE LA DEMANDE
-- Analyser le problème en amont pour bien le décrire
-- Identifier tous les fichiers potentiellement impactés
-- Préparer les informations contextuelles nécessaires
-- Définir clairement les critères de succès
-
-COMMUNICATION PROGRESSIVE
-- Commencer par une analyse générale si le problème est complexe
-- Demander des clarifications si la réponse n'est pas complète
-- Valider la compréhension avant l'implémentation
-- Tester les solutions proposées étape par étape
-
-SUIVI ET ITÉRATION
-- Tester chaque modification proposée
-- Signaler les effets de bord découverts
-- Demander des ajustements si nécessaire
-- Documenter la solution finale retenue
+"Dans composants.css, le burger menu (.burger-menu) a des problèmes de 
+performance lors des animations sur Android. Peux-tu optimiser les 
+transitions tout en gardant l'animation actuelle ? Il faut respecter 
+prefers-reduced-motion et utiliser nos variables de transition."
 
 ================================================================================
 8. RÉSOLUTION DE PROBLÈMES
@@ -657,62 +664,89 @@ PROBLÈMES DE SPÉCIFICITÉ
 Symptômes : Styles qui ne s'appliquent pas malgré un code correct
 Diagnostic : Vérifier l'ordre d'importation et la spécificité CSS
 Solutions :
-- Réorganiser l'ordre d'importation dans main.css
-- Utiliser des sélecteurs plus spécifiques
-- Éviter !important sauf cas exceptionnels
-- Vérifier que les variables CSS sont bien importées en premier
+- Vérifier que main.css importe dans le bon ordre
+- Contrôler que les variables CSS sont bien définies dans base.css
+- Éviter !important sauf pour utilitaires (préfixe .u-)
+- Utiliser des sélecteurs plus spécifiques si nécessaire
+- Vérifier que le fichier modifié est bien importé
 
 CONFLITS ENTRE FICHIERS
 Symptômes : Styles qui se surchargent de manière inattendue
 Diagnostic : Identifier les fichiers en conflit et leurs responsabilités
 Solutions :
-- Respecter la séparation des responsabilités par dossier
-- Préfixer les classes selon leur contexte
-- Documenter les overrides intentionnels
-- Utiliser des namespaces pour éviter les collisions
+- Respecter la séparation des responsabilités par fichier (voir section 3)
+- Utiliser les préfixes appropriés (.annonce-, .page-, .u-)
+- Documenter les overrides intentionnels avec commentaires
+- Éviter de dupliquer des styles dans plusieurs fichiers
+- Utiliser les variables CSS pour la cohérence
+
+PROBLÈMES DE VARIABLES CSS
+Symptômes : Variables non reconnues ou valeurs par défaut
+Diagnostic : Vérifier la définition et l'utilisation des variables
+Solutions :
+- Contrôler que base.css est importé en premier dans main.css
+- Vérifier la syntaxe des variables : var(--nom-variable)
+- S'assurer que les variables sont définies dans :root
+- Utiliser des valeurs de fallback : var(--couleur, #default)
+- Tester dans les DevTools navigateur
 
 PROBLÈMES DE PERFORMANCE
 Symptômes : Lenteur d'affichage, jank lors des animations
 Diagnostic : Identifier les propriétés CSS coûteuses
 Solutions :
 - Utiliser transform au lieu de position pour les animations
-- Optimiser les sélecteurs complexes
+- Optimiser les sélecteurs complexes (max 3 niveaux)
+- Utiliser will-change sur les éléments animés (déjà dans burger-menu)
 - Réduire les repaints et reflows
-- Utiliser will-change pour les éléments animés
+- Vérifier backdrop-filter support et fallbacks
 
 BUGS RESPONSIVE
 Symptômes : Affichage incorrect sur certaines tailles d'écran
 Diagnostic : Vérifier les breakpoints et les media queries
 Solutions :
-- Tester sur les breakpoints définis dans variables.css
+- Tester sur les breakpoints définis : 768px, 1024px, 1280px
 - Utiliser l'approche mobile-first systématiquement
-- Vérifier l'ordre des media queries
-- Tester les tailles d'écran intermédiaires
+- Vérifier l'ordre des media queries dans responsive.css
+- Tester les tailles d'écran intermédiaires (landscape mobile)
+- Contrôler les utilitaires responsive (.u-hidden-mobile, etc.)
 
 PROBLÈMES D'ACCESSIBILITÉ
 Symptômes : Contrastes insuffisants, navigation clavier difficile
 Diagnostic : Auditer l'accessibilité avec les outils dédiés
 Solutions :
-- Vérifier les ratios de contraste dans variables.css
+- Vérifier les ratios de contraste avec les couleurs de base.css
 - S'assurer que tous les éléments interactifs sont focusables
-- Utiliser les propriétés ARIA appropriées
-- Tester avec un lecteur d'écran
+- Utiliser focus-visible pour les outlines (déjà configuré)
+- Tester avec prefers-reduced-motion (déjà supporté)
+- Contrôler la navigation au clavier dans mega-menu
+
+PROBLÈMES DE CONVENTION BEM
+Symptômes : Nommage incohérent, difficultés de maintenance
+Diagnostic : Vérifier le respect des conventions BEM françaises
+Solutions :
+- Utiliser la structure bloc__element--modificateur
+- Respecter les préfixes (.annonce-, .btn-, .page-, .u-)
+- Éviter l'imbrication CSS trop profonde
+- Utiliser des classes plutôt que des sélecteurs de type
+- Maintenir la cohérence dans le nommage
 
 OUTILS DE DIAGNOSTIC RECOMMANDÉS
 - DevTools navigateur pour inspector les styles appliqués
 - Lighthouse pour l'audit performance et accessibilité
 - Wave ou axe pour l'accessibilité spécifique
 - Can I Use pour vérifier la compatibilité navigateur
+- CSS Validation Service pour la syntaxe
 
 MÉTHODOLOGIE DE DEBUG ÉTAPE PAR ÉTAPE
 1. Reproduire le problème de manière consistante
-2. Isoler le composant ou la page concernée
-3. Identifier le fichier CSS responsable selon notre structure
+2. Identifier le fichier CSS responsable selon notre structure
+3. Isoler le composant ou la page concernée
 4. Utiliser les DevTools pour analyser les styles appliqués
-5. Vérifier l'ordre d'importation et la spécificité
-6. Tester les modifications de manière incrémentale
-7. Valider la solution sur tous les breakpoints
-8. Documenter la correction pour éviter la récurrence
+5. Vérifier l'ordre d'importation dans main.css
+6. Contrôler les variables CSS dans base.css
+7. Tester les modifications de manière incrémentale
+8. Valider la solution sur tous les breakpoints
+9. Documenter la correction pour éviter la récurrence
 
 ================================================================================
 9. BONNES PRATIQUES
@@ -721,44 +755,71 @@ MÉTHODOLOGIE DE DEBUG ÉTAPE PAR ÉTAPE
 ORGANISATION ET STRUCTURE
 
 COHÉRENCE ARCHITECTURALE
-- Respecter scrupuleusement la séparation des responsabilités par dossier
+- Respecter scrupuleusement la séparation des responsabilités par fichier
 - Ne jamais mélanger les styles de différents contextes dans un même fichier
 - Utiliser systématiquement les variables CSS plutôt que des valeurs hardcodées
 - Maintenir l'ordre d'importation défini dans main.css
+- Documenter les modifications importantes avec des commentaires
 
 CONVENTIONS DE NOMMAGE
 - Appliquer la méthodologie BEM française de manière systématique
 - Privilégier la clarté et l'évocation à la concision
 - Utiliser des termes métier compréhensibles par toute l'équipe
 - Maintenir la cohérence des préfixes dans tout le projet
+- Éviter les abréviations non évidentes
+
+UTILISATION DES VARIABLES CSS
+- Centraliser toutes les valeurs récurrentes dans base.css
+- Utiliser des noms de variables sémantiques plutôt que descriptifs
+- Organiser les variables par catégories logiques
+- Documenter les variables complexes ou calculées
+- Préférer var(--variable) aux valeurs hardcodées
 
 DÉVELOPPEMENT ET MAINTENANCE
 
-APPROCHE MOBILE-FIRST
+APPROCHE MOBILE-FIRST RENFORCÉE
 - Toujours développer les styles pour mobile en premier
 - Ajouter progressivement les améliorations pour les écrans plus grands
 - Tester systématiquement sur les trois breakpoints principaux
 - Optimiser les performances pour les appareils mobiles
+- Utiliser les utilitaires responsive appropriés
 
-GESTION DES VARIABLES
-- Centraliser toutes les valeurs récurrentes dans fondations/variables.css
-- Utiliser des noms de variables sémantiques plutôt que descriptifs
-- Organiser les variables par catégories logiques
-- Documenter les variables complexes ou calculées
-
-PERFORMANCE ET OPTIMISATION
-
-SÉLECTEURS EFFICACES
+STRUCTURE DES SÉLECTEURS
 - Éviter les sélecteurs trop profonds (maximum 3 niveaux)
 - Privilégier les classes aux sélecteurs de type ou d'attribut
 - Utiliser des sélecteurs spécifiques mais pas trop complexes
 - Éviter les sélecteurs universels (*) sauf cas spécifiques
+- Maintenir une spécificité cohérente
+
+COMMENTAIRES ET DOCUMENTATION
+- Commenter les calculs complexes et les valeurs spécifiques
+- Expliquer les workarounds et les hacks nécessaires
+- Documenter les dépendances externes ou les spécificités navigateur
+- Maintenir les commentaires à jour lors des modifications
+- Utiliser des sections claires avec des séparateurs
+
+PERFORMANCE ET OPTIMISATION
+
+SÉLECTEURS EFFICACES
+- Utiliser les classes plutôt que les sélecteurs complexes
+- Éviter la sur-spécification des sélecteurs
+- Préférer les sélecteurs courts et directs
+- Optimiser les sélecteurs pour la réutilisabilité
+- Tester les performances sur appareils moins puissants
 
 ANIMATIONS ET TRANSITIONS
 - Limiter les animations aux propriétés transform et opacity
 - Utiliser will-change sur les éléments fréquemment animés
-- Respecter prefers-reduced-motion pour l'accessibilité
+- Respecter prefers-reduced-motion pour l'accessibilité (déjà configuré)
 - Optimiser la durée et l'easing pour une expérience fluide
+- Tester les animations sur différents appareils
+
+GESTION DES RESSOURCES
+- Minimiser le nombre de propriétés CSS redondantes
+- Utiliser les variables CSS pour éviter la duplication
+- Optimiser les images et les ressources externes
+- Tester la performance avec Lighthouse
+- Surveiller la taille des fichiers CSS
 
 ACCESSIBILITÉ ET INCLUSION
 
@@ -766,41 +827,47 @@ CONTRASTES ET LISIBILITÉ
 - Maintenir un ratio de contraste minimum de 4.5:1 pour le texte normal
 - Utiliser 3:1 minimum pour les éléments d'interface et texte large
 - Tester les couleurs avec des simulateurs de daltonisme
-- Prévoir des alternatives visuelles aux informations transmises par la couleur
+- Prévoir des alternatives visuelles aux informations transmises par couleur
+- Utiliser les variables de couleurs définies dans base.css
 
 NAVIGATION ET INTERACTION
 - S'assurer que tous les éléments interactifs sont accessibles au clavier
-- Prévoir des états de focus visibles et cohérents
+- Prévoir des états de focus visibles et cohérents (focus-visible configuré)
 - Utiliser des tailles de zones de touch suffisantes (44px minimum)
 - Implémenter les landmarks ARIA appropriés
+- Tester la navigation au clavier dans tous les composants
+
+RESPONSIVE ET ADAPTABILITÉ
+- Tester sur des tailles d'écran variées (pas seulement les breakpoints)
+- Optimiser pour les orientations portrait et landscape
+- Prévoir des fallbacks pour les fonctionnalités modernes
+- Tester avec du contenu réel (textes longs, images diverses)
+- Utiliser les utilitaires responsive appropriés
 
 DOCUMENTATION ET COLLABORATION
-
-COMMENTAIRES UTILES
-- Commenter les calculs complexes et les valeurs spécifiques
-- Expliquer les workarounds et les hacks nécessaires
-- Documenter les dépendances externes ou les spécificités navigateur
-- Maintenir les commentaires à jour lors des modifications
 
 VERSIONING ET HISTORIQUE
 - Utiliser des messages de commit descriptifs et structurés
 - Taguer les versions stables pour faciliter les rollbacks
 - Documenter les breaking changes dans le changelog
 - Maintenir ce README à jour avec les évolutions
+- Créer des branches dédiées pour les modifications importantes
 
 TESTS ET VALIDATION
 
 TESTS MULTI-NAVIGATEURS
 - Tester sur Chrome, Firefox, Safari et Edge minimum
 - Vérifier les fonctionnalités sur iOS Safari et Chrome mobile
-- Valider les polyfills pour les fonctionnalités modernes
+- Valider les polyfills pour les fonctionnalités modernes (backdrop-filter)
 - Maintenir une liste des navigateurs supportés
+- Tester les dégradations gracieuses
 
 TESTS DE RÉGRESSION
 - Tester systématiquement après chaque modification
 - Maintenir une checklist des pages et fonctionnalités critiques
 - Automatiser les tests visuels quand possible
 - Impliquer les utilisateurs dans les tests d'acceptation
+- Documenter les cas de test pour les futures modifications
 
 ================================================================================
 10. CHECKLIST DE MAINTENANCE
@@ -809,85 +876,185 @@ TESTS DE RÉGRESSION
 AVANT TOUTE MODIFICATION
 
 PRÉPARATIFS OBLIGATOIRES
+□ Identifier le fichier CSS concerné selon la structure (section 3)
 □ Sauvegarder les fichiers concernés
-□ Créer une branche Git dédiée
-□ Identifier précisément les fichiers à modifier selon la structure
+□ Créer une branche Git dédiée avec un nom descriptif
 □ Vérifier les dépendances et impacts potentiels
 □ Définir les critères de succès et de validation
 □ Préparer l'environnement de test (navigateurs, appareils)
 
+VÉRIFICATIONS PRÉALABLES
+□ Contrôler que main.css importe tous les fichiers dans le bon ordre
+□ Vérifier que les variables CSS sont à jour dans base.css
+□ S'assurer de la cohérence des conventions de nommage existantes
+□ Identifier les composants ou pages potentiellement impactés
+□ Préparer les tests sur mobile (768px-), tablette (768px+), desktop (1024px+)
+
 PENDANT LA MODIFICATION
 
 DÉVELOPPEMENT PROGRESSIF
-□ Effectuer les modifications par petites étapes
+□ Effectuer les modifications par petites étapes testables
+□ Utiliser les variables CSS plutôt que des valeurs hardcodées
+□ Respecter la convention BEM française (bloc__element--modificateur)
+□ Maintenir l'approche mobile-first dans responsive.css
 □ Tester après chaque modification significative
 □ Vérifier l'impact sur tous les breakpoints définis
-□ Contrôler la cohérence avec le design system existant
-□ Maintenir les conventions de nommage BEM française
-□ Utiliser les variables CSS plutôt que des valeurs hardcodées
+
+RESPECT DES CONVENTIONS
+□ Utiliser les préfixes appropriés (.annonce-, .btn-, .page-, .u-)
+□ Maintenir la cohérence avec les styles existants
+□ Documenter les modifications complexes avec des commentaires
+□ Éviter la duplication de code entre fichiers
+□ Respecter la séparation des responsabilités par fichier
 
 VALIDATION TECHNIQUE
 □ Vérifier la syntaxe CSS et l'absence d'erreurs
 □ Tester les interactions (hover, focus, active)
 □ Contrôler la performance (pas de jank, fluidité)
-□ Valider l'accessibilité (contraste, navigation clavier)
+□ Valider l'accessibilité (contraste, navigation clavier, focus-visible)
 □ Vérifier la compatibilité navigateur requise
 
 APRÈS LA MODIFICATION
 
 TESTS COMPLETS
 □ Tester sur toutes les pages potentiellement impactées
-□ Vérifier mobile, tablette et desktop
+□ Vérifier mobile (320px-767px), tablette (768px-1023px), desktop (1024px+)
 □ Contrôler les différents états des composants
 □ Valider avec des contenus réels (textes longs, images diverses)
 □ Tester les cas limites et les contenus manquants
+□ Vérifier les animations et transitions
 
 VALIDATION FINALE
 □ Faire relire le code par un pair si modification importante
-□ Documenter les changements effectués
-□ Mettre à jour ce README si nécessaire
+□ Documenter les changements effectués dans les commentaires
+□ Mettre à jour ce README si nécessaire (nouvelles variables, conventions)
+□ Tester la performance avec Lighthouse
+□ Valider l'accessibilité avec Wave ou axe
 □ Merger la branche après validation complète
 □ Surveiller en production pour détecter des problèmes
 
 CONTRÔLE QUALITÉ RÉCURRENT
 
 AUDIT MENSUEL
-□ Vérifier la cohérence de l'architecture CSS
-□ Identifier les doublons ou redondances
-□ Contrôler l'utilisation des variables CSS
+□ Vérifier la cohérence de l'architecture CSS en 8 fichiers
+□ Identifier les doublons ou redondances entre fichiers
+□ Contrôler l'utilisation correcte des variables CSS
 □ Analyser les performances CSS (taille, complexité)
 □ Réviser la documentation et les commentaires
+□ Vérifier le respect des conventions BEM françaises
 
 OPTIMISATION TRIMESTRIELLE
 □ Auditer l'accessibilité complète du site
-□ Analyser les métriques de performance
-□ Réviser la compatibilité navigateur
+□ Analyser les métriques de performance (Core Web Vitals)
+□ Réviser la compatibilité navigateur et les polyfills
 □ Évaluer l'efficacité de la structure actuelle
 □ Planifier les améliorations et refactoring nécessaires
+□ Mettre à jour les variables CSS si évolution design
 
 MAINTENANCE PRÉVENTIVE ANNUELLE
 □ Révision complète de l'architecture CSS
 □ Mise à jour des conventions et standards
-□ Formation de l'équipe sur les évolutions
-□ Planification des évolutions majeures
+□ Formation de l'équipe sur les évolutions CSS
+□ Planification des évolutions majeures (nouveaux fichiers ?)
 □ Documentation des bonnes pratiques apprises
+□ Évaluation de l'opportunité d'évolution vers structure plus complexe
+
+SURVEILLANCE CONTINUE
+□ Monitorer les performances en production
+□ Surveiller les rapports d'erreurs liés au CSS
+□ Collecter les retours utilisateurs sur l'expérience
+□ Identifier les points de friction dans le développement
+□ Ajuster les processus de maintenance si nécessaire
+
+================================================================================
+11. ÉVOLUTION ET EXTENSIBILITÉ
+================================================================================
+
+PRINCIPE D'ÉVOLUTION PROGRESSIVE
+Cette structure en 8 fichiers est conçue pour évoluer selon les besoins réels
+du projet. Elle peut rester simple ou se complexifier progressivement.
+
+CRITÈRES POUR FAIRE ÉVOLUER L'ARCHITECTURE
+
+QUAND AJOUTER UN 9ÈME FICHIER
+- Le contenu d'un fichier existant dépasse 500 lignes
+- Une fonctionnalité nécessite plus de 50 lignes de CSS spécifique
+- Une nouvelle responsabilité émerge qui ne rentre dans aucun fichier
+- L'équipe grandit et nécessite plus de séparation
+
+ÉVOLUTIONS POSSIBLES
+1. themes.css → Si besoin de thème sombre/clair
+2. animations.css → Si animations complexes se développent
+3. print.css → Si styles d'impression nécessaires
+4. admin.css → Si interface admin Django se complexifie
+
+MIGRATION VERS STRUCTURE COMPLEXE
+Si le projet atteint la complexité de plateformes comme Leboncoin :
+- Éclater annonces.css en sous-dossier /annonces/
+- Créer /fonctionnalites/ pour features avancées
+- Séparer /ecrans/ pour responsive avancé
+- Utiliser l'architecture initiale proposée comme guide
+
+RÈGLES D'ÉVOLUTION
+- Ne jamais sacrifier la simplicité sans raison valable
+- Maintenir la cohérence des conventions existantes
+- Documenter chaque évolution dans ce README
+- Tester l'impact sur l'équipe avant de complexifier
+- Garder l'approche mobile-first et les variables CSS
 
 ================================================================================
 CONCLUSION
 ================================================================================
 
-Cette structure CSS modulaire en français facilite grandement la maintenance 
-et la collaboration sur le projet. En respectant les conventions établies et 
-en suivant les méthodologies décrites dans ce README, l'équipe peut développer 
-et maintenir efficacement les styles du site de petites annonces.
+Cette structure CSS réorganisée en 8 fichiers facilite grandement la maintenance 
+et la collaboration sur votre site d'annonces. En respectant les conventions 
+établies et en suivant les méthodologies décrites dans ce README, l'équipe peut 
+développer et maintenir efficacement les styles.
 
-La clé du succès réside dans le respect de la séparation des responsabilités 
-par dossier et l'utilisation systématique des conventions de nommage établies. 
-Cette approche garantit une évolutivité optimale et une maintenance simplifiée.
+La clé du succès réside dans :
+- Le respect de la séparation des responsabilités par fichier
+- L'utilisation systématique des variables CSS et conventions BEM françaises
+- L'approche mobile-first renforcée
+- La maintenance régulière selon les checklists fournies
 
-Pour toute question ou amélioration de cette documentation, se référer à la 
-méthodologie de demande d'optimisation IA décrite dans la section 7.
+Cette approche garantit une évolutivité optimale et une maintenance simplifiée
+tout en préservant les performances et l'accessibilité.
 
-DERNIÈRE MISE À JOUR : À compléter lors des modifications
-VERSION DE LA STRUCTURE : 1.0
-MAINTENEUR PRINCIPAL : À définir selon l'équipe
+CONTACTS ET SUPPORT
+- Pour toute question sur cette documentation : [À compléter]
+- Pour les demandes d'évolution de l'architecture : [À compléter]
+- Pour les formations sur les conventions : [À compléter]
+
+DERNIÈRE MISE À JOUR : [À compléter lors des modifications]
+VERSION DE LA STRUCTURE : 2.0 (8 fichiers optimisés)
+MAINTENEUR PRINCIPAL : [À définir selon l'équipe]
+RÉVISION PRÉVUE : [À planifier selon les besoins]
+
+================================================================================
+AIDE-MÉMOIRE RAPIDE
+================================================================================
+
+LOCALISATION RAPIDE DES STYLES
+- Variables, couleurs, typographie → base.css
+- Header, footer, navigation → layout.css  
+- Boutons, formulaires, burger → composants.css
+- Cartes annonces, badges, filtres → annonces.css
+- Spécificités par page → pages.css
+- Classes d'aide (.u-*) → utilitaires.css
+- Responsive, breakpoints → responsive.css
+
+ORDRE D'IMPORTATION À RETENIR
+base → layout → composants → annonces → pages → utilitaires → responsive
+
+BREAKPOINTS STANDARDS
+- Mobile : < 768px
+- Tablette : 768px - 1023px  
+- Desktop : 1024px+
+- Grand écran : 1280px+
+
+PRÉFIXES DE CLASSES
+.annonce- | .btn- | .page- | .u- | .header- | .mega-menu
+
+VARIABLES CSS PRINCIPALES
+--couleur-primaire | --couleur-secondaire | --espacement-* | --taille-texte-*
+--rayon-* | --ombre-* | --transition-* | --mobile | --tablette | --desktop
