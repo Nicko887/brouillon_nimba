@@ -1,0 +1,705 @@
+<!-- templates/annonces/liste.html -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Petites Annonces - Django</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .search-bar {
+            flex: 1;
+            max-width: 400px;
+            margin-right: 20px;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 12px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-bar input:focus {
+            border-color: #ff6b35;
+        }
+
+        .btn-deposer {
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-deposer:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+        }
+
+        /* Filtres */
+        .filters-section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .filters-row {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: end;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .filter-group label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .filter-group input,
+        .filter-group select {
+            padding: 8px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 14px;
+            min-width: 120px;
+        }
+
+        .btn-filter {
+            background: #ff6b35;
+            color: white;
+            padding: 8px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            height: fit-content;
+        }
+
+        .btn-filter:hover {
+            background: #e55a2e;
+        }
+
+        /* Pagination et contrôles */
+        .controls-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .results-per-page {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .results-per-page select {
+            padding: 8px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .pagination {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pagination a,
+        .pagination span {
+            padding: 8px 12px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 5px;
+            text-decoration: none;
+            color: #333;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .pagination a:hover {
+            background: #ff6b35;
+            color: white;
+            border-color: #ff6b35;
+        }
+
+        .pagination .current {
+            background: #ff6b35;
+            color: white;
+            border-color: #ff6b35;
+        }
+
+        .page-info {
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* Sections de catégories */
+        .category-section {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            padding: 20px;
+        }
+
+        .category-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .category-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .category-count {
+            background: #ff6b35;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .scroll-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .scroll-btn {
+            width: 40px;
+            height: 40px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+
+        .scroll-btn:hover:not(:disabled) {
+            background: #ff6b35;
+            color: white;
+            border-color: #ff6b35;
+        }
+
+        .scroll-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        /* Conteneur scrollable horizontal */
+        .annonces-scroll-container {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .annonces-row {
+            display: flex;
+            gap: 15px;
+            transition: transform 0.3s ease;
+            padding-bottom: 10px;
+        }
+
+        /* Cartes d'annonces */
+        .annonce-card {
+            flex: 0 0 220px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 1px solid #e0e0e0;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .annonce-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .annonce-image {
+            width: 100%;
+            height: 110px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .annonce-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        .favorite-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(255,255,255,0.9);
+            border: none;
+            border-radius: 50%;
+            width: 26px;
+            height: 26px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .favorite-btn:hover {
+            background: white;
+            transform: scale(1.1);
+        }
+
+        .annonce-content {
+            padding: 12px;
+        }
+
+        .annonce-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 6px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            line-height: 1.3;
+        }
+
+        .annonce-price {
+            font-size: 16px;
+            font-weight: bold;
+            color: #ff6b35;
+            margin-bottom: 6px;
+        }
+
+        .annonce-location {
+            font-size: 11px;
+            color: #666;
+            margin-bottom: 4px;
+        }
+
+        .annonce-date {
+            font-size: 11px;
+            color: #999;
+        }
+
+        .annonce-stats {
+            font-size: 11px;
+            color: #999;
+            display: flex;
+            gap: 10px;
+            margin-top: 4px;
+        }
+
+        .badge {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .badge.urgent {
+            background: #ff4757;
+            color: white;
+        }
+
+        .badge.new {
+            background: #2ed573;
+            color: white;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+
+        .empty-state h3 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-actions {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .search-bar {
+                max-width: 100%;
+                margin-right: 0;
+            }
+
+            .controls-section {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .filters-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .annonce-card {
+                flex: 0 0 200px;
+            }
+
+            .category-header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+
+            .scroll-controls {
+                align-self: flex-end;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header avec recherche -->
+        <div class="header-actions">
+            <form method="get" class="search-bar">
+                <input type="text" name="q" value="{{ recherche }}" placeholder="Rechercher une annonce...">
+                {% if categorie_slug %}<input type="hidden" name="categorie" value="{{ categorie_slug }}">{% endif %}
+                {% if prix_min %}<input type="hidden" name="prix_min" value="{{ prix_min }}">{% endif %}
+                {% if prix_max %}<input type="hidden" name="prix_max" value="{{ prix_max }}">{% endif %}
+                {% if ville %}<input type="hidden" name="ville" value="{{ ville }}">{% endif %}
+                {% if sort %}<input type="hidden" name="sort" value="{{ sort }}">{% endif %}
+                <input type="hidden" name="per_page" value="{{ per_page }}">
+                <script>
+                    document.querySelector('.search-bar input[name="q"]').addEventListener('keypress', function(e) {
+                        if (e.key === 'Enter') {
+                            this.closest('form').submit();
+                        }
+                    });
+                </script>
+            </form>
+            <a href="#" class="btn-deposer">📝 Déposer une annonce</a>
+        </div>
+
+        <!-- Filtres -->
+        <div class="filters-section">
+            <form method="get" class="filters-form">
+                <div class="filters-row">
+                    <div class="filter-group">
+                        <label>Catégorie</label>
+                        <select name="categorie">
+                            <option value="">Toutes les catégories</option>
+                            {% for cat in categories %}
+                                <option value="{{ cat.slug }}" {% if cat.slug == categorie_slug %}selected{% endif %}>
+                                    {{ cat.emoji }} {{ cat.nom }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label>Prix min</label>
+                        <input type="number" name="prix_min" value="{{ prix_min }}" placeholder="0 €">
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label>Prix max</label>
+                        <input type="number" name="prix_max" value="{{ prix_max }}" placeholder="1000 €">
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label>Ville</label>
+                        <input type="text" name="ville" value="{{ ville }}" placeholder="Ville">
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label>Trier par</label>
+                        <select name="sort">
+                            <option value="date" {% if sort == 'date' %}selected{% endif %}>Plus récent</option>
+                            <option value="prix_asc" {% if sort == 'prix_asc' %}selected{% endif %}>Prix croissant</option>
+                            <option value="prix_desc" {% if sort == 'prix_desc' %}selected{% endif %}>Prix décroissant</option>
+                            <option value="vues" {% if sort == 'vues' %}selected{% endif %}>Plus vues</option>
+                        </select>
+                    </div>
+                    
+                    <input type="hidden" name="q" value="{{ recherche }}">
+                    <input type="hidden" name="per_page" value="{{ per_page }}">
+                    <button type="submit" class="btn-filter">Filtrer</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Contrôles et pagination -->
+        <div class="controls-section">
+            <div class="results-per-page">
+                <label for="itemsPerPage">Annonces par page :</label>
+                <form method="get" style="display: inline;">
+                    <select name="per_page" onchange="this.form.submit()">
+                        <option value="12" {% if per_page == 12 %}selected{% endif %}>12</option>
+                        <option value="24" {% if per_page == 24 %}selected{% endif %}>24</option>
+                        <option value="48" {% if per_page == 48 %}selected{% endif %}>48</option>
+                        <option value="96" {% if per_page == 96 %}selected{% endif %}>96</option>
+                    </select>
+                    {% if recherche %}<input type="hidden" name="q" value="{{ recherche }}">{% endif %}
+                    {% if categorie_slug %}<input type="hidden" name="categorie" value="{{ categorie_slug }}">{% endif %}
+                    {% if prix_min %}<input type="hidden" name="prix_min" value="{{ prix_min }}">{% endif %}
+                    {% if prix_max %}<input type="hidden" name="prix_max" value="{{ prix_max }}">{% endif %}
+                    {% if ville %}<input type="hidden" name="ville" value="{{ ville }}">{% endif %}
+                    {% if sort %}<input type="hidden" name="sort" value="{{ sort }}">{% endif %}
+                </form>
+            </div>
+            
+            <!-- Pagination Django -->
+            {% if is_paginated %}
+            <div class="pagination">
+                {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}{% if recherche %}&q={{ recherche }}{% endif %}{% if categorie_slug %}&categorie={{ categorie_slug }}{% endif %}{% if prix_min %}&prix_min={{ prix_min }}{% endif %}{% if prix_max %}&prix_max={{ prix_max }}{% endif %}{% if ville %}&ville={{ ville }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}&per_page={{ per_page }}">‹ Précédent</a>
+                {% endif %}
+                
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                        <span class="current">{{ num }}</span>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                        <a href="?page={{ num }}{% if recherche %}&q={{ recherche }}{% endif %}{% if categorie_slug %}&categorie={{ categorie_slug }}{% endif %}{% if prix_min %}&prix_min={{ prix_min }}{% endif %}{% if prix_max %}&prix_max={{ prix_max }}{% endif %}{% if ville %}&ville={{ ville }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}&per_page={{ per_page }}">{{ num }}</a>
+                    {% endif %}
+                {% endfor %}
+                
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}{% if recherche %}&q={{ recherche }}{% endif %}{% if categorie_slug %}&categorie={{ categorie_slug }}{% endif %}{% if prix_min %}&prix_min={{ prix_min }}{% endif %}{% if prix_max %}&prix_max={{ prix_max }}{% endif %}{% if ville %}&ville={{ ville }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}&per_page={{ per_page }}">Suivant ›</a>
+                {% endif %}
+            </div>
+            {% endif %}
+            
+            <div class="page-info">
+                {% if page_obj %}
+                    {{ page_obj.start_index }}-{{ page_obj.end_index }} sur {{ page_obj.paginator.count }}
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Sections par catégorie -->
+        <div id="categoriesSections">
+            {% if annonces_par_categorie %}
+                {% for categorie, annonces_cat in annonces_par_categorie.items %}
+                <div class="category-section">
+                    <div class="category-header">
+                        <div class="category-title">
+                            <span>{{ categorie.emoji }}</span>
+                            <span>{{ categorie.nom }}</span>
+                            <span class="category-count">{{ annonces_cat|length }}</span>
+                        </div>
+                        <div class="scroll-controls">
+                            <button class="scroll-btn" onclick="scrollCategorie('{{ categorie.slug }}', -1)" id="scroll-left-{{ categorie.slug }}">‹</button>
+                            <button class="scroll-btn" onclick="scrollCategorie('{{ categorie.slug }}', 1)" id="scroll-right-{{ categorie.slug }}">›</button>
+                        </div>
+                    </div>
+                    
+                    <div class="annonces-scroll-container" id="scroll-container-{{ categorie.slug }}">
+                        <div class="annonces-row" id="annonces-row-{{ categorie.slug }}">
+                            {% for annonce in annonces_cat %}
+                            <a href="{{ annonce.get_absolute_url }}" class="annonce-card">
+                                <div class="annonce-image">
+                                    {% if annonce.urgent %}
+                                        <div class="badge urgent">Urgent</div>
+                                    {% endif %}
+                                    
+                                    {% if annonce.photo_principale %}
+                                        <img src="{{ annonce.photo_principale.image.url }}" alt="{{ annonce.titre }}">
+                                    {% else %}
+                                        <div class="placeholder">{{ categorie.emoji }} Photo</div>
+                                    {% endif %}
+                                    
+                                    <button class="favorite-btn" onclick="event.preventDefault(); event.stopPropagation(); toggleFavorite({{ annonce.id }})" data-annonce-id="{{ annonce.id }}">
+                                        {% if annonce.id in favoris %}❤️{% else %}🤍{% endif %}
+                                    </button>
+                                </div>
+                                <div class="annonce-content">
+                                    <div class="annonce-title">{{ annonce.titre }}</div>
+                                    <div class="annonce-price">{{ annonce.prix }} €</div>
+                                    <div class="annonce-location">{{ annonce.ville }}{% if annonce.code_postal %}, {{ annonce.code_postal }}{% endif %}</div>
+                                    <div class="annonce-date">{{ annonce.date_creation|date:"d/m/Y" }}</div>
+                                    <div class="annonce-stats">
+                                        <span>👁️ {{ annonce.vues_count }}</span>
+                                        <span>📅 {{ annonce.date_creation|timesince }}</span>
+                                    </div>
+                                </div>
+                            </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <h3>Aucune annonce trouvée</h3>
+                    <p>Essayez de modifier vos critères de recherche ou de navigation.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        let scrollPositions = {};
+
+        function scrollCategorie(categorieId, direction) {
+            const container = document.getElementById(`scroll-container-${categorieId}`);
+            const row = document.getElementById(`annonces-row-${categorieId}`);
+            
+            if (!container || !row) return;
+            
+            const cardWidth = 235; // 220px + 15px gap
+            const containerWidth = container.offsetWidth;
+            const maxScroll = Math.max(0, row.scrollWidth - containerWidth);
+            
+            if (!scrollPositions[categorieId]) {
+                scrollPositions[categorieId] = 0;
+            }
+            
+            scrollPositions[categorieId] = Math.max(0, Math.min(maxScroll, scrollPositions[categorieId] + (direction * cardWidth * 3)));
+            
+            row.style.transform = `translateX(-${scrollPositions[categorieId]}px)`;
+            mettreAJourBoutonsScroll(categorieId);
+        }
+
+        function mettreAJourBoutonsScroll(categorieId) {
+            const container = document.getElementById(`scroll-container-${categorieId}`);
+            const row = document.getElementById(`annonces-row-${categorieId}`);
+            const leftBtn = document.getElementById(`scroll-left-${categorieId}`);
+            const rightBtn = document.getElementById(`scroll-right-${categorieId}`);
+            
+            if (!container || !row || !leftBtn || !rightBtn) return;
+            
+            const containerWidth = container.offsetWidth;
+            const maxScroll = Math.max(0, row.scrollWidth - containerWidth);
+            
+            leftBtn.disabled = scrollPositions[categorieId] <= 0;
+            rightBtn.disabled = scrollPositions[categorieId] >= maxScroll;
+        }
+
+        function toggleFavorite(annonceId) {
+            fetch(`/annonces/favori/toggle/${annonceId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                const btn = document.querySelector(`[data-annonce-id="${annonceId}"]`);
+                if (btn) {
+                    btn.textContent = data.is_favorite ? '❤️' : '🤍';
+                }
+            })
+            .catch(error => console.error('Erreur:', error));
+        }
+
+        // Initialiser les boutons de scroll
+        document.addEventListener('DOMContentLoaded', function() {
+            const categories = document.querySelectorAll('.category-section');
+            categories.forEach(section => {
+                const categorieId = section.querySelector('.annonces-scroll-container').id.replace('scroll-container-', '');
+                scrollPositions[categorieId] = 0;
+                mettreAJourBoutonsScroll(categorieId);
+            });
+        });
+
+        // Redimensionnement
+        window.addEventListener('resize', () => {
+            Object.keys(scrollPositions).forEach(categorieId => {
+                mettreAJourBoutonsScroll(categorieId);
+            });
+        });
+    </script>
+
+    <!-- CSRF Token pour les requêtes AJAX -->
+    {% csrf_token %}
+</body>
+</html>

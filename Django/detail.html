@@ -1,0 +1,648 @@
+<!-- templates/annonces/detail.html -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ annonce.titre }} - Petites Annonces</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .breadcrumb {
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .breadcrumb a {
+            color: #ff6b35;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .annonce-detail {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .annonce-header {
+            padding: 30px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .annonce-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .annonce-meta {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .annonce-price {
+            font-size: 32px;
+            font-weight: bold;
+            color: #ff6b35;
+        }
+
+        .badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .badge.urgent {
+            background: #ff4757;
+            color: white;
+        }
+
+        .badge.categorie {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        .annonce-content {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 30px;
+            padding: 30px;
+        }
+
+        .main-content {
+            min-width: 0;
+        }
+
+        .photos-section {
+            margin-bottom: 30px;
+        }
+
+        .photo-principale {
+            width: 100%;
+            height: 400px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+        }
+
+        .photo-principale img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photos-miniatures {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+
+        .photo-mini {
+            flex: 0 0 80px;
+            height: 80px;
+            border-radius: 6px;
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .photo-mini.active {
+            border-color: #ff6b35;
+        }
+
+        .photo-mini img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .description-section h2 {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .description-text {
+            font-size: 16px;
+            line-height: 1.7;
+            color: #555;
+            white-space: pre-line;
+        }
+
+        .caracteristiques-section {
+            margin-top: 30px;
+        }
+
+        .caracteristiques-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .caracteristique {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #ff6b35;
+        }
+
+        .caracteristique-label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .caracteristique-value {
+            color: #666;
+        }
+
+        .sidebar {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 8px;
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+        }
+
+        .vendeur-section {
+            margin-bottom: 25px;
+        }
+
+        .vendeur-section h3 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .vendeur-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .vendeur-avatar {
+            width: 50px;
+            height: 50px;
+            background: #ff6b35;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .vendeur-details {
+            flex: 1;
+        }
+
+        .vendeur-nom {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 2px;
+        }
+
+        .vendeur-depuis {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            text-decoration: none;
+            margin-bottom: 10px;
+        }
+
+        .btn-primary {
+            background: #ff6b35;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #e55a2e;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #ff6b35;
+            border: 2px solid #ff6b35;
+        }
+
+        .btn-secondary:hover {
+            background: #ff6b35;
+            color: white;
+        }
+
+        .localisation-section {
+            margin-bottom: 25px;
+        }
+
+        .localisation-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .stats-section {
+            border-top: 1px solid #e0e0e0;
+            padding-top: 20px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 10px;
+            background: white;
+            border-radius: 6px;
+        }
+
+        .stat-number {
+            font-size: 18px;
+            font-weight: bold;
+            color: #ff6b35;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            margin-top: 2px;
+        }
+
+        .annonces-similaires {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+
+        .annonces-similaires h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .similaires-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .annonce-card-mini {
+            background: #f8f9fa;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .annonce-card-mini:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .card-mini-image {
+            width: 100%;
+            height: 120px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+        }
+
+        .card-mini-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .card-mini-content {
+            padding: 15px;
+        }
+
+        .card-mini-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            line-height: 1.3;
+        }
+
+        .card-mini-price {
+            font-size: 16px;
+            font-weight: bold;
+            color: #ff6b35;
+            margin-bottom: 5px;
+        }
+
+        .card-mini-location {
+            font-size: 12px;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .annonce-content {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .sidebar {
+                position: static;
+                order: -1;
+            }
+
+            .caracteristiques-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .similaires-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+
+            .annonce-title {
+                font-size: 22px;
+            }
+
+            .annonce-price {
+                font-size: 24px;
+            }
+
+            .photo-principale {
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb">
+            <a href="{% url 'annonces:liste' %}">Accueil</a> > 
+            <a href="{% url 'annonces:categorie' annonce.categorie.slug %}">{{ annonce.categorie.nom }}</a> > 
+            {{ annonce.titre }}
+        </nav>
+
+        <!-- Détail de l'annonce -->
+        <article class="annonce-detail">
+            <header class="annonce-header">
+                <h1 class="annonce-title">{{ annonce.titre }}</h1>
+                
+                <div class="annonce-meta">
+                    <span>📅 Publié le {{ annonce.date_creation|date:"d/m/Y à H:i" }}</span>
+                    <span>👁️ {{ annonce.vues_count }} vue{{ annonce.vues_count|pluralize }}</span>
+                    <span>📍 {{ annonce.ville }}{% if annonce.code_postal %}, {{ annonce.code_postal }}{% endif %}</span>
+                    
+                    {% if annonce.urgent %}
+                        <span class="badge urgent">Urgent</span>
+                    {% endif %}
+                    
+                    <span class="badge categorie">{{ annonce.categorie.emoji }} {{ annonce.categorie.nom }}</span>
+                </div>
+                
+                <div class="annonce-price">{{ annonce.prix }} €</div>
+            </header>
+
+            <div class="annonce-content">
+                <main class="main-content">
+                    <!-- Photos -->
+                    <section class="photos-section">
+                        {% if annonce.photos.exists %}
+                            <div class="photo-principale" id="photo-principale">
+                                <img src="{{ annonce.photos.first.image.url }}" alt="{{ annonce.titre }}" id="main-photo">
+                            </div>
+                            
+                            {% if annonce.photos.count > 1 %}
+                            <div class="photos-miniatures">
+                                {% for photo in annonce.photos.all %}
+                                <div class="photo-mini {% if forloop.first %}active{% endif %}" 
+                                     onclick="changerPhoto('{{ photo.image.url }}', this)">
+                                    <img src="{{ photo.image.url }}" alt="{{ annonce.titre }}">
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        {% else %}
+                            <div class="photo-principale">
+                                {{ annonce.categorie.emoji }} Aucune photo
+                            </div>
+                        {% endif %}
+                    </section>
+
+                    <!-- Description -->
+                    <section class="description-section">
+                        <h2>Description</h2>
+                        <div class="description-text">{{ annonce.description }}</div>
+                    </section>
+
+                    <!-- Caractéristiques -->
+                    <section class="caracteristiques-section">
+                        <h2>Détails</h2>
+                        <div class="caracteristiques-grid">
+                            <div class="caracteristique">
+                                <div class="caracteristique-label">Catégorie</div>
+                                <div class="caracteristique-value">{{ annonce.categorie.nom }}</div>
+                            </div>
+                            <div class="caracteristique">
+                                <div class="caracteristique-label">État</div>
+                                <div class="caracteristique-value">{{ annonce.get_etat_display }}</div>
+                            </div>
+                            <div class="caracteristique">
+                                <div class="caracteristique-label">Localisation</div>
+                                <div class="caracteristique-value">{{ annonce.ville }}{% if annonce.code_postal %}, {{ annonce.code_postal }}{% endif %}</div>
+                            </div>
+                            <div class="caracteristique">
+                                <div class="caracteristique-label">Date de publication</div>
+                                <div class="caracteristique-value">{{ annonce.date_creation|date:"d/m/Y" }}</div>
+                            </div>
+                        </div>
+                    </section>
+                </main>
+
+                <!-- Sidebar -->
+                <aside class="sidebar">
+                    <!-- Vendeur -->
+                    <section class="vendeur-section">
+                        <h3>Vendeur</h3>
+                        <div class="vendeur-info">
+                            <div class="vendeur-avatar">
+                                {{ annonce.vendeur.username|first|upper }}
+                            </div>
+                            <div class="vendeur-details">
+                                <div class="vendeur-nom">{{ annonce.vendeur.username }}</div>
+                                <div class="vendeur-depuis">
+                                    Membre depuis {{ annonce.vendeur.date_joined|date:"M Y" }}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <a href="#" class="btn btn-primary">💬 Contacter</a>
+                        <a href="#" class="btn btn-secondary">📧 Envoyer un email</a>
+                    </section>
+
+                    <!-- Localisation -->
+                    <section class="localisation-section">
+                        <h3>Localisation</h3>
+                        <div class="localisation-info">
+                            <span>📍</span>
+                            <span>{{ annonce.ville }}{% if annonce.code_postal %}, {{ annonce.code_postal }}{% endif %}</span>
+                        </div>
+                    </section>
+
+                    <!-- Statistiques -->
+                    <section class="stats-section">
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <div class="stat-number">{{ annonce.vues_count }}</div>
+                                <div class="stat-label">Vues</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">{{ annonce.date_creation|timesince|slice:":1" }}</div>
+                                <div class="stat-label">{{ annonce.date_creation|timesince|slice:"2:" }}</div>
+                            </div>
+                        </div>
+                    </section>
+                </aside>
+            </div>
+        </article>
+
+        <!-- Annonces similaires -->
+        {% if annonces_similaires %}
+        <section class="annonces-similaires">
+            <h2>Annonces similaires</h2>
+            <div class="similaires-grid">
+                {% for annonce_sim in annonces_similaires %}
+                <a href="{{ annonce_sim.get_absolute_url }}" class="annonce-card-mini">
+                    <div class="card-mini-image">
+                        {% if annonce_sim.photo_principale %}
+                            <img src="{{ annonce_sim.photo_principale.image.url }}" alt="{{ annonce_sim.titre }}">
+                        {% else %}
+                            {{ annonce_sim.categorie.emoji }} Photo
+                        {% endif %}
+                    </div>
+                    <div class="card-mini-content">
+                        <div class="card-mini-title">{{ annonce_sim.titre }}</div>
+                        <div class="card-mini-price">{{ annonce_sim.prix }} €</div>
+                        <div class="card-mini-location">{{ annonce_sim.ville }}</div>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+    </div>
+
+    <script>
+        function changerPhoto(url, element) {
+            // Changer la photo principale
+            document.getElementById('main-photo').src = url;
+            
+            // Mettre à jour la classe active
+            document.querySelectorAll('.photo-mini').forEach(mini => {
+                mini.classList.remove('active');
+            });
+            element.classList.add('active');
+        }
+
+        // Gestion du zoom sur la photo principale
+        document.getElementById('photo-principale').addEventListener('click', function() {
+            const img = this.querySelector('img');
+            if (img) {
+                // Créer un overlay pour le zoom
+                const overlay = document.createElement('div');
+                overlay.style.cssText = `
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0,0,0,0.9);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: 1000;
+                    cursor: pointer;
+                `;
+                
+                const zoomedImg = document.createElement('img');
+                zoomedImg.src = img.src;
+                zoomedImg.style.cssText = `
+                    max-width: 90%;
+                    max-height: 90%;
+                    object-fit: contain;
+                `;
+                
+                overlay.appendChild(zoomedImg);
+                document.body.appendChild(overlay);
+                
+                // Fermer au clic
+                overlay.addEventListener('click', () => {
+                    document.body.removeChild(overlay);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

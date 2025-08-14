@@ -1,0 +1,524 @@
+# 🏪 Petites Annonces - Guide d'Installation Complet
+
+## 📋 Vue d'ensemble du projet
+
+Ce projet Django offre une plateforme complète de petites annonces avec toutes les fonctionnalités modernes :
+
+### ✨ Fonctionnalités principales
+- **Interface moderne** inspirée de LeBonCoin avec design responsive
+- **Gestion complète des annonces** avec photos, catégories, et géolocalisation
+- **Système d'authentification** complet avec profils utilisateurs
+- **Messagerie intégrée** entre acheteurs et vendeurs
+- **API REST** pour intégrations et applications mobiles
+- **Notifications temps réel** via WebSockets
+- **Système de favoris** et alertes personnalisées
+- **Administration Django** pour la modération
+- **Tests automatisés** et CI/CD
+- **Déploiement Docker** prêt pour la production
+
+---
+
+## 🚀 Installation rapide (développement)
+
+### 1. Prérequis
+```bash
+# Python 3.11+
+python --version
+
+# Git
+git --version
+
+# PostgreSQL (optionnel, SQLite par défaut)
+# Redis (pour cache et tâches asynchrones)
+```
+
+### 2. Installation
+```bash
+# Cloner le projet
+git clone https://github.com/votre-username/petites-annonces.git
+cd petites-annonces
+
+# Créer l'environnement virtuel
+python -m venv venv
+source venv/bin/activate  # Linux/Mac
+venv\Scripts\activate     # Windows
+
+# Installer les dépendances
+pip install -r requirements.txt
+
+# Configurer la base de données
+python manage.py makemigrations
+python manage.py migrate
+
+# Créer les catégories par défaut
+python manage.py create_categories
+
+# Créer un superutilisateur
+python manage.py createsuperuser
+
+# Importer des données de test (optionnel)
+python manage.py import_donnees_test --nb-users 20 --nb-annonces 100
+
+# Lancer le serveur
+python manage.py runserver
+```
+
+### 3. Accès à l'application
+- **Site web :** http://localhost:8000
+- **Admin Django :** http://localhost:8000/admin
+- **API REST :** http://localhost:8000/api/
+- **Documentation API :** http://localhost:8000/api/docs/
+
+---
+
+## 🏗️ Architecture du projet
+
+```
+petites_annonces/
+├── 📁 petites_annonces/          # Configuration Django
+│   ├── settings/
+│   │   ├── base.py              # Configuration de base
+│   │   ├── development.py       # Configuration développement
+│   │   └── production.py        # Configuration production
+│   ├── urls.py
+│   └── wsgi.py
+├── 📁 annonces/                  # Application principale
+│   ├── 📁 api/                  # API REST
+│   │   ├── serializers.py
+│   │   └── views.py
+│   ├── 📁 management/commands/   # Commandes Django
+│   │   ├── create_categories.py
+│   │   └── import_donnees_test.py
+│   ├── 📁 templates/            # Templates HTML
+│   │   ├── base.html
+│   │   ├── registration/
+│   │   └── annonces/
+│   ├── 📁 tests/                # Tests automatisés
+│   ├── models.py               # Modèles de données
+│   ├── views.py                # Vues Django
+│   ├── forms.py                # Formulaires
+│   ├── urls.py                 # URLs de l'app
+│   ├── admin.py                # Interface admin
+│   ├── signals.py              # Signaux Django
+│   ├── tasks.py                # Tâches Celery
+│   └── utils.py                # Utilitaires
+├── 📁 media/                    # Fichiers uploadés
+├── 📁 static/                   # Fichiers statiques
+├── 📁 monitoring/               # Monitoring et métriques
+├── 📁 scripts/                  # Scripts de déploiement
+├── 📄 requirements.txt          # Dépendances Python
+├── 📄 Dockerfile              # Configuration Docker
+├── 📄 docker-compose.yml      # Services Docker
+├── 📄 nginx.conf              # Configuration Nginx
+└── 📄 pytest.ini             # Configuration tests
+```
+
+---
+
+## 🔧 Configuration avancée
+
+### Variables d'environnement (.env)
+```bash
+# Base
+DEBUG=True
+SECRET_KEY=your-secret-key-here
+ALLOWED_HOSTS=localhost,127.0.0.1
+
+# Base de données
+DATABASE_URL=postgresql://user:password@localhost:5432/petites_annonces
+
+# Redis
+REDIS_URL=redis://localhost:6379/0
+
+# Email
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_HOST_USER=your-email@gmail.com
+EMAIL_HOST_PASSWORD=your-app-password
+
+# AWS S3 (production)
+AWS_ACCESS_KEY_ID=your-access-key
+AWS_SECRET_ACCESS_KEY=your-secret-key
+AWS_STORAGE_BUCKET_NAME=your-bucket
+
+# Monitoring
+SENTRY_DSN=your-sentry-dsn
+```
+
+### Services requis
+
+#### PostgreSQL
+```bash
+# Installation Ubuntu/Debian
+sudo apt update
+sudo apt install postgresql postgresql-contrib
+
+# Création de la base
+sudo -u postgres createdb petites_annonces
+sudo -u postgres createuser --interactive
+```
+
+#### Redis
+```bash
+# Installation Ubuntu/Debian
+sudo apt install redis-server
+
+# Démarrage
+sudo systemctl start redis-server
+sudo systemctl enable redis-server
+```
+
+#### Celery (tâches asynchrones)
+```bash
+# Dans un terminal séparé
+celery -A petites_annonces worker --loglevel=info
+
+# Pour les tâches programmées
+celery -A petites_annonces beat --loglevel=info
+```
+
+---
+
+## 🐳 Déploiement avec Docker
+
+### Développement
+```bash
+# Construire et lancer tous les services
+docker-compose up --build
+
+# En arrière-plan
+docker-compose up -d
+
+# Voir les logs
+docker-compose logs -f web
+```
+
+### Production
+```bash
+# Utiliser le fichier de production
+docker-compose -f docker-compose.prod.yml up -d
+
+# Migrations en production
+docker-compose exec web python manage.py migrate
+
+# Collecte des fichiers statiques
+docker-compose exec web python manage.py collectstatic --noinput
+```
+
+---
+
+## 🧪 Tests et qualité
+
+### Lancer les tests
+```bash
+# Tests Django
+python manage.py test
+
+# Tests avec pytest
+pytest
+
+# Tests avec couverture
+pytest --cov=annonces --cov-report=html
+
+# Tests de performance
+python manage.py test tests.test_performance
+```
+
+### Qualité du code
+```bash
+# Linting avec flake8
+flake8 annonces/
+
+# Formatage avec black
+black annonces/
+
+# Import sorting avec isort
+isort annonces/
+```
+
+---
+
+## 📊 Monitoring et maintenance
+
+### Métriques
+- **Prometheus :** http://localhost:9090
+- **Grafana :** http://localhost:3000
+- **Health check :** http://localhost:8000/health/
+
+### Logs
+```bash
+# Logs en développement
+python manage.py runserver --verbosity=2
+
+# Logs Docker
+docker-compose logs -f
+
+# Logs en production
+tail -f /var/log/django/petites_annonces.log
+```
+
+### Tâches de maintenance
+```bash
+# Nettoyage des notifications anciennes
+python manage.py clearsessions
+python manage.py nettoyer_notifications_anciennes
+
+# Optimisation des images
+python manage.py optimiser_images --quality=85 --max-width=1200
+
+# Backup de la base
+pg_dump petites_annonces > backup_$(date +%Y%m%d).sql
+```
+
+---
+
+## 🚀 Déploiement en production
+
+### 1. Serveur VPS (Ubuntu 22.04)
+```bash
+# Mise à jour du système
+sudo apt update && sudo apt upgrade -y
+
+# Installation des dépendances
+sudo apt install python3-pip python3-venv nginx postgresql redis-server
+
+# Installation de Docker
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
+sudo usermod -aG docker $USER
+```
+
+### 2. Configuration Nginx
+```bash
+# Copier la configuration
+sudo cp nginx.conf /etc/nginx/sites-available/petites-annonces
+sudo ln -s /etc/nginx/sites-available/petites-annonces /etc/nginx/sites-enabled/
+
+# Test et restart
+sudo nginx -t
+sudo systemctl restart nginx
+```
+
+### 3. SSL avec Let's Encrypt
+```bash
+# Installation Certbot
+sudo apt install certbot python3-certbot-nginx
+
+# Génération du certificat
+sudo certbot --nginx -d petites-annonces.com -d www.petites-annonces.com
+```
+
+### 4. Services systemd
+```bash
+# Créer les fichiers service pour Gunicorn, Celery, etc.
+sudo systemctl enable gunicorn
+sudo systemctl enable celery
+sudo systemctl start gunicorn
+sudo systemctl start celery
+```
+
+---
+
+## 📱 API REST - Documentation
+
+### Endpoints principaux
+
+#### Annonces
+```bash
+# Liste des annonces
+GET /api/annonces/
+POST /api/annonces/
+
+# Détail d'une annonce
+GET /api/annonces/{id}/
+PUT /api/annonces/{id}/
+DELETE /api/annonces/{id}/
+
+# Recherche avancée
+GET /api/annonces/recherche/?q=terme&categorie=1&prix_min=100
+```
+
+#### Utilisateur
+```bash
+# Mes annonces
+GET /api/mes-annonces/
+
+# Favoris
+POST /api/favoris/toggle/{annonce_id}/
+
+# Notifications
+GET /api/notifications/
+POST /api/notifications/{id}/marquer-lue/
+```
+
+### Authentification API
+```python
+# Token d'authentification
+from rest_framework.authtoken.models import Token
+token = Token.objects.create(user=user)
+
+# Headers de requête
+headers = {'Authorization': f'Token {token.key}'}
+```
+
+---
+
+## 🔧 Personnalisation et extension
+
+### Ajouter une nouvelle fonctionnalité
+
+1. **Modèle :** Créer le modèle dans `models.py`
+2. **Migration :** `python manage.py makemigrations`
+3. **Vue :** Ajouter la vue dans `views.py`
+4. **Template :** Créer le template HTML
+5. **URL :** Ajouter l'URL dans `urls.py`
+6. **Tests :** Écrire les tests dans `tests/`
+
+### Exemples d'extensions possibles
+- **Système de notation** (étoiles pour les vendeurs)
+- **Chat en temps réel** (avec WebRTC)
+- **Paiement intégré** (Stripe, PayPal)
+- **Application mobile** (React Native, Flutter)
+- **Machine learning** (recommandations personnalisées)
+
+---
+
+## 🛠️ Troubleshooting
+
+### Problèmes courants
+
+#### Base de données
+```bash
+# Reset de la base
+python manage.py flush
+python manage.py migrate
+python manage.py create_categories
+```
+
+#### Permissions médias
+```bash
+sudo chown -R www-data:www-data /path/to/media/
+sudo chmod -R 755 /path/to/media/
+```
+
+#### Mémoire insuffisante
+```bash
+# Ajuster les workers Gunicorn
+gunicorn --workers=2 --max-requests=1000 petites_annonces.wsgi:application
+```
+
+#### Problèmes de cache
+```bash
+# Vider le cache Redis
+redis-cli FLUSHALL
+
+# Cache Django
+python manage.py shell -c "from django.core.cache import cache; cache.clear()"
+```
+
+---
+
+## 📈 Performance et optimisation
+
+### Optimisations recommandées
+
+1. **Base de données**
+   - Index sur les champs de recherche fréquente
+   - `select_related()` et `prefetch_related()`
+   - Pagination efficace
+
+2. **Cache**
+   - Cache des vues avec `@cache_page`
+   - Cache des templates avec `{% cache %}`
+   - Cache Redis pour les sessions
+
+3. **Images**
+   - Compression automatique
+   - Formats WebP pour les navigateurs compatibles
+   - CDN pour la diffusion globale
+
+4. **Frontend**
+   - Minification CSS/JS
+   - Compression Gzip/Brotli
+   - Lazy loading des images
+
+---
+
+## 🔒 Sécurité
+
+### Checklist de sécurité
+
+- [ ] HTTPS activé avec certificat valide
+- [ ] Headers de sécurité configurés
+- [ ] Rate limiting sur l'API
+- [ ] Validation stricte des uploads
+- [ ] Logs de sécurité activés
+- [ ] Sauvegardes automatiques
+- [ ] Mises à jour régulières des dépendances
+
+### Configuration de sécurité
+```python
+# settings/production.py
+SECURE_SSL_REDIRECT = True
+SECURE_HSTS_SECONDS = 31536000
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+```
+
+---
+
+## 📚 Ressources supplémentaires
+
+### Documentation
+- [Django Documentation](https://docs.djangoproject.com/)
+- [Django REST Framework](https://www.django-rest-framework.org/)
+- [Celery Documentation](https://docs.celeryproject.org/)
+
+### Communauté
+- [Django Forum](https://forum.djangoproject.com/)
+- [Stack Overflow](https://stackoverflow.com/questions/tagged/django)
+- [Reddit r/django](https://www.reddit.com/r/django/)
+
+### Outils utiles
+- [Django Debug Toolbar](https://django-debug-toolbar.readthedocs.io/)
+- [Django Extensions](https://django-extensions.readthedocs.io/)
+- [Sentry](https://sentry.io/) pour le monitoring d'erreurs
+
+---
+
+## 🎯 Roadmap et prochaines étapes
+
+### Version 2.0 (prochaines fonctionnalités)
+- [ ] Application mobile React Native
+- [ ] Intelligence artificielle pour la modération
+- [ ] Système de recommandations personnalisées
+- [ ] Intégration de paiement sécurisé
+- [ ] Tableau de bord analytique avancé
+- [ ] API GraphQL
+- [ ] Mode hors ligne (PWA)
+
+### Contributions
+Les contributions sont les bienvenues ! Consultez `CONTRIBUTING.md` pour les guidelines.
+
+---
+
+## 📞 Support
+
+Pour toute question ou problème :
+- **Email :** support@petites-annonces.com
+- **GitHub Issues :** https://github.com/votre-username/petites-annonces/issues
+- **Documentation :** https://docs.petites-annonces.com
+
+---
+
+## 📄 Licence
+
+Ce projet est sous licence MIT. Voir le fichier `LICENSE` pour plus de détails.
+
+---
+
+**🎉 Félicitations ! Votre plateforme de petites annonces est maintenant prête à être utilisée et déployée en production !**
+
+> **Note :** Ce guide couvre une installation complète avec toutes les fonctionnalités avancées. Pour un démarrage rapide, vous pouvez commencer par l'installation de base et ajouter progressivement les fonctionnalités selon vos besoins.

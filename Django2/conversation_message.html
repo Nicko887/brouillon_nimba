@@ -1,0 +1,1209 @@
+
+<!-- templates/annonces/conversation.html -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversation - {{ conversation.annonce.titre }}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .breadcrumb {
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .breadcrumb a {
+            color: #ff6b35;
+            text-decoration: none;
+        }
+
+        .conversation-header {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .annonce-thumb {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            overflow: hidden;
+        }
+
+        .annonce-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .conversation-info {
+            flex: 1;
+        }
+
+        .conversation-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .conversation-meta {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .conversation-price {
+            font-size: 20px;
+            font-weight: bold;
+            color: #ff6b35;
+        }
+
+        .conversation-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 10px rgba(255, 107, 53, 0.3);
+        }
+
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        .messages-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .messages-list {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            max-height: 400px;
+        }
+
+        .message-item {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .message-item.own {
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .message-item.own .message-avatar {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .message-content {
+            flex: 1;
+            max-width: 70%;
+        }
+
+        .message-bubble {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 15px;
+            border-bottom-left-radius: 5px;
+            position: relative;
+        }
+
+        .message-item.own .message-bubble {
+            background: #ff6b35;
+            color: white;
+            border-bottom-left-radius: 15px;
+            border-bottom-right-radius: 5px;
+        }
+
+        .message-text {
+            line-height: 1.5;
+            white-space: pre-line;
+        }
+
+        .message-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 8px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .message-item.own .message-meta {
+            color: rgba(255,255,255,0.8);
+        }
+
+        .message-author {
+            font-weight: 600;
+        }
+
+        .message-date {
+            opacity: 0.8;
+        }
+
+        .message-form {
+            padding: 20px;
+            border-top: 1px solid #e0e0e0;
+            background: #f8f9fa;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 60px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #ff6b35;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .char-count {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .empty-messages {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+        }
+
+        .empty-messages h3 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .conversation-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .message-content {
+                max-width: 85%;
+            }
+
+            .form-actions {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb">
+            <a href="{% url 'annonces:liste' %}">Accueil</a> > 
+            <a href="{% url 'annonces:mes_messages' %}">Mes Messages</a> > 
+            Conversation
+        </nav>
+
+        <!-- Header de la conversation -->
+        <div class="conversation-header">
+            <div class="annonce-thumb">
+                {% if conversation.annonce.photo_principale %}
+                    <img src="{{ conversation.annonce.photo_principale.image.url }}" alt="{{ conversation.annonce.titre }}">
+                {% else %}
+                    {{ conversation.annonce.categorie.emoji }}
+                {% endif %}
+            </div>
+            
+            <div class="conversation-info">
+                <div class="conversation-title">{{ conversation.annonce.titre }}</div>
+                <div class="conversation-meta">
+                    📍 {{ conversation.annonce.ville }} • {{ conversation.annonce.categorie.nom }}
+                </div>
+                <div class="conversation-price">{{ conversation.annonce.prix }} €</div>
+            </div>
+            
+            <div class="conversation-actions">
+                <a href="{{ conversation.annonce.get_absolute_url }}" class="btn btn-secondary">👁️ Voir l'annonce</a>
+                {% if conversation.vendeur == user %}
+                    <a href="{% url 'annonces:modifier' conversation.annonce.pk %}" class="btn btn-primary">✏️ Modifier</a>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Container des messages -->
+        <div class="messages-container">
+            <!-- Liste des messages -->
+            <div class="messages-list" id="messages-list">
+                {% if messages %}
+                    {% for message in messages %}
+                    <div class="message-item {% if message.expediteur == user %}own{% endif %}">
+                        <div class="message-avatar">
+                            {{ message.expediteur.username|first|upper }}
+                        </div>
+                        <div class="message-content">
+                            <div class="message-bubble">
+                                <div class="message-text">{{ message.contenu }}</div>
+                                <div class="message-meta">
+                                    <span class="message-author">{{ message.expediteur.username }}</span>
+                                    <span class="message-date">{{ message.date_envoi|date:"d/m/Y H:i" }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="empty-messages">
+                        <h3>Démarrez la conversation</h3>
+                        <p>Envoyez votre premier message pour commencer à échanger.</p>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Formulaire de nouveau message -->
+            <div class="message-form">
+                <form method="post" id="message-form">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <textarea name="message" id="message-input" class="form-control" 
+                                  placeholder="Tapez votre message..." maxlength="1000" required></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <div class="char-count">
+                            <span id="char-counter">0</span>/1000 caractères
+                        </div>
+                        <button type="submit" class="btn btn-primary">📤 Envoyer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Auto-scroll vers le bas
+        function scrollToBottom() {
+            const messagesList = document.getElementById('messages-list');
+            messagesList.scrollTop = messagesList.scrollHeight;
+        }
+
+        // Compteur de caractères
+        const messageInput = document.getElementById('message-input');
+        const charCounter = document.getElementById('char-counter');
+
+        messageInput.addEventListener('input', function() {
+            const count = this.value.length;
+            charCounter.textContent = count;
+            
+            if (count > 900) {
+                charCounter.style.color = '#ff6b35';
+            } else {
+                charCounter.style.color = '#666';
+            }
+        });
+
+        // Auto-resize du textarea
+        messageInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
+
+        // Scroll vers le bas au chargement
+        document.addEventListener('DOMContentLoaded', function() {
+            scrollToBottom();
+            messageInput.focus();
+        });
+
+        // Scroll vers le bas après envoi du message
+        document.getElementById('message-form').addEventListener('submit', function() {
+            setTimeout(scrollToBottom, 100);
+        });
+
+        // Raccourci clavier Ctrl+Enter pour envoyer
+        messageInput.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'Enter') {
+                e.preventDefault();
+                document.getElementById('message-form').submit();
+            }
+        });
+    </script>
+</body>
+</html>
+
+<!-- templates/annonces/contacter.html -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacter le vendeur - {{ annonce.titre }}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .breadcrumb {
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .breadcrumb a {
+            color: #ff6b35;
+            text-decoration: none;
+        }
+
+        .contact-header {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .annonce-thumb {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            overflow: hidden;
+        }
+
+        .annonce-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .annonce-info h1 {
+            color: #333;
+            margin-bottom: 5px;
+            font-size: 20px;
+        }
+
+        .annonce-meta {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .annonce-price {
+            font-size: 18px;
+            font-weight: bold;
+            color: #ff6b35;
+        }
+
+        .contact-form {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .form-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ff6b35;
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: inherit;
+            transition: border-color 0.3s ease;
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #ff6b35;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.4);
+        }
+
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        .form-actions {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .vendor-info {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .vendor-info h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .vendor-meta {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .message-tips {
+            background: #e8f4f8;
+            border-left: 4px solid #17a2b8;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .message-tips h4 {
+            color: #0c5460;
+            margin-bottom: 10px;
+        }
+
+        .message-tips ul {
+            color: #0c5460;
+            padding-left: 20px;
+        }
+
+        .message-tips li {
+            margin-bottom: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .contact-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .form-actions {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb">
+            <a href="{% url 'annonces:liste' %}">Accueil</a> > 
+            <a href="{{ annonce.get_absolute_url }}">{{ annonce.titre }}</a> > 
+            Contacter le vendeur
+        </nav>
+
+        <!-- Header -->
+        <div class="contact-header">
+            <div class="annonce-thumb">
+                {% if annonce.photo_principale %}
+                    <img src="{{ annonce.photo_principale.image.url }}" alt="{{ annonce.titre }}">
+                {% else %}
+                    {{ annonce.categorie.emoji }}
+                {% endif %}
+            </div>
+            
+            <div class="annonce-info">
+                <h1>{{ annonce.titre }}</h1>
+                <div class="annonce-meta">
+                    📍 {{ annonce.ville }} • {{ annonce.categorie.nom }}
+                </div>
+                <div class="annonce-price">{{ annonce.prix }} €</div>
+            </div>
+        </div>
+
+        <!-- Formulaire de contact -->
+        <div class="contact-form">
+            <div class="form-section">
+                <h2>💬 Contacter {{ annonce.vendeur.username }}</h2>
+                
+                <!-- Infos vendeur -->
+                <div class="vendor-info">
+                    <h3>👤 Vendeur</h3>
+                    <div class="vendor-meta">
+                        <strong>{{ annonce.vendeur.username }}</strong><br>
+                        Membre depuis {{ annonce.vendeur.date_joined|date:"F Y" }}
+                    </div>
+                </div>
+
+                <!-- Conseils -->
+                <div class="message-tips">
+                    <h4>💡 Conseils pour votre message</h4>
+                    <ul>
+                        <li>Soyez poli et respectueux</li>
+                        <li>Posez des questions précises sur l'article</li>
+                        <li>Proposez un rendez-vous pour voir l'objet</li>
+                        <li>Négociez le prix si nécessaire</li>
+                    </ul>
+                </div>
+
+                <!-- Formulaire -->
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="message">Votre message *</label>
+                        <textarea name="message" id="message" class="form-control" 
+                                  placeholder="Bonjour, je suis intéressé(e) par votre annonce. L'article est-il toujours disponible ?" 
+                                  required maxlength="1000"></textarea>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">📤 Envoyer le message</button>
+                        <a href="{{ annonce.get_absolute_url }}" class="btn btn-secondary">Annuler</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Auto-resize du textarea
+        const messageInput = document.getElementById('message');
+        messageInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
+
+        // Focus automatique
+        document.addEventListener('DOMContentLoaded', function() {
+            messageInput.focus();
+        });
+    </script>
+</body>
+</html>
+
+<!-- templates/annonces/supprimer.html -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supprimer l'annonce - {{ annonce.titre }}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .delete-container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        .delete-icon {
+            font-size: 48px;
+            color: #dc3545;
+            margin-bottom: 20px;
+        }
+
+        .delete-title {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 24px;
+        }
+
+        .delete-message {
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .annonce-preview {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .annonce-thumb {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            overflow: hidden;
+        }
+
+        .annonce-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .annonce-details {
+            flex: 1;
+            text-align: left;
+        }
+
+        .annonce-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .annonce-meta {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin: 0 5px;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.4);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+            text-decoration: none;
+            color: white;
+        }
+
+        .warning-text {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .delete-container {
+                margin: 20px;
+                padding: 30px 20px;
+            }
+
+            .annonce-preview {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="delete-container">
+        <div class="delete-icon">🗑️</div>
+        
+        <h1 class="delete-title">Supprimer l'annonce</h1>
+        
+        <p class="delete-message">
+            Êtes-vous sûr de vouloir supprimer cette annonce ? Cette action est irréversible.
+        </p>
+
+        <div class="annonce-preview">
+            <div class="annonce-thumb">
+                {% if annonce.photo_principale %}
+                    <img src="{{ annonce.photo_principale.image.url }}" alt="{{ annonce.titre }}">
+                {% else %}
+                    {{ annonce.categorie.emoji }}
+                {% endif %}
+            </div>
+            
+            <div class="annonce-details">
+                <div class="annonce-title">{{ annonce.titre }}</div>
+                <div class="annonce-meta">
+                    {{ annonce.prix }} € • {{ annonce.ville }} • {{ annonce.date_creation|date:"d/m/Y" }}
+                </div>
+            </div>
+        </div>
+
+        <div class="warning-text">
+            ⚠️ <strong>Attention :</strong> La suppression entraînera également la suppression de toutes les conversations liées à cette annonce.
+        </div>
+
+        <form method="post" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">🗑️ Confirmer la suppression</button>
+        </form>
+        
+        <a href="{% url 'annonces:mes_annonces' %}" class="btn btn-secondary">↩️ Annuler</a>
+    </div>
+</body>
+</html>
+
+<!-- templates/annonces/mes_favoris.html -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mes Favoris - Petites Annonces</title>
+    <style>
+        /* Même CSS que mes_annonces.html mais avec quelques ajustements */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .breadcrumb {
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .breadcrumb a {
+            color: #ff6b35;
+            text-decoration: none;
+        }
+
+        .page-header {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .page-header p {
+            color: #666;
+        }
+
+        .favoris-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .favori-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .favori-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        .favorite-remove {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255,255,255,0.9);
+            border: none;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .favorite-remove:hover {
+            background: white;
+            transform: scale(1.1);
+        }
+
+        .annonce-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+            position: relative;
+        }
+
+        .annonce-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .annonce-content {
+            padding: 20px;
+        }
+
+        .annonce-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+
+        .annonce-price {
+            font-size: 20px;
+            font-weight: bold;
+            color: #ff6b35;
+            margin-bottom: 10px;
+        }
+
+        .annonce-meta {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .annonce-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 10px rgba(255, 107, 53, 0.3);
+        }
+
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .empty-state h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .empty-state p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .favoris-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb">
+            <a href="{% url 'annonces:liste' %}">Accueil</a> > 
+            <a href="{% url 'annonces:profil' %}">Mon Profil</a> > 
+            Mes Favoris
+        </nav>
+
+        <!-- Header -->
+        <div class="page-header">
+            <h1>❤️ Mes Favoris</h1>
+            <p>Retrouvez toutes les annonces que vous avez sauvegardées</p>
+        </div>
+
+        <!-- Liste des favoris -->
+        {% if page_obj %}
+            <div class="favoris-grid">
+                {% for annonce in page_obj %}
+                <div class="favori-card">
+                    <button class="favorite-remove" onclick="toggleFavorite({{ annonce.id }})" data-annonce-id="{{ annonce.id }}">
+                        💔
+                    </button>
+                    
+                    <div class="annonce-image">
+                        {% if annonce.photo_principale %}
+                            <img src="{{ annonce.photo_principale.image.url }}" alt="{{ annonce.titre }}">
+                        {% else %}
+                            {{ annonce.categorie.emoji }} Photo
+                        {% endif %}
+                    </div>
+                    
+                    <div class="annonce-content">
+                        <div class="annonce-title">{{ annonce.titre }}</div>
+                        <div class="annonce-price">{{ annonce.prix }} €</div>
+                        
+                        <div class="annonce-meta">
+                            📍 {{ annonce.ville }} • {{ annonce.categorie.nom }}
+                            <br>
+                            📅 {{ annonce.date_creation|date:"d/m/Y" }} • 👁️ {{ annonce.vues_count }} vue{{ annonce.vues_count|pluralize }}
+                        </div>
+                        
+                        <div class="annonce-actions">
+                            <a href="{{ annonce.get_absolute_url }}" class="btn btn-primary">👁️ Voir l'annonce</a>
+                            <a href="{% url 'annonces:contacter' annonce.id %}" class="btn btn-secondary">💬 Contacter</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <h3>Aucun favori pour le moment</h3>
+                <p>Parcourez les annonces et cliquez sur le cœur pour sauvegarder vos coups de cœur !</p>
+                <a href="{% url 'annonces:liste' %}" class="btn btn-primary">🔍 Parcourir les annonces</a>
+            </div>
+        {% endif %}
+    </div>
+
+    <script>
+        function toggleFavorite(annonceId) {
+            fetch(`/annonces/favori/toggle/${annonceId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.is_favorite) {
+                    // Supprimer la card avec animation
+                    const card = document.querySelector(`[data-annonce-id="${annonceId}"]`).closest('.favori-card');
+                    card.style.transform = 'scale(0)';
+                    card.style.opacity = '0';
+                    setTimeout(() => {
+                        card.remove();
+                        
+                        // Vérifier s'il reste des favoris
+                        const remainingCards = document.querySelectorAll('.favori-card');
+                        if (remainingCards.length === 0) {
+                            location.reload(); // Recharger pour afficher l'état vide
+                        }
+                    }, 300);
+                }
+            })
+            .catch(error => console.error('Erreur:', error));
+        }
+    </script>
+
+    <!-- CSRF Token -->
+    {% csrf_token %}
+</body>
+</html>

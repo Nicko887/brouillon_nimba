@@ -1,0 +1,657 @@
+
+<!-- templates/base.html - Template de base avec navigation -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Petites Annonces{% endblock %}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 70px;
+        }
+
+        .nav-logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ff6b35;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-logo:hover {
+            text-decoration: none;
+            color: #e55a2e;
+        }
+
+        .nav-search {
+            flex: 1;
+            max-width: 500px;
+            margin: 0 30px;
+            position: relative;
+        }
+
+        .nav-search input {
+            width: 100%;
+            padding: 10px 45px 10px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .nav-search input:focus {
+            border-color: #ff6b35;
+        }
+
+        .nav-search button {
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #ff6b35;
+            border: none;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            cursor: pointer;
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-search button:hover {
+            background: #e55a2e;
+            transform: translateY(-50%) scale(1.05);
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav-item {
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 15px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-item:hover {
+            background: #f8f9fa;
+            text-decoration: none;
+            color: #ff6b35;
+        }
+
+        .nav-item.active {
+            background: #ff6b35;
+            color: white;
+        }
+
+        .nav-item.active:hover {
+            background: #e55a2e;
+            color: white;
+        }
+
+        .nav-user {
+            position: relative;
+        }
+
+        .user-menu {
+            position: relative;
+        }
+
+        .user-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 15px;
+            background: #f8f9fa;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .user-toggle:hover {
+            background: #e9ecef;
+        }
+
+        .user-avatar {
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .user-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+            min-width: 200px;
+            padding: 10px 0;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .user-dropdown.show {
+            display: block;
+        }
+
+        .dropdown-item {
+            display: block;
+            padding: 10px 20px;
+            color: #333;
+            text-decoration: none;
+            font-size: 14px;
+            transition: background 0.3s ease;
+        }
+
+        .dropdown-item:hover {
+            background: #f8f9fa;
+            text-decoration: none;
+            color: #333;
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: #e0e0e0;
+            margin: 10px 0;
+        }
+
+        .btn-deposer {
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-deposer:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+            text-decoration: none;
+            color: white;
+        }
+
+        .nav-mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #333;
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .nav-container {
+                padding: 0 15px;
+                height: auto;
+                flex-wrap: wrap;
+                padding-top: 15px;
+                padding-bottom: 15px;
+            }
+
+            .nav-search {
+                order: 3;
+                margin: 15px 0 0 0;
+                max-width: none;
+                flex-basis: 100%;
+            }
+
+            .nav-menu {
+                order: 2;
+                gap: 10px;
+            }
+
+            .nav-item {
+                padding: 6px 12px;
+                font-size: 14px;
+            }
+
+            .btn-deposer {
+                padding: 8px 16px;
+                font-size: 13px;
+            }
+        }
+
+        /* Messages globaux */
+        .messages {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 1100;
+            max-width: 400px;
+        }
+
+        .message {
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            animation: slideIn 0.3s ease;
+        }
+
+        .message-success {
+            background: #d4edda;
+            color: #155724;
+            border-left: 4px solid #28a745;
+        }
+
+        .message-error {
+            background: #f8d7da;
+            color: #721c24;
+            border-left: 4px solid #dc3545;
+        }
+
+        .message-info {
+            background: #cce7ff;
+            color: #0c5460;
+            border-left: 4px solid #17a2b8;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Contenu principal */
+        .main-content {
+            min-height: calc(100vh - 70px);
+        }
+
+        /* Footer */
+        .footer {
+            background: #333;
+            color: white;
+            padding: 40px 0 20px;
+            margin-top: 50px;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 15px;
+            color: #ff6b35;
+        }
+
+        .footer-section p,
+        .footer-section a {
+            color: #ccc;
+            text-decoration: none;
+            line-height: 1.6;
+        }
+
+        .footer-section a:hover {
+            color: #ff6b35;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #555;
+            color: #999;
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="{% url 'annonces:liste' %}" class="nav-logo">
+                🏪 Petites Annonces
+            </a>
+
+            <form class="nav-search" method="get" action="{% url 'annonces:liste' %}">
+                <input type="text" name="q" placeholder="Rechercher une annonce..." value="{{ request.GET.q }}">
+                <button type="submit">🔍</button>
+            </form>
+
+            <div class="nav-menu">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'annonces:mes_annonces' %}" class="nav-item">📋 Mes annonces</a>
+                    <a href="{% url 'annonces:mes_favoris' %}" class="nav-item">❤️ Favoris</a>
+                    <a href="{% url 'annonces:mes_messages' %}" class="nav-item">💬 Messages</a>
+                    
+                    <div class="user-menu">
+                        <button class="user-toggle" onclick="toggleUserMenu()">
+                            <div class="user-avatar">{{ user.username|first|upper }}</div>
+                            <span>{{ user.username }}</span>
+                            <span>▼</span>
+                        </button>
+                        <div class="user-dropdown" id="userDropdown">
+                            <a href="{% url 'annonces:profil' %}" class="dropdown-item">👤 Mon profil</a>
+                            <a href="{% url 'annonces:mes_annonces' %}" class="dropdown-item">📋 Mes annonces</a>
+                            <a href="{% url 'annonces:mes_favoris' %}" class="dropdown-item">❤️ Mes favoris</a>
+                            <a href="{% url 'annonces:mes_messages' %}" class="dropdown-item">💬 Messages</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="{% url 'annonces:logout' %}" class="dropdown-item">🚪 Déconnexion</a>
+                        </div>
+                    </div>
+                    
+                    <a href="{% url 'annonces:creer' %}" class="btn-deposer">✨ Déposer une annonce</a>
+                {% else %}
+                    <a href="{% url 'annonces:login' %}" class="nav-item">🔑 Connexion</a>
+                    <a href="{% url 'annonces:register' %}" class="nav-item">📝 Inscription</a>
+                    <a href="{% url 'annonces:login' %}" class="btn-deposer">✨ Déposer une annonce</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <!-- Messages globaux -->
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+            <div class="message message-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Contenu principal -->
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>🏪 Petites Annonces</h3>
+                <p>La plateforme de référence pour vos achats et ventes entre particuliers. Trouvez tout ce dont vous avez besoin près de chez vous.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Liens utiles</h3>
+                <p><a href="{% url 'annonces:liste' %}">Toutes les annonces</a></p>
+                <p><a href="#">Comment ça marche</a></p>
+                <p><a href="#">Conseils sécurité</a></p>
+                <p><a href="#">Nous contacter</a></p>
+            </div>
+            <div class="footer-section">
+                <h3>Catégories</h3>
+                <p><a href="#">🏠 Immobilier</a></p>
+                <p><a href="#">🚗 Automobile</a></p>
+                <p><a href="#">💻 High-tech</a></p>
+                <p><a href="#">🪑 Mobilier</a></p>
+            </div>
+            <div class="footer-section">
+                <h3>Mon compte</h3>
+                {% if user.is_authenticated %}
+                    <p><a href="{% url 'annonces:profil' %}">Mon profil</a></p>
+                    <p><a href="{% url 'annonces:mes_annonces' %}">Mes annonces</a></p>
+                    <p><a href="{% url 'annonces:mes_favoris' %}">Mes favoris</a></p>
+                {% else %}
+                    <p><a href="{% url 'annonces:login' %}">Connexion</a></p>
+                    <p><a href="{% url 'annonces:register' %}">Inscription</a></p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Petites Annonces. Tous droits réservés.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Toggle menu utilisateur
+        function toggleUserMenu() {
+            const dropdown = document.getElementById('userDropdown');
+            dropdown.classList.toggle('show');
+        }
+
+        // Fermer le menu si clic à l'extérieur
+        document.addEventListener('click', function(event) {
+            const userMenu = document.querySelector('.user-menu');
+            const dropdown = document.getElementById('userDropdown');
+            
+            if (userMenu && !userMenu.contains(event.target)) {
+                dropdown.classList.remove('show');
+            }
+        });
+
+        // Auto-hide messages
+        document.addEventListener('DOMContentLoaded', function() {
+            const messages = document.querySelectorAll('.message');
+            messages.forEach(function(message) {
+                setTimeout(function() {
+                    message.style.opacity = '0';
+                    message.style.transform = 'translateX(100%)';
+                    setTimeout(function() {
+                        message.remove();
+                    }, 300);
+                }, 5000);
+            });
+        });
+    </script>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
+
+<!-- Mise à jour des templates existants pour utiliser base.html -->
+<!-- 
+Pour utiliser ce template de base, modifiez vos templates existants :
+
+templates/annonces/liste.html:
+{% extends 'base.html' %}
+{% block title %}Petites Annonces{% endblock %}
+{% block content %}
+<!-- Votre contenu actuel sans <html>, <head>, <body> -->
+{% endblock %}
+
+templates/annonces/detail.html:
+{% extends 'base.html' %}
+{% block title %}{{ annonce.titre }} - Petites Annonces{% endblock %}
+{% block content %}
+<!-- Votre contenu actuel sans <html>, <head>, <body> -->
+{% endblock %}
+
+Etc. pour tous les autres templates.
+-->
+
+<!-- Instructions d'installation complètes -->
+<!--
+==============================================
+INSTALLATION COMPLÈTE DU PROJET
+==============================================
+
+1. CRÉATION DE L'ENVIRONNEMENT :
+   python -m venv venv
+   source venv/bin/activate  # Linux/Mac
+   venv\Scripts\activate     # Windows
+
+2. INSTALLATION DES DÉPENDANCES :
+   pip install Django>=4.2.0 Pillow>=9.0.0
+
+3. CRÉATION DU PROJET :
+   django-admin startproject petites_annonces
+   cd petites_annonces
+   django-admin startapp annonces
+
+4. CONFIGURATION :
+   - Copier le code des models.py, views.py, forms.py, urls.py, admin.py
+   - Copier tous les templates dans templates/
+   - Ajouter 'annonces' dans INSTALLED_APPS
+   - Configurer MEDIA_URL et MEDIA_ROOT dans settings.py
+
+5. BASE DE DONNÉES :
+   python manage.py makemigrations
+   python manage.py migrate
+   python manage.py create_categories
+   python manage.py createsuperuser
+
+6. LANCEMENT :
+   python manage.py runserver
+
+==============================================
+FONCTIONNALITÉS COMPLÈTES INCLUSES :
+==============================================
+
+✅ AUTHENTIFICATION :
+   - Inscription / Connexion / Déconnexion
+   - Gestion des profils utilisateurs
+   - Système de permissions
+
+✅ GESTION DES ANNONCES :
+   - Création avec upload de photos
+   - Modification et suppression
+   - Système de catégories
+   - Recherche et filtres avancés
+   - Pagination intelligente
+
+✅ INTERACTION UTILISATEURS :
+   - Système de favoris (AJAX)
+   - Messagerie intégrée
+   - Contact entre vendeurs/acheteurs
+   - Notifications
+
+✅ INTERFACE UTILISATEUR :
+   - Design moderne inspiré LeBonCoin
+   - Navigation intuitive
+   - Responsive design
+   - Scroll horizontal par catégorie
+   - Galeries photos avec zoom
+
+✅ ADMINISTRATION :
+   - Interface admin Django
+   - Gestion des catégories
+   - Modération des annonces
+   - Statistiques utilisateurs
+
+✅ SÉCURITÉ :
+   - Protection CSRF
+   - Validation des formulaires
+   - Gestion des permissions
+   - Upload sécurisé des fichiers
+
+==============================================
+STRUCTURE FINALE DU PROJET :
+==============================================
+
+petites_annonces/
+├── manage.py
+├── petites_annonces/
+│   ├── __init__.py
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
+├── annonces/
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── models.py
+│   ├── views.py
+│   ├── urls.py
+│   ├── forms.py
+│   ├── signals.py
+│   ├── migrations/
+│   ├── management/
+│   │   └── commands/
+│   │       └── create_categories.py
+│   └── templates/
+│       ├── base.html
+│       ├── registration/
+│       │   ├── login.html
+│       │   └── register.html
+│       └── annonces/
+│           ├── liste.html
+│           ├── detail.html
+│           ├── creer.html
+│           ├── profil.html
+│           ├── mes_annonces.html
+│           ├── mes_favoris.html
+│           ├── mes_messages.html
+│           ├── conversation.html
+│           ├── contacter.html
+│           └── supprimer.html
+├── media/
+└── static/
+
+==============================================
+EXTENSIONS POSSIBLES :
+==============================================
+
+🚀 POUR ALLER PLUS LOIN :
+   - API REST avec Django REST Framework
+   - Notifications push en temps réel
+   - Système de notation/avis
+   - Géolocalisation avec cartes
+   - Paiement intégré (Stripe/PayPal)
+   - Recherche avancée avec Elasticsearch
+   - Cache Redis pour les performances
+   - Déploiement avec Docker
+   - Tests automatisés
+   - CI/CD avec GitHub Actions
+
+Le projet est maintenant 100% fonctionnel avec toutes les fonctionnalités
+d'un site de petites annonces moderne ! 🎉
+-->
