@@ -9,11 +9,17 @@
 
   
   <!-- FAVICONS optimisés -->
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+  <!-- <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
   <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
   <link rel="manifest" href="favicon/site.webmanifest">
   <meta name="msapplication-config" content="favicon/browserconfig.xml">
+  <meta name="theme-color" content="#ffffff"> -->
+
+  <!-- Favicon moderne (SVG + fallback) -->
+  <link rel="icon" type="image/svg+xml" href="LeNimba.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
   <meta name="theme-color" content="#ffffff">
 
   <!-- Police et icônes Font Awesome -->
@@ -37,8 +43,23 @@
       <!-- LIGNE 1 : Logo + Contact/Réseaux + Auth -->
       <div class="header-top">
         <div class="header-left">
-          <div class="header__logo">
+          <!-- <div class="header__logo">
             <img src="img_traitee/logo2.jpg" alt="Logo Nimba" loading="lazy">
+          </div> -->
+
+          <div class="header__logo">
+            <img src="favicon/android-chrome-192x192.png" 
+                srcset="favicon/favicon-32x32.png 32w,
+                        favicon/android-chrome-192x192.png 192w,
+                        favicon/android-chrome-512x512.png 512w"
+                sizes="(max-width: 480px) 32px,
+                        (max-width: 768px) 48px,
+                        (max-width: 1200px) 56px,
+                        64px"
+                alt="Logo Nimba" 
+                loading="eager"
+                decoding="async"
+                onerror="this.src='img_traitee/logo2.jpg'">
           </div>
 
           
@@ -343,7 +364,7 @@
     <!-- Bas de page -->
     <div class="footer-bottom">
         <p>&copy; 2024 Nimba. Tous droits réservés.</p>
-        <p>Conçu avec ❤️ pour la Guinée</p>
+        <!-- <p>Conçu avec ❤️ pour la Guinée</p> -->
     </div>
 </footer>
 

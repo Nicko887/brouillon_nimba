@@ -1,0 +1,1021 @@
+<!-- templates/annonces/profil.html -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Profil - Petites Annonces</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .breadcrumb {
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .breadcrumb a {
+            color: #ff6b35;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .profile-header {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 36px;
+            font-weight: bold;
+            overflow: hidden;
+        }
+
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-info h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .profile-meta {
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .stat-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            border-left: 4px solid #ff6b35;
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ff6b35;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .profile-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .profile-section {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            color: #333;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ff6b35;
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+            font-family: inherit;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #ff6b35;
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.4);
+        }
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .action-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            border: 2px solid #e0e0e0;
+        }
+
+        .action-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-color: #ff6b35;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .action-icon {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .action-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .action-desc {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .messages {
+            margin-bottom: 20px;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        @media (max-width: 768px) {
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .profile-content {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb">
+            <a href="{% url 'annonces:liste' %}">Accueil</a> > Mon Profil
+        </nav>
+
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Header du profil -->
+        <div class="profile-header">
+            <div class="profile-avatar">
+                {% if profil.photo_profil %}
+                    <img src="{{ profil.photo_profil.url }}" alt="Photo de profil">
+                {% else %}
+                    {{ user.username|first|upper }}
+                {% endif %}
+            </div>
+            
+            <div class="profile-info">
+                <h1>{{ user.get_full_name|default:user.username }}</h1>
+                <div class="profile-meta">
+                    <p>Membre depuis {{ user.date_joined|date:"F Y" }}</p>
+                    {% if profil.ville_defaut %}
+                        <p>📍 {{ profil.ville_defaut }}</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">{{ stats.nb_annonces }}</div>
+                    <div class="stat-label">Annonces</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">{{ stats.nb_favoris }}</div>
+                    <div class="stat-label">Favoris</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">{{ stats.nb_messages }}</div>
+                    <div class="stat-label">Messages</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">{{ stats.total_vues }}</div>
+                    <div class="stat-label">Vues totales</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actions rapides -->
+        <div class="quick-actions">
+            <a href="{% url 'annonces:creer' %}" class="action-card">
+                <div class="action-icon">✨</div>
+                <div class="action-title">Nouvelle annonce</div>
+                <div class="action-desc">Publier une annonce</div>
+            </a>
+            <a href="{% url 'annonces:mes_annonces' %}" class="action-card">
+                <div class="action-icon">📋</div>
+                <div class="action-title">Mes annonces</div>
+                <div class="action-desc">Gérer mes publications</div>
+            </a>
+            <a href="{% url 'annonces:mes_messages' %}" class="action-card">
+                <div class="action-icon">💬</div>
+                <div class="action-title">Messages</div>
+                <div class="action-desc">Conversations en cours</div>
+            </a>
+        </div>
+
+        <!-- Contenu du profil -->
+        <div class="profile-content">
+            <!-- Formulaire de profil -->
+            <div class="profile-section">
+                <h2 class="section-title">Modifier mon profil</h2>
+                
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <div class="form-group">
+                        <label for="{{ form.telephone.id_for_label }}">Téléphone</label>
+                        {{ form.telephone }}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="{{ form.ville_defaut.id_for_label }}">Ville par défaut</label>
+                        {{ form.ville_defaut }}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="{{ form.code_postal_defaut.id_for_label }}">Code postal par défaut</label>
+                        {{ form.code_postal_defaut }}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="{{ form.photo_profil.id_for_label }}">Photo de profil</label>
+                        {{ form.photo_profil }}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="{{ form.description.id_for_label }}">Description</label>
+                        {{ form.description }}
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">💾 Sauvegarder</button>
+                </form>
+            </div>
+
+            <!-- Informations du compte -->
+            <div class="profile-section">
+                <h2 class="section-title">Informations du compte</h2>
+                
+                <div class="form-group">
+                    <label>Nom d'utilisateur</label>
+                    <div class="form-control" style="background: #f8f9fa; cursor: not-allowed;">
+                        {{ user.username }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Email</label>
+                    <div class="form-control" style="background: #f8f9fa; cursor: not-allowed;">
+                        {{ user.email|default:"Non renseigné" }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Membre depuis</label>
+                    <div class="form-control" style="background: #f8f9fa; cursor: not-allowed;">
+                        {{ user.date_joined|date:"d/m/Y à H:i" }}
+                    </div>
+                </div>
+
+                {% if profil.description %}
+                <div class="form-group">
+                    <label>À propos de moi</label>
+                    <div style="padding: 15px; background: #f8f9fa; border-radius: 8px; line-height: 1.6;">
+                        {{ profil.description|linebreaks }}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+<!-- templates/annonces/mes_annonces.html -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mes Annonces - Petites Annonces</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .breadcrumb {
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .breadcrumb a {
+            color: #ff6b35;
+            text-decoration: none;
+        }
+
+        .page-header {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .page-header h1 {
+            color: #333;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.4);
+        }
+
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #333;
+            font-size: 14px;
+            padding: 8px 16px;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+            font-size: 14px;
+            padding: 8px 16px;
+        }
+
+        .annonces-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .annonce-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .annonce-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        .annonce-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+            position: relative;
+        }
+
+        .annonce-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .annonce-status {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .status-active {
+            background: #28a745;
+            color: white;
+        }
+
+        .status-inactive {
+            background: #6c757d;
+            color: white;
+        }
+
+        .annonce-content {
+            padding: 20px;
+        }
+
+        .annonce-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+
+        .annonce-price {
+            font-size: 20px;
+            font-weight: bold;
+            color: #ff6b35;
+            margin-bottom: 10px;
+        }
+
+        .annonce-meta {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .annonce-stats {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .annonce-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .empty-state h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .empty-state p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        .pagination a,
+        .pagination span {
+            padding: 8px 12px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 5px;
+            text-decoration: none;
+            color: #333;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .pagination a:hover {
+            background: #ff6b35;
+            color: white;
+            border-color: #ff6b35;
+        }
+
+        .pagination .current {
+            background: #ff6b35;
+            color: white;
+            border-color: #ff6b35;
+        }
+
+        @media (max-width: 768px) {
+            .page-header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .annonces-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .annonce-actions {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb">
+            <a href="{% url 'annonces:liste' %}">Accueil</a> > 
+            <a href="{% url 'annonces:profil' %}">Mon Profil</a> > 
+            Mes Annonces
+        </nav>
+
+        <!-- Header -->
+        <div class="page-header">
+            <h1>📋 Mes Annonces</h1>
+            <a href="{% url 'annonces:creer' %}" class="btn btn-primary">✨ Nouvelle annonce</a>
+        </div>
+
+        <!-- Liste des annonces -->
+        {% if page_obj %}
+            <div class="annonces-grid">
+                {% for annonce in page_obj %}
+                <div class="annonce-card">
+                    <div class="annonce-image">
+                        <div class="annonce-status {% if annonce.active %}status-active{% else %}status-inactive{% endif %}">
+                            {% if annonce.active %}Publiée{% else %}Inactive{% endif %}
+                        </div>
+                        
+                        {% if annonce.photo_principale %}
+                            <img src="{{ annonce.photo_principale.image.url }}" alt="{{ annonce.titre }}">
+                        {% else %}
+                            {{ annonce.categorie.emoji }} Photo
+                        {% endif %}
+                    </div>
+                    
+                    <div class="annonce-content">
+                        <div class="annonce-title">{{ annonce.titre }}</div>
+                        <div class="annonce-price">{{ annonce.prix }} €</div>
+                        
+                        <div class="annonce-meta">
+                            📍 {{ annonce.ville }} • {{ annonce.categorie.nom }}
+                            <br>
+                            📅 {{ annonce.date_creation|date:"d/m/Y" }}
+                        </div>
+                        
+                        <div class="annonce-stats">
+                            <span>👁️ {{ annonce.vues_count }} vue{{ annonce.vues_count|pluralize }}</span>
+                            <span>💬 {{ annonce.conversations.count }} message{{ annonce.conversations.count|pluralize }}</span>
+                        </div>
+                        
+                        <div class="annonce-actions">
+                            <a href="{{ annonce.get_absolute_url }}" class="btn btn-secondary">👁️ Voir</a>
+                            <a href="{% url 'annonces:modifier' annonce.pk %}" class="btn btn-secondary">✏️ Modifier</a>
+                            <a href="{% url 'annonces:supprimer' annonce.pk %}" class="btn btn-danger" 
+                               onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette annonce ?')">🗑️ Supprimer</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Pagination -->
+            {% if page_obj.has_other_pages %}
+            <div class="pagination">
+                {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}">‹ Précédent</a>
+                {% endif %}
+                
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                        <span class="current">{{ num }}</span>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                        <a href="?page={{ num }}">{{ num }}</a>
+                    {% endif %}
+                {% endfor %}
+                
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}">Suivant ›</a>
+                {% endif %}
+            </div>
+            {% endif %}
+        {% else %}
+            <div class="empty-state">
+                <h3>Aucune annonce pour le moment</h3>
+                <p>Vous n'avez pas encore publié d'annonces. Commencez dès maintenant !</p>
+                <a href="{% url 'annonces:creer' %}" class="btn btn-primary">✨ Créer ma première annonce</a>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
+
+<!-- templates/annonces/mes_messages.html -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mes Messages - Petites Annonces</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .breadcrumb {
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .breadcrumb a {
+            color: #ff6b35;
+            text-decoration: none;
+        }
+
+        .page-header {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .conversations-list {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .conversation-item {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid #e0e0e0;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .conversation-item:hover {
+            background: #f8f9fa;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .conversation-item:last-child {
+            border-bottom: none;
+        }
+
+        .annonce-thumb {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            margin-right: 15px;
+            overflow: hidden;
+        }
+
+        .annonce-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .conversation-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .conversation-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .conversation-title {
+            font-weight: 600;
+            color: #333;
+            font-size: 16px;
+            line-height: 1.3;
+        }
+
+        .conversation-date {
+            font-size: 12px;
+            color: #666;
+            white-space: nowrap;
+        }
+
+        .conversation-participants {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .conversation-last-message {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .conversation-meta {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-left: 15px;
+        }
+
+        .unread-badge {
+            background: #ff6b35;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        .conversation-price {
+            font-weight: bold;
+            color: #ff6b35;
+            font-size: 14px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .empty-state h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .empty-state p {
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .conversation-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .conversation-header {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .conversation-meta {
+                margin-left: 0;
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb">
+            <a href="{% url 'annonces:liste' %}">Accueil</a> > 
+            <a href="{% url 'annonces:profil' %}">Mon Profil</a> > 
+            Mes Messages
+        </nav>
+
+        <!-- Header -->
+        <div class="page-header">
+            <h1>💬 Mes Messages</h1>
+            <p>Gérez vos conversations avec les autres utilisateurs</p>
+        </div>
+
+        <!-- Liste des conversations -->
+        {% if conversations %}
+            <div class="conversations-list">
+                {% for conversation in conversations %}
+                <a href="{% url 'annonces:conversation' conversation.pk %}" class="conversation-item">
+                    <div class="annonce-thumb">
+                        {% if conversation.annonce.photo_principale %}
+                            <img src="{{ conversation.annonce.photo_principale.image.url }}" alt="{{ conversation.annonce.titre }}">
+                        {% else %}
+                            {{ conversation.annonce.categorie.emoji }}
+                        {% endif %}
+                    </div>
+                    
+                    <div class="conversation-content">
+                        <div class="conversation-header">
+                            <div class="conversation-title">{{ conversation.annonce.titre }}</div>
+                            <div class="conversation-date">
+                                {% if conversation.dernier_message %}
+                                    {{ conversation.dernier_message.date_envoi|date:"d/m/Y H:i" }}
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="conversation-participants">
+                            {% if conversation.acheteur == user %}
+                                💬 Conversation avec {{ conversation.vendeur.username }}
+                            {% else %}
+                                💬 Conversation avec {{ conversation.acheteur.username }}
+                            {% endif %}
+                        </div>
+                        
+                        {% if conversation.dernier_message %}
+                        <div class="conversation-last-message">
+                            <strong>{{ conversation.dernier_message.expediteur.username }}:</strong>
+                            {{ conversation.dernier_message.contenu }}
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="conversation-meta">
+                        {% if conversation.nb_non_lus > 0 %}
+                            <div class="unread-badge">{{ conversation.nb_non_lus }}</div>
+                        {% endif %}
+                        <div class="conversation-price">{{ conversation.annonce.prix }} €</div>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <h3>Aucune conversation</h3>
+                <p>Vous n'avez pas encore de conversations. Contactez des vendeurs pour commencer à échanger !</p>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

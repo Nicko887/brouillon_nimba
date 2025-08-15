@@ -6,6 +6,76 @@ COMPOSANTS - composants.css
 Impact : MOYEN À ÉLEVÉ selon l'usage
 */
 
+
+
+
+
+
+
+/* === STYLES MOBILE DE BASE (par défaut) === */
+/* === LOGO RESPONSIVE MOBILE-FIRST MAXIMUM === */
+.header__logo {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.header__logo img {
+  width: auto;
+  height: 48px; /* ENCORE PLUS GRAND mobile (était 42px) */
+  max-width: 100%;
+  object-fit: contain;
+  transform: scaleX(1.1); /* Légèrement allongé */
+  transition: opacity 0.2s ease;
+}
+
+/* TRÈS PETITS ÉCRANS - encore plus petit */
+@media (max-width: 360px) {
+  .header__logo img {
+    height: 44px; /* ENCORE PLUS GRAND (était 38px) */
+    transform: scaleX(1.05);
+  }
+}
+
+/* TABLET - commence à grandir */
+@media (min-width: 768px) {
+  .header__logo img {
+    height: 72px; /* ENCORE PLUS GRAND (était 65px) */
+    transform: scaleX(1.2);
+  }
+}
+
+/* DESKTOP - encore plus grand */
+@media (min-width: 1024px) {
+  .header__logo img {
+    height: 92px; /* ENCORE PLUS GRAND (était 82px) */
+    transform: scaleX(1.3);
+  }
+}
+
+/* LARGE DESKTOP - maximum */
+@media (min-width: 1200px) {
+  .header__logo img {
+    height: 108px; /* MAXIMUM (était 98px) */
+    transform: scaleX(1.4);
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* === LIENS TOP HEADER === */
 .top-links {
   display: flex;
