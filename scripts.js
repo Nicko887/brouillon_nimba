@@ -2,6 +2,27 @@
      * 🎯 NIMBA HEADER - OPTIMISÉ POUR LA PERFORMANCE ET L'ACCESSIBILITÉ
      * 🔥 CORRECTION DU BUG: Mega-menu qui bloque les clics après fermeture
      */
+
+
+function scrollToTop() {
+  // Scroll fluide vers le vrai top
+  window.scrollTo({
+    top: 0,
+    left: 0,
+    behavior: 'smooth'
+  });
+  
+  // Focus management pour accessibilité
+  document.body.focus();
+  
+  // Analytics (optionnel)
+  // gtag('event', 'logo_click', { event_category: 'navigation' });
+}
+
+
+
+
+
     class NimbaHeader {
       constructor() {
         // Éléments DOM avec vérification d'existence

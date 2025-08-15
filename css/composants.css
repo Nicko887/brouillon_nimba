@@ -67,6 +67,54 @@ Impact : MOYEN À ÉLEVÉ selon l'usage
 
 
 
+/* === LOGO LIEN OPTIMAL UX === */
+.header__logo a {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  outline: none;
+  border-radius: 12px;
+  padding: 8px;
+  margin: -8px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.header__logo a:hover {
+  transform: scale(1.05);
+  background: rgba(37, 99, 235, 0.08);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+}
+
+.header__logo a:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  background: rgba(37, 99, 235, 0.05);
+}
+
+.header__logo a:active {
+  transform: scale(0.95);
+  transition-duration: 0.1s;
+}
+
+/* Feedback tactile mobile */
+@media (hover: none) {
+  .header__logo a:active {
+    background: rgba(37, 99, 235, 0.1);
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
