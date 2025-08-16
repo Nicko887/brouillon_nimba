@@ -1,0 +1,133 @@
+{
+  "categories": [
+    {
+      "nom": "Emploi",
+      "sous_categories": []
+    },
+    {
+      "nom": "Véhicules",
+      "sous_categories": [
+        "Voitures",
+        "Motos",
+        "Caravaning",
+        "Utilitaires",
+        "Nautisme",
+        "Équipement auto",
+        "Équipement moto",
+        "Équipement caravaning",
+        "Équipement nautisme"
+      ]
+    },
+    {
+      "nom": "Immobilier",
+      "sous_categories": [
+        "Ventes immobilières",
+        "Locations",
+        "Colocations",
+        "Bureaux & Commerces"
+      ]
+    },
+    {
+      "nom": "Locations de vacances",
+      "sous_categories": []
+    },
+    {
+      "nom": "Électronique",
+      "sous_categories": [
+        "Ordinateurs",
+        "Accessoires informatique",
+        "Tablettes & Liseuses",
+        "Photo, audio & vidéo",
+        "Téléphones & Objets connectés",
+        "Accessoires téléphone & Objets connectés",
+        "Consoles",
+        "Jeux vidéo"
+      ]
+    },
+    {
+      "nom": "Maison & Jardin",
+      "sous_categories": [
+        "Ameublement",
+        "Papeterie & Fournitures scolaires",
+        "Électroménager",
+        "Arts de la table",
+        "Décoration",
+        "Linge de maison",
+        "Bricolage",
+        "Jardin & Plantes"
+      ]
+    },
+    {
+      "nom": "Famille",
+      "sous_categories": []
+    },
+    {
+      "nom": "Mode",
+      "sous_categories": [
+        "Vêtements",
+        "Chaussures",
+        "Accessoires & Bagagerie",
+        "Montres & Bijoux"
+      ]
+    },
+    {
+      "nom": "Loisirs",
+      "sous_categories": []
+    },
+    {
+      "nom": "Animaux",
+      "sous_categories": []
+    },
+    {
+      "nom": "Matériel professionnel",
+      "sous_categories": [
+        "Tracteurs",
+        "Matériel agricole",
+        "BTP - Chantier gros-oeuvre",
+        "Poids lourds",
+        "Manutention - Levage",
+        "Équipements industriels",
+        "Équipements pour restaurants & hôtels",
+        "Équipements & Fournitures de bureau",
+        "Équipements pour commerces & marchés",
+        "Matériel médical"
+      ]
+    },
+    {
+      "nom": "Services",
+      "sous_categories": [
+        "Artistes & Musiciens",
+        "Baby-Sitting",
+        "Billetterie",
+        "Covoiturage",
+        "Cours particuliers",
+        "Entraide entre voisins",
+        "Évènements",
+        "Services à la personne",
+        "Services aux animaux",
+        "Services de déménagement",
+        "Services de réparations électroniques",
+        "Services de jardinerie & bricolage",
+        "Services événementiels",
+        "Autres services"
+      ]
+    },
+    {
+      "nom": "Produits locaux",
+      "sous_categories": [
+        "Huile de palme",
+        "Bazin",
+        "Banane",
+        "Manioc",
+        "Habits traditionnels",
+        "Fruits & légumes locaux",
+        "Épices et condiments",
+        "Artisanat"
+      ]
+    },
+    {
+      "nom": "Divers",
+      "sous_categories": []
+    }
+  ]
+}
