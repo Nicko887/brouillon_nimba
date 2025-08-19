@@ -1,0 +1,393 @@
+-------------------------------------------------
+GUIDE PostgreSQL Terminal - WINDOWS
+-------------------------------------------------
+
+=================================================================
+INSTALLATION PostgreSQL SUR WINDOWS
+=================================================================
+
+METHODE 1 : INSTALLATEUR OFFICIEL (RECOMMANDEE)
+------------------------------------------------
+1) Aller sur https://www.postgresql.org/download/windows/
+2) Télécharger "PostgreSQL 14" ou version plus récente
+3) Exécuter le fichier .exe EN TANT QU'ADMINISTRATEUR
+4) Suivre l'assistant d'installation :
+   - Dossier d'installation : C:\Program Files\PostgreSQL\14\
+   - Composants : PostgreSQL Server, pgAdmin 4, Command Line Tools
+   - Port : 5432 (par défaut)
+   - IMPORTANT : Noter le mot de passe du superutilisateur "postgres"
+5) Terminer l'installation
+
+METHODE 2 : VIA CHOCOLATEY (SI INSTALLE)
+-----------------------------------------
+# Ouvrir PowerShell en tant qu'administrateur
+choco install postgresql
+
+METHODE 3 : VIA SCOOP (SI INSTALLE)
+------------------------------------
+# Depuis PowerShell
+scoop install postgresql
+
+VERIFICATION DE L'INSTALLATION
+-------------------------------
+1) Ouvrir l'invite de commande (cmd) ou PowerShell
+2) Vérifier que PostgreSQL est dans le PATH :
+   psql --version
+
+3) Si commande non trouvée, ajouter au PATH :
+   - Panneau de configuration > Système > Paramètres système avancés
+   - Variables d'environnement > Variable système "Path"
+   - Ajouter : C:\Program Files\PostgreSQL\14\bin
+
+4) Vérifier que le service fonctionne :
+   - Touche Windows + R, taper "services.msc"
+   - Chercher "postgresql-x64-14" 
+   - Statut doit être "En cours d'exécution"
+
+=================================================================
+PREMIERE CONNEXION ET CONFIGURATION
+=================================================================
+
+CONNEXION INITIALE
+------------------
+1) Ouvrir l'invite de commande (cmd) EN TANT QU'ADMINISTRATEUR
+
+2) Se connecter avec l'utilisateur postgres :
+   psql -U postgres -h localhost
+
+3) Entrer le mot de passe défini lors de l'installation
+
+4) Vous devriez voir l'invite PostgreSQL :
+   postgres=#
+
+CREER VOTRE UTILISATEUR PERSONNEL
+----------------------------------
+# Dans le shell PostgreSQL (postgres=#)
+CREATE USER mon_utilisateur WITH PASSWORD 'mon_mot_de_passe' CREATEDB;
+
+# Donner des droits étendus (optionnel)
+ALTER USER mon_utilisateur CREATEDB CREATEROLE;
+
+# Quitter le shell
+\q
+
+TESTER LA CONNEXION AVEC VOTRE UTILISATEUR
+-------------------------------------------
+psql -U mon_utilisateur -h localhost -d postgres
+
+=================================================================
+CREATION DE LA BASE DE DONNEES
+=================================================================
+
+METHODE 1 : DEPUIS L'INVITE DE COMMANDE
+----------------------------------------
+# Créer la base de données
+createdb -U postgres petites_annonces_django
+
+# Ou avec votre utilisateur
+createdb -U mon_utilisateur petites_annonces_django
+
+# Avec encodage spécifique
+createdb -U postgres --encoding=UTF8 petites_annonces_django
+
+METHODE 2 : DEPUIS LE SHELL PSQL
+---------------------------------
+# Se connecter
+psql -U postgres -h localhost
+
+# Créer la base
+CREATE DATABASE petites_annonces_django 
+  WITH ENCODING='UTF8' 
+  OWNER=mon_utilisateur;
+
+# Donner les droits
+GRANT ALL PRIVILEGES ON DATABASE petites_annonces_django TO mon_utilisateur;
+
+# Quitter
+\q
+
+VERIFICATION
+------------
+# Lister les bases de données
+psql -U postgres -l
+
+# Se connecter à la nouvelle base
+psql -U postgres -d petites_annonces_django
+
+# Vérifier la connexion
+SELECT current_database(), current_user;
+
+=================================================================
+CHARGEMENT DES SCRIPTS SQL
+=================================================================
+
+PREPARATION DES FICHIERS
+-------------------------
+Assurez-vous que vos fichiers SQL sont dans le bon dossier :
+- db\schema_optimized.sql
+- db\seed_data.sql
+- db\usage_examples.sql
+
+METHODE 1 : DEPUIS L'INVITE DE COMMANDE
+----------------------------------------
+# Naviguer vers le dossier du projet
+cd C:\chemin\vers\votre\projet
+
+# Charger le schéma principal
+psql -U postgres -d petites_annonces_django -f db\schema_optimized.sql
+
+# Charger les données d'exemple
+psql -U postgres -d petites_annonces_django -f db\seed_data.sql
+
+# (Optionnel) Charger les exemples de requêtes
+psql -U postgres -d petites_annonces_django -f db\usage_examples.sql
+
+METHODE 2 : DEPUIS LE SHELL PSQL
+---------------------------------
+# Se connecter à la base
+psql -U postgres -d petites_annonces_django
+
+# Charger les fichiers (avec double backslash)
+\i db\\schema_optimized.sql
+\i db\\seed_data.sql
+\i db\\usage_examples.sql
+
+# Ou avec chemin absolu
+\i C:\\chemin\\vers\\projet\\db\\schema_optimized.sql
+
+VERIFICATION DU CHARGEMENT
+--------------------------
+# Dans le shell psql
+\dt                        # Lister les tables créées
+SELECT COUNT(*) FROM category;      # Vérifier les catégories
+SELECT COUNT(*) FROM auth_user;     # Vérifier les utilisateurs
+
+=================================================================
+COMMANDES ESSENTIELLES PSQL
+=================================================================
+
+ENTRER DANS LE SHELL
+---------------------
+psql -U postgres -d petites_annonces_django
+
+COMMANDES DE NAVIGATION
+-----------------------
+\l                          # Lister les bases de données
+\c nom_base                 # Se connecter à une base
+\dt                         # Lister les tables
+\d nom_table               # Décrire une table (colonnes, index)
+\di                        # Lister les index
+\df                        # Lister les fonctions
+\du                        # Lister les utilisateurs
+\q                         # Quitter psql
+
+COMMANDES D'AIDE
+----------------
+\h                         # Aide sur les commandes SQL
+\?                         # Aide sur les commandes psql
+\timing on                 # Afficher le temps d'exécution des requêtes
+\x                         # Affichage étendu (pratique pour gros résultats)
+
+GESTION DES FICHIERS
+--------------------
+\i fichier.sql             # Exécuter un fichier SQL
+\o resultats.txt           # Rediriger la sortie vers un fichier
+\o                         # Arrêter la redirection
+
+=================================================================
+GESTION DES UTILISATEURS ET PERMISSIONS
+=================================================================
+
+CREER DES UTILISATEURS
+----------------------
+# Dans psql connecté en tant que postgres
+CREATE USER nouvel_user WITH PASSWORD 'mot_de_passe_fort';
+
+# Utilisateur avec droit de créer des bases
+CREATE USER dev_user WITH PASSWORD 'dev_pass' CREATEDB;
+
+# Superutilisateur (attention : droits étendus)
+CREATE USER admin_user WITH PASSWORD 'admin_pass' SUPERUSER;
+
+MODIFIER DES UTILISATEURS
+-------------------------
+# Changer un mot de passe
+ALTER USER nom_user PASSWORD 'nouveau_mot_de_passe';
+
+# Donner des droits
+GRANT ALL PRIVILEGES ON DATABASE petites_annonces_django TO nom_user;
+ALTER USER nom_user CREATEDB;
+
+# Retirer des droits
+REVOKE ALL PRIVILEGES ON DATABASE petites_annonces_django FROM nom_user;
+
+LISTER ET SUPPRIMER
+-------------------
+# Voir tous les utilisateurs
+\du
+
+# Supprimer un utilisateur
+DROP USER nom_user;
+
+=================================================================
+SAUVEGARDES ET RESTAURATIONS
+=================================================================
+
+SAUVEGARDES
+-----------
+# Sauvegarde complète (depuis l'invite de commande)
+pg_dump -U postgres petites_annonces_django > backup_complet.sql
+
+# Sauvegarde avec compression
+pg_dump -U postgres -Fc petites_annonces_django > backup_complet.dump
+
+# Sauvegarde schéma seulement
+pg_dump -U postgres --schema-only petites_annonces_django > schema_seul.sql
+
+# Sauvegarde données seulement  
+pg_dump -U postgres --data-only petites_annonces_django > donnees_seules.sql
+
+# Sauvegarde vers un dossier spécifique
+pg_dump -U postgres petites_annonces_django > C:\Backups\backup_%date%.sql
+
+RESTAURATIONS
+-------------
+# Restaurer dans une nouvelle base
+createdb -U postgres nouvelle_base
+psql -U postgres -d nouvelle_base < backup_complet.sql
+
+# Restaurer depuis un dump compressé
+pg_restore -U postgres -d nouvelle_base backup_complet.dump
+
+# Restaurer en écrasant (ATTENTION : supprime tout)
+psql -U postgres -d petites_annonces_django < backup_complet.sql
+
+=================================================================
+VARIABLES D'ENVIRONNEMENT (OPTIONNEL)
+=================================================================
+
+CONFIGURATION PERMANENTE
+-------------------------
+1) Touche Windows + R, taper "sysdm.cpl"
+2) Onglet "Avancé" > "Variables d'environnement"
+3) Dans "Variables système", ajouter :
+
+PGHOST=localhost
+PGPORT=5432
+PGUSER=postgres
+PGDATABASE=petites_annonces_django
+
+4) Redémarrer l'invite de commande
+
+UTILISATION APRES CONFIGURATION
+-------------------------------
+# Plus besoin de spécifier les paramètres
+psql                       # Se connecte automatiquement
+createdb ma_nouvelle_base  # Utilise l'utilisateur par défaut
+
+=================================================================
+DEPANNAGE WINDOWS
+=================================================================
+
+SERVICE POSTGRESQL ARRETE
+--------------------------
+1) Touche Windows + R, taper "services.msc"
+2) Chercher "postgresql-x64-14" ou similar
+3) Clic droit > "Démarrer"
+4) Pour démarrage automatique : clic droit > "Propriétés" > "Automatique"
+
+COMMANDE PSQL NON TROUVEE
+--------------------------
+1) Vérifier l'installation dans : C:\Program Files\PostgreSQL\14\bin
+2) Ajouter au PATH système :
+   - Panneau de configuration > Système > Variables d'environnement
+   - Modifier la variable "Path"
+   - Ajouter : C:\Program Files\PostgreSQL\14\bin
+3) Redémarrer l'invite de commande
+
+CONNEXION REFUSEE
+-----------------
+1) Vérifier que PostgreSQL fonctionne (services.msc)
+2) Vérifier le fichier pg_hba.conf :
+   - Localisation : C:\Program Files\PostgreSQL\14\data\pg_hba.conf
+   - Ligne à vérifier : host all all 127.0.0.1/32 md5
+3) Redémarrer le service PostgreSQL après modification
+
+MOT DE PASSE OUBLIE
+-------------------
+1) Arrêter le service PostgreSQL
+2) Modifier pg_hba.conf temporairement :
+   - Changer "md5" en "trust" pour localhost
+3) Redémarrer le service
+4) Se connecter sans mot de passe : psql -U postgres
+5) Changer le mot de passe : ALTER USER postgres PASSWORD 'nouveau_pass';
+6) Remettre "md5" dans pg_hba.conf
+7) Redémarrer le service
+
+PORT DEJA UTILISE
+-----------------
+1) Identifier qui utilise le port 5432 :
+   netstat -an | findstr :5432
+2) Arrêter l'application ou changer le port PostgreSQL
+3) Modifier postgresql.conf : port = 5433
+4) Redémarrer PostgreSQL
+
+=================================================================
+PROCEDURE COMPLETE POUR LE PROJET
+=================================================================
+
+DEMARRAGE RAPIDE (ETAPES FINALES)
+----------------------------------
+# 1) Ouvrir l'invite de commande EN TANT QU'ADMINISTRATEUR
+
+# 2) Naviguer vers le dossier du projet
+cd C:\chemin\vers\votre\projet
+
+# 3) Créer la base de données
+createdb -U postgres petites_annonces_django
+
+# 4) Charger le schéma complet
+psql -U postgres -d petites_annonces_django -f db\schema_optimized.sql
+
+# 5) Charger les données d'exemple
+psql -U postgres -d petites_annonces_django -f db\seed_data.sql
+
+# 6) (Optionnel) Charger les exemples de requêtes
+psql -U postgres -d petites_annonces_django -f db\usage_examples.sql
+
+# 7) Se connecter pour utiliser la base
+psql -U postgres -d petites_annonces_django
+
+VERIFICATION DU SUCCES
+----------------------
+# Dans le shell psql, vérifier :
+\dt                                    # Tables créées
+SELECT COUNT(*) FROM category;         # Catégories chargées
+SELECT COUNT(*) FROM auth_user;        # Utilisateurs de test
+SELECT * FROM search_listings('toyota'); # Test de recherche
+
+FELICITATIONS !
+---------------
+Votre base de données PostgreSQL est maintenant prête pour votre site 
+de petites annonces Django sur Windows !
+
+=================================================================
+COMMANDES DE REFERENCE RAPIDE
+=================================================================
+
+# Connexion
+psql -U postgres -d petites_annonces_django
+
+# Sauvegarde
+pg_dump -U postgres petites_annonces_django > backup.sql
+
+# Restauration
+psql -U postgres -d nouvelle_base < backup.sql
+
+# Arrêt/Démarrage service
+net stop postgresql-x64-14
+net start postgresql-x64-14
+
+# Localisation fichiers importants
+C:\Program Files\PostgreSQL\14\data\postgresql.conf
+C:\Program Files\PostgreSQL\14\data\pg_hba.conf

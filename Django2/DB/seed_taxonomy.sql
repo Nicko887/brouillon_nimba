@@ -85,6 +85,7 @@ SELECT v.name, (SELECT id FROM category WHERE slug='materiel-professionnel') FRO
 INSERT INTO category (name, kind, parent_id)
 SELECT v.name, 'services', (SELECT id FROM category WHERE slug='services') FROM (VALUES
   ('Artistes & Musiciens'),
+  ('Livraison rapide')
   ('Baby-Sitting'),
   ('Billetterie'),
   ('Covoiturage'),
@@ -92,7 +93,6 @@ SELECT v.name, 'services', (SELECT id FROM category WHERE slug='services') FROM 
   ('Entraide entre voisins'),
   ('Évènements'),
   ('Services à la personne'),
-  ('Services aux animaux'),
   ('Services de déménagement'),
   ('Services de réparations électroniques'),
   ('Services de jardinerie & bricolage'),
@@ -110,13 +110,13 @@ SELECT v.name, (SELECT id FROM category WHERE slug='produits-locaux') FROM (VALU
 -- Produits locaux : niveau 3 - Alimentaire
 INSERT INTO category (name, parent_id)
 SELECT v.name, (SELECT id FROM category WHERE slug='alimentaire') FROM (VALUES
-  ('Huile de palme'),('Banane'),('Manioc'),('Fruits & légumes locaux'),('Épices et condiments')
+  ('Huile de palme'),('Banane'),('Manioc'), ('pomme de terre'),('Fruits & légumes locaux'),('Épices et condiments')
 ) AS v(name);
 
 -- Produits locaux : niveau 3 - Textile
 INSERT INTO category (name, parent_id)
 SELECT v.name, (SELECT id FROM category WHERE slug='textile') FROM (VALUES
-  ('Bazin'),('Habits traditionnels')
+  ('Bazin'),('Habits traditionnels'), ('pagne lepi'), ('pagne foret')
 ) AS v(name);
 
 -- Produits locaux : niveau 3 - Artisanat

@@ -1,0 +1,167 @@
+=================================================================
+GUIDE POSTGRESQL LOCAL - CONNEXION ET USAGE QUOTIDIEN
+=================================================================
+
+=== PRÉPARATION (À FAIRE UNE SEULE FOIS PAR SESSION) ===
+
+# 1. Ouvrir Terminal VS Code ou PowerShell
+# 2. Naviguer vers votre projet
+cd "C:\Users\eunic\OneDrive\Documents\NICODEME\NimbaPro\Django2\DB2"
+
+# 3. Configurer l'environnement
+chcp 1252
+$env:PATH += ";C:\Program Files\PostgreSQL\15\bin"
+
+=== INITIALISATION DE LA BASE (PREMIÈRE FOIS) ===
+
+# Créer la base de données
+createdb -U postgres -h localhost petites_annonces_django
+
+# Supprimer la base
+\c postgres
+DROP DATABASE petites_annonces_django;
+
+# Exécuter les scripts dans l'ordre
+psql -U postgres -h localhost -d petites_annonces_django -f schema_postgres.sql
+psql -U postgres -h localhost -d petites_annonces_django -f seed_taxonomy.sql
+psql -U postgres -h localhost -d petites_annonces_django -f queries_examples.sql
+
+
+
+
+
+
+=== CONNEXION QUOTIDIENNE ===
+
+# Se connecter à la base existante
+psql -U postgres -h localhost -d petites_annonces_django
+
+=== EXÉCUTER UN SCRIPT SQL ===
+
+# Depuis PowerShell
+psql -U postgres -h localhost -d petites_annonces_django -f nom_fichier.sql
+
+
+# Depuis psql terminal vscode (une fois connecté)
+\i nom_fichier.sql
+\i schema_postgres.sql
+\i seed_taxonomy.sql
+\i queries_examples.sql
+
+
+=== COMMANDES DE VÉRIFICATION ===
+
+# Vérifier que les tables existent
+\dt
+
+# Voir le contenu d'une table
+SELECT * FROM client;
+SELECT * FROM produit;
+
+# Compter les lignes
+SELECT COUNT(*) FROM client;
+SELECT COUNT(*) FROM produit;
+
+=== DANS PSQL (UNE FOIS CONNECTÉ) ===
+
+\dt                    # Voir toutes vos tables
+\d nom_table          # Voir la structure d'une table
+SELECT * FROM client; # Exemple de requête
+\q                    # Quitter
+
+=== SCRIPT D'AUTOMATISATION ===
+
+# Créez un fichier connect.ps1 dans votre dossier projet :
+
+# connect.ps1
+chcp 1252
+$env:PATH += ";C:\Program Files\PostgreSQL\15\bin"
+cd "C:\Users\eunic\OneDrive\Documents\NICODEME\NimbaPro\Django2\DB2"
+psql -U postgres -h localhost -d petites_annonces_django
+
+# Pour l'utiliser : ./connect.ps1
+
+=== RÉINITIALISER LA BASE ===
+
+# Si vous voulez recommencer à zéro
+dropdb -U postgres -h localhost petites_annonces_django
+createdb -U postgres -h localhost petites_annonces_django
+psql -U postgres -h localhost -d petites_annonces_django -f schema_postgres.sql
+psql -U postgres -h localhost -d petites_annonces_django -f seed_taxonomy.sql
+
+=== VOS FICHIERS SQL ===
+
+schema_postgres.sql    # Structure des tables (CLIENT, COMMANDE, DETAIL, PRODUIT)
+seed_taxonomy.sql      # Données de base
+queries_examples.sql   # Exemples de requêtes
+
+=== COMMANDES SQL USUELLES ===
+
+-- Voir toutes les tables
+\dt
+
+-- Compter les lignes
+SELECT COUNT(*) FROM client;
+SELECT COUNT(*) FROM commande;
+SELECT COUNT(*) FROM detail;
+SELECT COUNT(*) FROM produit;
+
+-- Exemples de requêtes de votre fichier
+SELECT * FROM client WHERE ville = 'Toulouse';
+SELECT RefP, TypeP, Prix FROM produit WHERE TypeP='Cheville';
+
+-- Requêtes avec jointures
+SELECT c.NomC, co.DateCom, p.TypeP 
+FROM client c 
+JOIN commande co ON c.RefC = co.RefC 
+JOIN detail d ON co.RefCom = d.RefCOM 
+JOIN produit p ON d.RefP = p.RefP;
+
+=== POUR DJANGO ===
+
+# Configuration settings.py
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'petites_annonces_django',
+        'USER': 'postgres',
+        'PASSWORD': 'votre_mot_de_passe',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
+}
+
+# Commandes Django
+python manage.py dbshell  # Ouvre psql depuis Django
+
+=== RACCOURCIS UTILES ===
+
+# Dans PowerShell
+Flèche haut/bas : Historique des commandes
+Tab : Auto-complétion
+
+# Dans psql
+\l : Lister les bases
+\c autre_base : Changer de base
+\h SELECT : Aide sur SELECT
+\q : Quitter
+Ctrl+C : Annuler commande en cours
+
+=== UTILISATION QUOTIDIENNE ===
+
+1. Ouvrir VS Code
+2. Terminal → New Terminal
+3. Copier-coller ces 3 lignes :
+   chcp 1252
+   $env:PATH += ";C:\Program Files\PostgreSQL\15\bin"
+   psql -U postgres -h localhost -d petites_annonces_django
+
+4. Entrer le mot de passe
+5. Commencer à travailler !
+
+=================================================================
+NOTES :
+- Remplacez le mot de passe par le vôtre
+- Ces commandes fonctionnent pour votre installation locale
+- Sauvegardez ce fichier pour référence future
+=================================================================
