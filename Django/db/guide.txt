@@ -17,19 +17,10 @@ $env:PATH += ";C:\Program Files\PostgreSQL\15\bin"
 # Créer la base de données
 createdb -U postgres -h localhost nimba
 
-# Supprimer la base
-\c postgres
-DROP DATABASE nimba;
-
 # Exécuter les scripts dans l'ordre
 psql -U postgres -h localhost -d nimba -f schema_postgres.sql
 psql -U postgres -h localhost -d nimba -f seed_taxonomy.sql
 psql -U postgres -h localhost -d nimba -f queries_examples.sql
-
-
-
-
-
 
 === CONNEXION QUOTIDIENNE ===
 
@@ -41,13 +32,8 @@ psql -U postgres -h localhost -d nimba
 # Depuis PowerShell
 psql -U postgres -h localhost -d nimba -f nom_fichier.sql
 
-
-# Depuis psql terminal vscode (une fois connecté)
+# Depuis psql (une fois connecté)
 \i nom_fichier.sql
-\i schema_postgres.sql
-\i seed_taxonomy.sql
-\i queries_examples.sql
-
 
 === COMMANDES DE VÉRIFICATION ===
 

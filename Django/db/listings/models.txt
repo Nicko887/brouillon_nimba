@@ -1,0 +1,431 @@
+# listings/models.py
+from django.db import models, connection
+from django.contrib.auth.models import User
+from django.urls import reverse
+from django.utils.text import slugify
+from django.utils import timezone
+from django.core.validators import MinValueValidator, MaxValueValidator
+from django.contrib.postgres.fields import JSONField
+from django.contrib.postgres.search import SearchVectorField
+import uuid
+
+class TimeStampedModel(models.Model):
+    """Modèle abstrait avec timestamps automatiques"""
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        abstract = True
+
+class UserProfile(TimeStampedModel):
+    """Profil utilisateur étendu"""
+    STATUS_CHOICES = [
+        ('active', 'Actif'),
+        ('suspended', 'Suspendu'),
+        ('banned', 'Banni'),
+        ('pending_verification', 'En attente de vérification'),
+    ]
+    
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    phone = models.CharField(max_length=20, blank=True, null=True)
+    avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
+    bio = models.TextField(blank=True)
+    location = models.CharField(max_length=255, blank=True)
+    latitude = models.DecimalField(max_digits=10, decimal_places=8, blank=True, null=True)
+    longitude = models.DecimalField(max_digits=11, decimal_places=8, blank=True, null=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='active')
+    email_verified = models.BooleanField(default=False)
+    phone_verified = models.BooleanField(default=False)
+    rating_average = models.DecimalField(max_digits=3, decimal_places=2, default=0.00)
+    rating_count = models.IntegerField(default=0)
+    
+    class Meta:
+        db_table = 'user_profile'
+    
+    def __str__(self):
+        return f"Profil de {self.user.username}"
+    
+    def get_full_name(self):
+        return f"{self.user.first_name} {self.user.last_name}".strip() or self.user.username
+    
+    def update_rating(self):
+        """Met à jour la moyenne des évaluations"""
+        ratings = UserRating.objects.filter(rated=self.user)
+        if ratings.exists():
+            self.rating_average = ratings.aggregate(models.Avg('rating'))['rating__avg']
+            self.rating_count = ratings.count()
+        else:
+            self.rating_average = 0.00
+            self.rating_count = 0
+        self.save()
+
+class CategoryManager(models.Manager):
+    def roots(self):
+        """Retourne les catégories racines"""
+        return self.filter(parent__isnull=True)
+    
+    def by_kind(self, kind):
+        """Filtre par type de catégorie"""
+        return self.filter(kind=kind)
+    
+    def active(self):
+        """Retourne seulement les catégories actives"""
+        return self.filter(is_active=True)
+
+class Category(TimeStampedModel):
+    """Catégories hiérarchiques pour les annonces"""
+    KIND_CHOICES = [
+        ('goods', 'Biens'),
+        ('services', 'Services'),
+        ('real_estate', 'Immobilier'),
+        ('jobs', 'Emploi'),
+        ('vehicles', 'Véhicules'),
+        ('other', 'Autre'),
+    ]
+    
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True, related_name='children')
+    name = models.CharField(max_length=255)
+    slug = models.SlugField(max_length=255, unique=True, blank=True)
+    kind = models.CharField(max_length=20, choices=KIND_CHOICES, default='goods')
+    description = models.TextField(blank=True)
+    icon = models.CharField(max_length=100, blank=True, help_text="Nom de l'icône")
+    image = models.ImageField(upload_to='categories/', blank=True, null=True)
+    is_active = models.BooleanField(default=True)
+    depth = models.IntegerField(default=1)
+    listing_count = models.IntegerField(default=0)
+    sort_order = models.IntegerField(default=0)
+    
+    objects = CategoryManager()
+    
+    class Meta:
+        db_table = 'category'
+        verbose_name_plural = "Categories"
+        ordering = ['sort_order', 'name']
+    
+    def __str__(self):
+        return self.name
+    
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        
+        # Calculer la profondeur
+        if self.parent:
+            self.depth = self.parent.depth + 1
+        else:
+            self.depth = 1
+            
+        super().save(*args, **kwargs)
+    
+    def get_absolute_url(self):
+        return reverse('category_detail', kwargs={'slug': self.slug})
+    
+    def get_ancestors(self):
+        """Retourne tous les ancêtres de la catégorie"""
+        ancestors = []
+        current = self.parent
+        while current:
+            ancestors.append(current)
+            current = current.parent
+        return reversed(ancestors)
+    
+    def get_descendants(self):
+        """Retourne tous les descendants"""
+        descendants = []
+        for child in self.children.all():
+            descendants.append(child)
+            descendants.extend(child.get_descendants())
+        return descendants
+    
+    def get_breadcrumb(self):
+        """Retourne le chemin complet pour le breadcrumb"""
+        breadcrumb = list(self.get_ancestors())
+        breadcrumb.append(self)
+        return breadcrumb
+
+class CategoryRelation(models.Model):
+    """Relations entre catégories"""
+    RELATION_CHOICES = [
+        ('related', 'Lié'),
+        ('service_for', 'Service pour'),
+        ('accessory_for', 'Accessoire pour'),
+        ('similar', 'Similaire'),
+    ]
+    
+    source_category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='relations_as_source')
+    target_category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='relations_as_target')
+    relation_type = models.CharField(max_length=20, choices=RELATION_CHOICES)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        db_table = 'category_relation'
+        unique_together = ['source_category', 'target_category', 'relation_type']
+
+class ListingManager(models.Manager):
+    def active(self):
+        """Annonces actives et non expirées"""
+        now = timezone.now()
+        return self.filter(
+            status='active'
+        ).filter(
+            models.Q(expires_at__isnull=True) | models.Q(expires_at__gt=now)
+        )
+    
+    def featured(self):
+        """Annonces mises en avant"""
+        now = timezone.now()
+        return self.active().filter(
+            featured_until__gt=now
+        )
+    
+    def by_location(self, latitude, longitude, radius_km=50):
+        """Filtre par géolocalisation (requête SQL brute)"""
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                SELECT id FROM listing 
+                WHERE latitude IS NOT NULL 
+                AND longitude IS NOT NULL
+                AND 6371 * acos(cos(radians(%s)) * cos(radians(latitude)) * 
+                    cos(radians(longitude) - radians(%s)) + sin(radians(%s)) * 
+                    sin(radians(latitude))) <= %s
+            """, [latitude, longitude, latitude, radius_km])
+            ids = [row[0] for row in cursor.fetchall()]
+        return self.filter(id__in=ids)
+
+class Listing(TimeStampedModel):
+    """Annonce principale"""
+    CONDITION_CHOICES = [
+        ('new', 'Neuf'),
+        ('like_new', 'Comme neuf'),
+        ('good', 'Bon état'),
+        ('fair', 'État correct'),
+        ('poor', 'Mauvais état'),
+    ]
+    
+    STATUS_CHOICES = [
+        ('draft', 'Brouillon'),
+        ('active', 'Active'),
+        ('sold', 'Vendue'),
+        ('expired', 'Expirée'),
+        ('suspended', 'Suspendue'),
+        ('deleted', 'Supprimée'),
+    ]
+    
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='listings')
+    category = models.ForeignKey(Category, on_delete=models.RESTRICT, related_name='listings')
+    title = models.CharField(max_length=255)
+    slug = models.SlugField(max_length=255, unique=True, blank=True)
+    description = models.TextField()
+    price_cents = models.BigIntegerField(blank=True, null=True, help_text="Prix en centimes")
+    currency = models.CharField(max_length=3, default='GNF')
+    is_negotiable = models.BooleanField(default=True)
+    condition = models.CharField(max_length=20, choices=CONDITION_CHOICES, blank=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='draft')
+    
+    # Géolocalisation
+    location = models.CharField(max_length=255, blank=True)
+    latitude = models.DecimalField(max_digits=10, decimal_places=8, blank=True, null=True)
+    longitude = models.DecimalField(max_digits=11, decimal_places=8, blank=True, null=True)
+    
+    # SEO
+    meta_title = models.CharField(max_length=255, blank=True)
+    meta_description = models.TextField(blank=True)
+    search_vector = SearchVectorField(null=True)
+    
+    # Statistiques
+    view_count = models.IntegerField(default=0)
+    favorite_count = models.IntegerField(default=0)
+    contact_count = models.IntegerField(default=0)
+    
+    # Dates importantes
+    expires_at = models.DateTimeField(blank=True, null=True)
+    featured_until = models.DateTimeField(blank=True, null=True)
+    sold_at = models.DateTimeField(blank=True, null=True)
+    
+    objects = ListingManager()
+    
+    class Meta:
+        db_table = 'listing'
+        ordering = ['-created_at']
+        indexes = [
+            models.Index(fields=['status', 'created_at']),
+            models.Index(fields=['category', 'status']),
+            models.Index(fields=['user', 'status']),
+        ]
+    
+    def __str__(self):
+        return self.title
+    
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        
+        # Générer un slug unique si nécessaire
+        if Listing.objects.filter(slug=self.slug).exclude(pk=self.pk).exists():
+            self.slug = f"{slugify(self.title)}-{uuid.uuid4().hex[:8]}"
+        
+        super().save(*args, **kwargs)
+        
+        # Mettre à jour le search_vector via fonction PostgreSQL
+        self.update_search_vector()
+    
+    def update_search_vector(self):
+        """Met à jour le vecteur de recherche"""
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT update_listing_search_vector(%s)", [self.id])
+    
+    def get_absolute_url(self):
+        return reverse('listing_detail', kwargs={'slug': self.slug})
+    
+    @property
+    def price_display(self):
+        """Affichage du prix formaté"""
+        if self.price_cents:
+            return f"{self.price_cents / 100:,.0f} {self.currency}"
+        return "Prix non spécifié"
+    
+    @property
+    def primary_image(self):
+        """Image principale de l'annonce"""
+        return self.images.filter(is_primary=True).first()
+    
+    def increment_view_count(self):
+        """Incrémente le compteur de vues"""
+        Listing.objects.filter(pk=self.pk).update(view_count=models.F('view_count') + 1)
+    
+    def is_favorited_by(self, user):
+        """Vérifie si l'annonce est en favori pour un utilisateur"""
+        if user.is_authenticated:
+            return self.favorites.filter(user=user).exists()
+        return False
+    
+    def get_related_listings(self, limit=4):
+        """Annonces similaires"""
+        return Listing.objects.active().filter(
+            category=self.category
+        ).exclude(pk=self.pk)[:limit]
+
+class ListingImage(models.Model):
+    """Images d'une annonce"""
+    listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name='images')
+    image = models.ImageField(upload_to='listings/')
+    alt_text = models.CharField(max_length=255, blank=True)
+    is_primary = models.BooleanField(default=False)
+    sort_order = models.IntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        db_table = 'listing_image'
+        ordering = ['sort_order', 'created_at']
+    
+    def save(self, *args, **kwargs):
+        # S'assurer qu'il n'y a qu'une seule image principale
+        if self.is_primary:
+            ListingImage.objects.filter(
+                listing=self.listing, 
+                is_primary=True
+            ).exclude(pk=self.pk).update(is_primary=False)
+        super().save(*args, **kwargs)
+
+class Tag(TimeStampedModel):
+    """Tags pour les annonces"""
+    name = models.CharField(max_length=100, unique=True)
+    slug = models.SlugField(max_length=100, unique=True, blank=True)
+    usage_count = models.IntegerField(default=0)
+    
+    class Meta:
+        db_table = 'tag'
+        ordering = ['-usage_count', 'name']
+    
+    def __str__(self):
+        return self.name
+    
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+
+class ListingTag(models.Model):
+    """Liaison annonce-tag"""
+    listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name='listing_tags')
+    tag = models.ForeignKey(Tag, on_delete=models.CASCADE, related_name='listing_tags')
+    
+    class Meta:
+        db_table = 'listing_tag'
+        unique_together = ['listing', 'tag']
+
+# Ajouter une relation many-to-many sur Listing
+Listing.add_to_class('tags', models.ManyToManyField(Tag, through=ListingTag, blank=True))
+
+class UserFavorite(models.Model):
+    """Favoris des utilisateurs"""
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='favorites')
+    listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name='favorites')
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        db_table = 'user_favorite'
+        unique_together = ['user', 'listing']
+
+class SavedSearch(TimeStampedModel):
+    """Recherches sauvegardées"""
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='saved_searches')
+    name = models.CharField(max_length=255)
+    query_params = JSONField()
+    email_alerts = models.BooleanField(default=False)
+    
+    class Meta:
+        db_table = 'saved_search'
+    
+    def __str__(self):
+        return f"{self.name} - {self.user.username}"
+
+class Conversation(TimeStampedModel):
+    """Conversation entre acheteur et vendeur"""
+    listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name='conversations')
+    buyer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='buyer_conversations')
+    seller = models.ForeignKey(User, on_delete=models.CASCADE, related_name='seller_conversations')
+    last_message_at = models.DateTimeField(blank=True, null=True)
+    is_active = models.BooleanField(default=True)
+    
+    class Meta:
+        db_table = 'conversation'
+        unique_together = ['listing', 'buyer', 'seller']
+    
+    def __str__(self):
+        return f"Conversation {self.buyer.username} - {self.seller.username}"
+
+class Message(models.Model):
+    """Message dans une conversation"""
+    STATUS_CHOICES = [
+        ('sent', 'Envoyé'),
+        ('delivered', 'Délivré'),
+        ('read', 'Lu'),
+    ]
+    
+    conversation = models.ForeignKey(Conversation, on_delete=models.CASCADE, related_name='messages')
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_messages')
+    content = models.TextField()
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='sent')
+    read_at = models.DateTimeField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        db_table = 'message'
+        ordering = ['created_at']
+
+class UserRating(models.Model):
+    """Évaluation entre utilisateurs"""
+    rater = models.ForeignKey(User, on_delete=models.CASCADE, related_name='given_ratings')
+    rated = models.ForeignKey(User, on_delete=models.CASCADE, related_name='received_ratings')
+    listing = models.ForeignKey(Listing, on_delete=models.SET_NULL, blank=True, null=True)
+    rating = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
+    comment = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        db_table = 'user_rating'
+        unique_together = ['rater', 'rated', 'listing']
+    
+    def __str__(self):
+        return f"{self.rater.username} → {self.rated.username}: {self.rating}/5"

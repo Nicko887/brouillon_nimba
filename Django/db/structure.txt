@@ -1,0 +1,436 @@
+# 🚀 Guide de Démarrage Complet - Site de Petites Annonces Django + PostgreSQL
+
+## 📋 Structure du Projet
+
+```
+petites_annonces/
+├── manage.py
+├── requirements.txt
+├── .env
+├── petites_annonces/
+│   ├── __init__.py
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
+├── listings/
+│   ├── __init__.py
+│   ├── apps.py
+│   ├── models.py
+│   ├── admin.py
+│   ├── views.py
+│   ├── forms.py
+│   ├── urls.py
+│   ├── signals.py
+│   ├── migrations/
+│   ├── management/
+│   │   └── commands/
+│   │       ├── setup_categories.py
+│   │       ├── update_search_vectors.py
+│   │       └── cleanup_expired.py
+│   └── templates/
+│       └── listings/
+├── templates/
+│   ├── base.html
+│   └── registration/
+├── static/
+│   ├── css/
+│   ├── js/
+│   └── images/
+├── media/
+├── sql/
+│   ├── schema_hybride.sql
+│   └── seed_data_django.sql
+└── logs/
+```
+
+## 🛠️ Installation et Configuration
+
+### 1. Prérequis
+
+- Python 3.8+
+- PostgreSQL 12+
+- Git
+
+### 2. Cloner et configurer le projet
+
+```bash
+# Créer le dossier projet
+mkdir petites_annonces
+cd petites_annonces
+
+# Créer un environnement virtuel
+python -m venv venv
+
+# Activer l'environnement virtuel
+# Windows
+venv\Scripts\activate
+# Linux/Mac
+source venv/bin/activate
+
+# Installer les dépendances
+pip install -r requirements.txt
+```
+
+### 3. Configuration PostgreSQL
+
+```bash
+# Démarrer PostgreSQL et se connecter
+chcp 1252
+$env:PATH += ";C:\Program Files\PostgreSQL\15\bin"
+psql -U postgres -h localhost
+
+# Créer la base de données
+CREATE DATABASE petites_annonces_django;
+\q
+```
+
+### 4. Exécuter les scripts SQL
+
+```bash
+# Exécuter le schéma hybride
+psql -U postgres -h localhost -d petites_annonces_django -f sql/schema_hybride.sql
+
+# Insérer les données initiales
+psql -U postgres -h localhost -d petites_annonces_django -f sql/seed_data_django.sql
+```
+
+### 5. Configuration Django
+
+```bash
+# Copier le fichier d'environnement
+cp .env.example .env
+
+# Modifier .env avec vos paramètres
+# DB_PASSWORD=votre_mot_de_passe_postgres
+# SECRET_KEY=votre_clé_secrète
+```
+
+### 6. Migrations Django
+
+```bash
+# Créer les migrations initiales
+python manage.py makemigrations listings
+
+# Appliquer les migrations
+python manage.py migrate
+
+# Créer un superutilisateur
+python manage.py createsuperuser
+```
+
+### 7. Importer les catégories
+
+```bash
+# Utiliser la commande personnalisée
+python manage.py setup_categories
+
+# Ou manuellement si nécessaire
+python manage.py shell
+>>> from listings.models import Category
+>>> Category.objects.count()  # Vérifier que les catégories sont là
+```
+
+### 8. Lancer le serveur de développement
+
+```bash
+# Démarrer le serveur Django
+python manage.py runserver
+
+# Accéder au site
+# http://localhost:8000/
+# Admin: http://localhost:8000/admin/
+```
+
+## 🔧 Configuration Avancée
+
+### Variables d'environnement (.env)
+
+```env
+# Configuration de base
+SECRET_KEY=your-very-secret-key-here-change-in-production
+DEBUG=True
+ALLOWED_HOSTS=localhost,127.0.0.1,petites-annonces.local
+
+# Base de données PostgreSQL
+DB_NAME=petites_annonces_django
+DB_USER=postgres
+DB_PASSWORD=your_postgres_password
+DB_HOST=localhost
+DB_PORT=5432
+
+# Email configuration (pour les notifications)
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_HOST_USER=your-email@gmail.com
+EMAIL_HOST_PASSWORD=your-app-specific-password
+EMAIL_USE_TLS=True
+
+# Configuration du site
+SITE_NAME=Petites Annonces Guinée
+SITE_DOMAIN=localhost:8000
+```
+
+### Configuration Redis (optionnel pour le cache)
+
+```bash
+# Installer Redis sur Windows avec Chocolatey
+choco install redis-64
+
+# Ou télécharger depuis: https://github.com/tporadowski/redis/releases
+
+# Démarrer Redis
+redis-server
+```
+
+## 📁 Création des Templates de Base
+
+### templates/base.html
+
+```html
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Petites Annonces Guinée{% endblock %}</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <i class="bi bi-shop"></i> Petites Annonces
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'listing_list' %}">Annonces</a>
+                    </li>
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'listing_create' %}">Déposer une annonce</a>
+                    </li>
+                    {% endif %}
+                </ul>
+                
+                <ul class="navbar-nav">
+                    {% if user.is_authenticated %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle"></i> {{ user.username }}
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'user_profile' %}">Mon profil</a></li>
+                            <li><a class="dropdown-item" href="{% url 'user_listings' %}">Mes annonces</a></li>
+                            <li><a class="dropdown-item" href="{% url 'user_favorites' %}">Mes favoris</a></li>
+                            <li><a class="dropdown-item" href="{% url 'conversation_list' %}">Messages</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{% url 'logout' %}">Déconnexion</a></li>
+                        </ul>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">Connexion</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'register' %}">Inscription</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Messages -->
+    {% if messages %}
+    <div class="container mt-3">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Contenu principal -->
+    <main class="container my-4">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Petites Annonces Guinée</h5>
+                    <p>La plateforme de référence pour vos achats et ventes en Guinée.</p>
+                </div>
+                <div class="col-md-6">
+                    <h5>Liens utiles</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-light">À propos</a></li>
+                        <li><a href="#" class="text-light">Contact</a></li>
+                        <li><a href="#" class="text-light">Conditions d'utilisation</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
+```
+
+## 🎯 Scripts Utiles
+
+### Script de démarrage rapide (start.py)
+
+```python
+#!/usr/bin/env python
+"""
+Script de démarrage rapide pour le projet
+Usage: python start.py [--reset]
+"""
+import os
+import sys
+import subprocess
+from pathlib import Path
+
+def run_command(command, description):
+    print(f"🔄 {description}...")
+    result = subprocess.run(command, shell=True, capture_output=True, text=True)
+    if result.returncode != 0:
+        print(f"❌ Erreur: {result.stderr}")
+        return False
+    print(f"✅ {description} terminé")
+    return True
+
+def main():
+    reset = '--reset' in sys.argv
+    
+    print("🚀 Démarrage du projet Petites Annonces")
+    print("=" * 50)
+    
+    # Vérifier PostgreSQL
+    if not run_command("psql --version", "Vérification PostgreSQL"):
+        print("⚠️ PostgreSQL non trouvé. Installez PostgreSQL d'abord.")
+        return
+    
+    # Créer la base si nécessaire
+    if reset:
+        run_command("dropdb -U postgres petites_annonces_django", "Suppression ancienne base")
+    
+    run_command("createdb -U postgres petites_annonces_django", "Création base de données")
+    
+    # Exécuter les scripts SQL
+    if Path("sql/schema_hybride.sql").exists():
+        run_command(
+            "psql -U postgres -h localhost -d petites_annonces_django -f sql/schema_hybride.sql",
+            "Création du schéma"
+        )
+    
+    if Path("sql/seed_data_django.sql").exists():
+        run_command(
+            "psql -U postgres -h localhost -d petites_annonces_django -f sql/seed_data_django.sql",
+            "Import des données"
+        )
+    
+    # Migrations Django
+    if reset:
+        # Supprimer les fichiers de migration
+        migrations_dir = Path("listings/migrations")
+        if migrations_dir.exists():
+            for file in migrations_dir.glob("*.py"):
+                if file.name != "__init__.py":
+                    file.unlink()
+    
+    run_command("python manage.py makemigrations", "Création des migrations")
+    run_command("python manage.py migrate", "Application des migrations")
+    
+    # Collecter les fichiers statiques
+    run_command("python manage.py collectstatic --noinput", "Collection fichiers statiques")
+    
+    print("\n🎉 Projet configuré avec succès!")
+    print("📝 Prochaines étapes:")
+    print("   1. Créer un superutilisateur: python manage.py createsuperuser")
+    print("   2. Lancer le serveur: python manage.py runserver")
+    print("   3. Accéder au site: http://localhost:8000")
+    print("   4. Admin: http://localhost:8000/admin")
+
+if __name__ == "__main__":
+    main()
+```
+
+## 🚀 Commandes de Gestion
+
+```bash
+# Démarrage complet
+python start.py
+
+# Démarrage avec reset complet
+python start.py --reset
+
+# Commandes de maintenance
+python manage.py cleanup_expired        # Nettoyer les annonces expirées
+python manage.py update_search_vectors  # Mettre à jour la recherche
+python manage.py setup_categories       # Réimporter les catégories
+
+# Commandes Django standard
+python manage.py shell                  # Console Python
+python manage.py dbshell               # Console SQL
+python manage.py runserver             # Serveur de développement
+python manage.py test                  # Tests unitaires
+```
+
+## 📊 Fonctionnalités Disponibles
+
+### ✅ Implémentées
+- **Gestion utilisateurs** : Inscription, connexion, profils
+- **Catégories hiérarchiques** : Structure à 3 niveaux
+- **Annonces complètes** : Création, modification, images multiples
+- **Recherche avancée** : Texte, prix, localisation, catégories
+- **Favoris** : Système de favoris utilisateur
+- **Messagerie** : Conversations entre acheteur/vendeur
+- **Évaluations** : Système de notation utilisateur
+- **Administration** : Interface admin complète
+- **Géolocalisation** : Support latitude/longitude
+- **Tags** : Système de tags pour les annonces
+
+### 🔜 À Implémenter (Extensible)
+- **Paiements en ligne** : Intégration API de paiement
+- **Notifications** : Email et push notifications
+- **API REST** : Pour applications mobiles
+- **Recherche géographique** : Carte interactive
+- **Modération** : Outils de modération avancés
+- **Analytics** : Tableaux de bord statistiques
+
+## 🎯 Conclusion
+
+Vous avez maintenant un **site de petites annonces professionnel complet** avec :
+- ✅ Architecture Django robuste
+- ✅ Base PostgreSQL optimisée
+- ✅ Interface utilisateur complète
+- ✅ Administration avancée
+- ✅ Fonctionnalités métier essentielles
+
+Le projet est **prêt pour le développement** et peut être étendu selon vos besoins spécifiques !
+
+**Bon développement ! 🚀**
