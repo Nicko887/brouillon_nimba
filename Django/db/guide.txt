@@ -6,10 +6,9 @@ GUIDE POSTGRESQL LOCAL - CONNEXION ET USAGE QUOTIDIEN
 
 # 1. Ouvrir Terminal VS Code ou PowerShell
 # 2. Naviguer vers votre projet
-cd "C:\Users\eunic\OneDrive\Documents\NICODEME\NimbaPro\Django2\DB2"
+cd "C:\Users\eunic\OneDrive\Documents\NICODEME\NimbaPro\Django\db"
 
 # 3. Configurer l'environnement
-chcp 1252
 $env:PATH += ";C:\Program Files\PostgreSQL\15\bin"
 
 === INITIALISATION DE LA BASE (PREMIÈRE FOIS) ===
@@ -21,6 +20,9 @@ createdb -U postgres -h localhost nimba
 psql -U postgres -h localhost -d nimba -f schema_postgres.sql
 psql -U postgres -h localhost -d nimba -f seed_taxonomy.sql
 psql -U postgres -h localhost -d nimba -f queries_examples.sql
+
+
+
 
 === CONNEXION QUOTIDIENNE ===
 
