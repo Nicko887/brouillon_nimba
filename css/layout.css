@@ -174,14 +174,14 @@ Impact : ÉLEVÉ - Affecte la disposition générale
 
 
 /* === FOOTER === */
-/* ===== FOOTER NIMBA MODERNE ===== */
+/* ===== FOOTER NIMBA MODERNE - VERSION CLAIRE ===== */
 .footer {
   position: relative;
-  background: linear-gradient(135deg, rgba(55, 65, 81, 0.95) 0%, rgba(31, 41, 55, 0.98) 100%);
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  color: white;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  color: #1f2937;
   padding: 60px 0 0;
   margin-top: 80px;
   overflow: hidden;
@@ -197,12 +197,12 @@ Impact : ÉLEVÉ - Affecte la disposition générale
   height: 1px;
   background: linear-gradient(90deg, 
     transparent 0%, 
-    var(--primary-light) 20%, 
-    var(--secondary) 50%, 
-    var(--primary-light) 80%, 
+    rgba(100, 116, 139, 0.2) 20%, 
+    rgba(148, 163, 184, 0.3) 50%, 
+    rgba(100, 116, 139, 0.2) 80%, 
     transparent 100%
   );
-  opacity: 0.6;
+  opacity: 0.8;
 }
 
 .footer::after {
@@ -212,7 +212,7 @@ Impact : ÉLEVÉ - Affecte la disposition générale
   left: -10%;
   width: 120%;
   height: 200%;
-  background: radial-gradient(ellipse at center, rgba(37, 99, 235, 0.03) 0%, transparent 70%);
+  background: radial-gradient(ellipse at center, rgba(148, 163, 184, 0.04) 0%, transparent 70%);
   pointer-events: none;
 }
 
@@ -235,7 +235,7 @@ Impact : ÉLEVÉ - Affecte la disposition générale
 .footer-logo h2 {
   font-size: clamp(1.8rem, 4vw, 2.5rem);
   font-weight: 700;
-  background: linear-gradient(135deg, var(--primary-light), var(--secondary));
+  background: linear-gradient(135deg, #64748b, #94a3b8);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -244,7 +244,7 @@ Impact : ÉLEVÉ - Affecte la disposition générale
 }
 
 .footer-logo p {
-  color: rgba(255, 255, 255, 0.7);
+  color: #64748b;
   font-size: 16px;
   font-weight: 400;
   margin-bottom: 30px;
@@ -266,15 +266,16 @@ Impact : ÉLEVÉ - Affecte la disposition générale
   justify-content: center;
   width: 48px;
   height: 48px;
-  background: rgba(255, 255, 255, 0.08);
+  background: white;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: 50%;
-  color: rgba(255, 255, 255, 0.8);
+  color: #64748b;
   text-decoration: none;
-  transition: all 0.4s var(--transition);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .social-link::before {
@@ -284,16 +285,16 @@ Impact : ÉLEVÉ - Affecte la disposition générale
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  background: linear-gradient(135deg, #e2e8f0, #cbd5e1);
   opacity: 0;
-  transition: opacity 0.4s var(--transition);
+  transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   border-radius: 50%;
 }
 
 .social-link:hover {
   transform: translateY(-4px) scale(1.05);
-  box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
-  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+  border-color: rgba(0, 0, 0, 0.12);
 }
 
 .social-link:hover::before {
@@ -305,17 +306,17 @@ Impact : ÉLEVÉ - Affecte la disposition générale
   z-index: 2;
   width: 20px;
   height: 20px;
-  transition: all 0.3s var(--transition);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .social-link:hover svg {
-  color: white;
+  color: #475569;
   transform: scale(1.1);
 }
 
 /* ===== TITRE SECTIONS ===== */
 .footer-section h3 {
-  color: white;
+  color: #1f2937;
   font-size: 18px;
   font-weight: 600;
   margin-bottom: 24px;
@@ -331,7 +332,7 @@ Impact : ÉLEVÉ - Affecte la disposition générale
   transform: translateX(-50%);
   width: 40px;
   height: 2px;
-  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  background: linear-gradient(90deg, #94a3b8, #cbd5e1);
   border-radius: 1px;
 }
 
@@ -346,11 +347,11 @@ Impact : ÉLEVÉ - Affecte la disposition générale
 }
 
 .footer-links a {
-  color: rgba(255, 255, 255, 0.7);
+  color: #64748b;
   text-decoration: none;
   font-size: 14px;
   font-weight: 400;
-  transition: all 0.3s var(--transition);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   display: inline-block;
   padding: 4px 0;
@@ -364,13 +365,13 @@ Impact : ÉLEVÉ - Affecte la disposition générale
   transform: translateX(-50%) scaleX(0);
   width: 100%;
   height: 1px;
-  background: var(--secondary);
-  transition: transform 0.3s var(--transition);
+  background: #94a3b8;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   transform-origin: center;
 }
 
 .footer-links a:hover {
-  color: white;
+  color: #475569;
   transform: translateX(4px);
 }
 
@@ -387,39 +388,40 @@ Impact : ÉLEVÉ - Affecte la disposition générale
 }
 
 .payment-logo {
-  background: rgba(255, 255, 255, 0.95);
+  background: white;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   padding: 12px 16px;
-  border-radius: var(--radius-small);
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  transition: all 0.3s var(--transition);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   min-width: 60px;
   height: 40px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .payment-logo:hover {
   transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-  background: white;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+  border-color: rgba(0, 0, 0, 0.12);
 }
 
 /* ===== BAS DE PAGE ===== */
 .footer-bottom {
   text-align: center;
   padding: 40px 20px 30px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
   margin-top: 50px;
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.4);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 }
 
 .footer-bottom p {
-  color: rgba(255, 255, 255, 0.6);
+  color: #64748b;
   font-size: 14px;
   margin-bottom: 8px;
   line-height: 1.5;
@@ -428,6 +430,7 @@ Impact : ÉLEVÉ - Affecte la disposition générale
 .footer-bottom p:last-child {
   margin-bottom: 0;
   font-weight: 500;
+  color: #475569;
 }
 
 /* ===== ANIMATIONS ENTRÉE ===== */
@@ -445,5 +448,36 @@ Impact : ÉLEVÉ - Affecte la disposition générale
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+/* ===== RESPONSIVE ===== */
+@media (min-width: 768px) {
+  .footer-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .footer-container {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  
+  .footer-section h3,
+  .footer-links {
+    text-align: left;
+  }
+  
+  .footer-section h3::after {
+    left: 0;
+    transform: translateX(0);
+  }
+  
+  .social-links {
+    justify-content: flex-start;
+  }
+  
+  .payment-methods {
+    justify-content: flex-start;
   }
 }
